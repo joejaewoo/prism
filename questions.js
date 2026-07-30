@@ -87,3 +87,33 @@ const GRADE_GROUP_META = {
   g2: { label: "Level 2", sub: "초3~초4", grades: ["초3", "초4"], time: "8~10분", count: 24 },
   g3: { label: "Level 3", sub: "초5~초6", grades: ["초5", "초6"], time: "10~12분", count: 30 }
 };
+
+// ===== 검증 문항 (신뢰도 확인용) =====
+// ※ 채점(QUESTIONS)과 분리됨 — 점수/차원 만점에 영향 없음. 위 count(16/24/30)는 "채점 문항 수"라 그대로 유지.
+// 같은 성향을 다르게 물은 쌍(check가 같은 두 문항). 두 답의 pole이 같으면 일관, 다르면 엇갈림.
+// 쌍의 한 문항은 A/B 순서를 뒤집어(pole 반대로 배치) 한쪽만 계속 누르는 것을 잡아냅니다.
+// ▼▼ 문구는 초안입니다. 아이 눈높이/학원 톤에 맞게 자유롭게 수정하세요. ▼▼
+const CHECK_QUESTIONS = {
+  "g1": [
+    { id: "c1a", check: "g1p1", text: "영어로 말할 때, 나는...", a: { text: "틀려도 일단 말해봐", pole: "P" }, b: { text: "맞는지 생각해보고 말해", pole: "Q" } },
+    { id: "c1b", check: "g1p1", text: "친구가 영어로 물어보면, 나는...", a: { text: "천천히 맞게 말하려고 해", pole: "Q" }, b: { text: "틀려도 바로 대답해", pole: "P" } },
+    { id: "c2a", check: "g1p2", text: "새 영어 단어를 외울 때, 나는...", a: { text: "소리 내어 여러 번 말하면 외워져", pole: "P" }, b: { text: "글자를 보고 눈으로 외워", pole: "Q" } },
+    { id: "c2b", check: "g1p2", text: "받아쓰기를 준비할 때, 나는...", a: { text: "글자를 보면서 외워", pole: "Q" }, b: { text: "소리 내어 말하면서 외워", pole: "P" } }
+  ],
+  "g2": [
+    { id: "c1a", check: "g2p1", text: "영어로 말할 때, 나는...", a: { text: "문법이 틀려도 일단 말해", pole: "P" }, b: { text: "맞는지 확인하고 나서 말해", pole: "Q" } },
+    { id: "c1b", check: "g2p1", text: "발표 차례가 오면, 나는...", a: { text: "문장을 다 만들고 나서 말해", pole: "Q" }, b: { text: "일단 아는 단어로 말해봐", pole: "P" } },
+    { id: "c2a", check: "g2p2", text: "새 표현을 익힐 때, 나는...", a: { text: "여러 번 들으면 잘 익혀져", pole: "P" }, b: { text: "써보면서 익히는 게 좋아", pole: "Q" } },
+    { id: "c2b", check: "g2p2", text: "단어 시험을 준비할 때, 나는...", a: { text: "노트에 써가며 외워", pole: "Q" }, b: { text: "소리 내어 말하며 외워", pole: "P" } },
+    { id: "c3a", check: "g2p3", text: "새로운 걸 배울 때, 나는...", a: { text: "빨리 해보고 싶어", pole: "P" }, b: { text: "조금 망설여져", pole: "Q" } },
+    { id: "c3b", check: "g2p3", text: "원어민 선생님이 말을 걸면, 나는...", a: { text: "당황스러워서 머뭇거려", pole: "Q" }, b: { text: "신나서 대답해보고 싶어", pole: "P" } }
+  ],
+  "g3": [
+    { id: "c1a", check: "g3p1", text: "영어로 말할 때, 나는...", a: { text: "틀려도 우선 말하고 나중에 고쳐", pole: "P" }, b: { text: "정확한 문장을 만든 뒤에 말해", pole: "Q" } },
+    { id: "c1b", check: "g3p1", text: "영어 글을 쓸 때, 나는...", a: { text: "한 문장씩 정확하게 써 내려가", pole: "Q" }, b: { text: "일단 쭉 쓰고 나중에 다듬어", pole: "P" } },
+    { id: "c2a", check: "g3p2", text: "모르는 표현을 만나면, 나는...", a: { text: "앞뒤 상황으로 뜻을 짐작해", pole: "P" }, b: { text: "바로 뜻을 확인하고 넘어가", pole: "Q" } },
+    { id: "c2b", check: "g3p2", text: "긴 지문을 읽을 때, 나는...", a: { text: "모르는 단어를 먼저 다 찾아봐", pole: "Q" }, b: { text: "흐름으로 대략 의미를 잡고 읽어", pole: "P" } },
+    { id: "c3a", check: "g3p3", text: "시험을 못 봤을 때, 나는...", a: { text: "바로 다시 준비해", pole: "P" }, b: { text: "한동안 의욕이 잘 안 생겨", pole: "Q" } },
+    { id: "c3b", check: "g3p3", text: "발표에서 실수하면, 나는...", a: { text: "부끄러워서 한동안 위축돼", pole: "Q" }, b: { text: "금방 털고 다시 해", pole: "P" } }
+  ]
+};

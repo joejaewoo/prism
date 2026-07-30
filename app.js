@@ -9,6 +9,8 @@ const state = {
   gradeGroup: null,
   respondent: { name: '', grade: '', school: '', phone: '' },
   answers: {},
+  times: {},       // 문항별 응답 소요시간(ms) — 신뢰도 검증용
+  qStart: null,    // 현재 문항 표시 시각
   currentQ: 0,
   result: null,
   submitStatus: 'idle', // idle | sending | success | error
@@ -260,8 +262,17 @@ function renderIntro() {
 }
 
 // ===================== TEST =====================
+// 채점 문항 + 검증 문항(뒤쪽에 배치, 같은 쌍은 서로 떨어뜨림)
+function getTestQuestions(gg) {
+  const base = (QUESTIONS[gg] || []).slice();
+  const checks = (typeof CHECK_QUESTIONS !== 'undefined' && CHECK_QUESTIONS[gg]) ? CHECK_QUESTIONS[gg] : [];
+  const firsts = checks.filter(q => /a$/.test(q.id));
+  const seconds = checks.filter(q => /b$/.test(q.id));
+  return base.concat(firsts, seconds);
+}
+
 function renderTest() {
-  const questions = QUESTIONS[state.gradeGroup];
+  const questions = getTestQuestions(state.gradeGroup);
   const q = questions[state.currentQ];
   const pct = Math.round(((state.currentQ) / questions.length) * 100);
 
@@ -350,6 +361,8 @@ function attachEvents() {
 
       state.respondent = { name, grade, school, phone };
       state.answers = {};
+      state.times = {};
+      state.qStart = null;
       state.currentQ = 0;
       state.screen = 'test';
       render();
@@ -357,18 +370,23 @@ function attachEvents() {
   }
 
   if (state.screen === 'test') {
+    state.qStart = Date.now();
     document.querySelectorAll('.option-card').forEach(el => {
       el.addEventListener('click', () => {
-        const questions = QUESTIONS[state.gradeGroup];
+        const questions = getTestQuestions(state.gradeGroup);
         const q = questions[state.currentQ];
         state.answers[q.id] = el.dataset.choice;
+        if (state.qStart) state.times[q.id] = Date.now() - state.qStart;
 
         if (state.currentQ < questions.length - 1) {
           state.currentQ++;
           render();
         } else {
-          // 채점 및 결과 화면
+          // 채점 및 결과 화면 (검증 문항/시간은 채점에 영향 없음)
           state.result = scoreTest(state.gradeGroup, state.answers);
+          if (typeof computeValidity === 'function') {
+            try { state.answers.__validity = computeValidity(state.gradeGroup, state.answers, state.times); } catch (e) {}
+          }
           state.submitStatus = 'idle';
           state.screen = 'result';
           render();
@@ -389,6 +407,8 @@ function attachEvents() {
       state.gradeGroup = null;
       state.respondent = { name: '', grade: '', school: '', phone: '' };
       state.answers = {};
+      state.times = {};
+      state.qStart = null;
       state.currentQ = 0;
       state.result = null;
       state.submitStatus = 'idle';

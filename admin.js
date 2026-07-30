@@ -445,6 +445,19 @@ function buildCounselResult(item) {
 }
 
 // ===== 상세 패널 (우측) =====
+// 응답 신뢰도 참고 배지 (화면 전용, 인쇄 제외)
+function validityBadge(item) {
+  const v = item && item.answers && item.answers.__validity;
+  if (!v || v.flag === 'ok') return '';
+  const styleMap = {
+    unreliable:      { label: '신뢰도 낮음', bg: '#FDE0D3', color: '#C24A22' },
+    low_consistency: { label: '응답 엇갈림', bg: '#FFE9C7', color: '#8A5A1E' },
+    fast:            { label: '빠른 응답',   bg: '#EEF0F4', color: '#4A5578' }
+  };
+  const s = styleMap[v.flag] || styleMap.fast;
+  return `<div class="validity-note" style="margin:0 0 14px;padding:11px 15px;border-radius:10px;background:${s.bg};color:${s.color};font-size:13px;line-height:1.55"><b>참고 · ${s.label}</b> — ${escapeHtml(v.note || '')}</div>`;
+}
+
 function renderDetailContent(detail) {
   const viewMode = adminState.viewMode || 'parent';
   const renderFn = viewMode === 'academy' ? renderAcademyResult : renderParentResult;
@@ -479,12 +492,13 @@ function renderDetailContent(detail) {
     bodyHtml = `<div class="loading">⚠️ ${escapeHtml(detail.error)}</div>`;
   } else {
     const item = detail.item;
-    bodyHtml = viewMode === 'academy'
+    const main = viewMode === 'academy'
       ? academyWithCard(item)
       : renderFn(
           { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
           { name: item.name, grade: item.grade }
         );
+    bodyHtml = validityBadge(item) + main;
   }
 
   return `
