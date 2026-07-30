@@ -154,7 +154,7 @@ function renderRecipePage(r, respondent) {
   return `
   <div class="result-page">
     <div class="academy-only-badge">학원 내부용</div>
-    <div class="section-title">📋 ${name} 학생 수업 설계서</div>
+    <div class="section-title">📋 수업 설계서</div>
     <p style="font-size:13px; color:var(--ink-soft); margin-bottom:18px;">담당 강사용 지도 자료입니다. 학부모님께는 별도의 학부모용 결과지를 안내해주세요.</p>
 
     <div class="academy-grid">
@@ -190,7 +190,6 @@ function renderRecipePage(r, respondent) {
     </div>
   </div>
   <div class="result-page">
-    <div class="academy-only-badge">학원 내부용</div>
     <div class="section-title">💬 학부모 상담 가이드</div>
     <p style="font-size:13px; color:var(--ink-soft); margin-bottom:18px;">상담 시 활용할 수 있는 설명 포인트와 예상 질문 대응 가이드입니다.</p>
 

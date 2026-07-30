@@ -107,6 +107,7 @@ function renderGate() {
       <button id="btn-org" style="width:100%; padding:15px; border:none; border-radius:12px; background:var(--coral); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit;">확인</button>
     </div>
     <div style="font-size:12px; color:var(--ink-soft); margin-top:20px; opacity:.7;">기관 코드가 없으신가요? 학원에 문의해주세요.</div>
+    <a href="index.html" style="display:inline-block; margin-top:16px; font-size:13px; color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px;">← 소개 페이지로 돌아가기</a>
   </div>`;
 }
 

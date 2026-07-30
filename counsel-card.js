@@ -48,13 +48,8 @@ function renderCounselCard(result, meta = {}) {
 
   return `
 <div class="counsel-card">
-  <div class="academy-only-badge">학원 내부용</div>
-  <div class="section-title">🗂 ${name} 학생 상담 요약 카드</div>
+  <div class="section-title">🗂 상담 요약 카드</div>
   <p style="font-size:13px; color:var(--ink-soft); margin-bottom:18px;">상담 테이블에서 바로 쓰는 한 장 요약입니다. 성향 → 힘들 수 있는 점 → 케어 계획 순으로 정리했어요.</p>
-  <div class="cc-head">
-    <div class="cc-title">${name} <span class="cc-sub">${gradeStr}</span></div>
-    <div class="cc-logo">PRISM 상담 요약</div>
-  </div>
 
   <!-- ① 성향 -->
   <div class="cc-section cc-sec-l1">
@@ -125,48 +120,35 @@ const COUNSEL_CARD_CSS = `
 
 /* ===== 인쇄 전용: A4 한 장 고정 + 색상 또렷하게 ===== */
 @media print{
-  @page{size:A4;margin:14mm}
-  /* 배경색·배지 색이 인쇄에서도 그대로 나오도록 강제 */
+  @page{size:A4;margin:15mm}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   body{background:#fff !important;padding:0 !important;margin:0 !important}
+  .counsel-card{border:none !important;box-shadow:none !important;max-width:100% !important;width:100% !important;margin:0 !important;padding:0 !important}
 
-  .counsel-card{
-    border:none !important;box-shadow:none !important;
-    max-width:100% !important;width:100% !important;
-    margin:0 !important;padding:0 !important;
-  }
-
-  /* 헤더는 크게, 나머지는 살짝 조여서 한 장에 */
-  .cc-head{padding-bottom:10px;margin-bottom:14px}
-  .cc-title{font-size:20px}
-  .cc-sub{font-size:13px}
-  .cc-logo{font-size:11px}
-
-  /* 각 섹션이 페이지 중간에서 잘리지 않도록 + 배경색 유지 */
-  .cc-section{margin-bottom:12px;padding:12px 12px 10px;page-break-inside:avoid;break-inside:avoid}
+  .cc-section{margin-bottom:16px;padding:16px 16px 14px;page-break-inside:avoid;break-inside:avoid}
   .cc-sec-l1{background:#FFF8F5 !important;border-color:#F5D9CC !important}
   .cc-sec-l2{background:#F3FAF8 !important;border-color:#CFE8E1 !important}
   .cc-sec-l3{background:#F6F3FB !important;border-color:#DED4EE !important}
-  .cc-persona-block{margin-bottom:8px;gap:10px}
-  .cc-persona-icon{width:40px !important;height:40px !important}
-  .cc-persona-icon .persona-icon{width:30px;height:30px}
-  .cc-label{font-size:12px;padding:4px 10px;margin-bottom:8px}
-  .cc-persona{margin-bottom:6px}
-  .cc-tag{font-size:11.5px;padding:4px 10px}
-  .cc-desc{font-size:11.5px;margin-bottom:0;line-height:1.5}
-  .cc-bands{padding-top:8px}
-  .cc-band{font-size:10.5px;padding:3px 9px}
+  .cc-persona-block{margin-bottom:11px;gap:13px}
+  .cc-persona-icon{width:48px !important;height:48px !important}
+  .cc-persona-icon .persona-icon{width:36px;height:36px}
+  .cc-label{font-size:13.5px;padding:6px 13px;margin-bottom:12px}
+  .cc-persona{margin-bottom:9px}
+  .cc-tag{font-size:12.5px;padding:5px 12px}
+  .cc-desc{font-size:13px;margin-bottom:0;line-height:1.6}
+  .cc-bands{padding-top:11px}
+  .cc-band{font-size:12px;padding:4px 11px}
 
-  .cc-list li{font-size:11.5px;padding:8px 10px 8px 28px;line-height:1.5;margin-bottom:5px;background:#fff !important;page-break-inside:avoid;break-inside:avoid}
+  .cc-list li{font-size:13px;padding:11px 13px 11px 32px;line-height:1.6;margin-bottom:7px;background:#fff !important;page-break-inside:avoid;break-inside:avoid}
   .cc-l1{background:#FDE0D3 !important;color:#C24A22 !important}
   .cc-l2{background:#D3EDE7 !important;color:#1F7A6E !important}
   .cc-l3{background:#E3DAF3 !important;color:#544387 !important}
   .cc-tag-l1{background:#E8633C !important;color:#fff !important}
   .cc-tag-l2{background:#2A9D8F !important;color:#fff !important}
-  .cc-concern li:before{color:#E8A33C !important;left:11px;top:8px}
-  .cc-plan li:before{color:#2A9D8F !important;left:10px;top:8px}
+  .cc-concern li:before{color:#E8A33C !important;left:13px;top:11px;font-size:16px}
+  .cc-plan li:before{color:#2A9D8F !important;left:12px;top:11px}
 
-  .cc-foot{font-size:10px;padding-top:10px;margin-top:4px}
+  .cc-foot{font-size:11.5px;padding-top:13px;margin-top:6px}
 }
 `;
 

@@ -258,20 +258,20 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
   <svg width="296" height="272" viewBox="0 0 296 272" style="max-width:100%; height:auto;">
     <polygon points="148,116.5 164.88749537379655,145.75 131.11250462620345,145.75" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,97 181.7749907475931,155.5 114.22500925240689,155.5" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,77.5 198.66248612138966,165.25 97.33751387861034,165.25" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,58 215.54998149518622,175 80.45001850481378,175" fill="none" stroke="#E3DDD1" stroke-width="1"/>
     <line x1="148" y1="136" x2="148" y2="58" stroke="#E3DDD1" stroke-width="1"/><line x1="148" y1="136" x2="215.54998149518622" y2="175" stroke="#E3DDD1" stroke-width="1"/><line x1="148" y1="136" x2="80.45001850481378" y2="175" stroke="#E3DDD1" stroke-width="1"/>
-    <polygon points="148,72.04 193.93398741672664,162.52 114.22500925240689,155.5" fill="#E8633C22" stroke="#1C2541" stroke-width="2"/>
-    <circle cx="148" cy="72.04" r="4" fill="#E8633C"/><circle cx="193.93398741672664" cy="162.52" r="4" fill="#2A9D8F"/><circle cx="114.22500925240689" cy="155.5" r="4" fill="#E8A33C"/>
+    <polygon id="rdrData" points="148,72.04 193.93398741672664,162.52 114.22500925240689,155.5" fill="#E8633C22" stroke="#1C2541" stroke-width="2"/>
+    <circle id="rdrDotS" cx="148" cy="72.04" r="4" fill="#E8633C"/><circle id="rdrDotT" cx="193.93398741672664" cy="162.52" r="4" fill="#2A9D8F"/><circle id="rdrDotSc" cx="114.22500925240689" cy="155.5" r="4" fill="#E8A33C"/>
     
       <text x="148" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#1C2541">Sound</text>
-      <text x="148" y="40" text-anchor="middle" font-size="13" fill="#4A5578">82</text>
+      <text id="rdrNumS" x="148" y="40" text-anchor="middle" font-size="13" fill="#4A5578">82</text>
     
       <text x="241.53074360871938" y="186" text-anchor="start" font-size="13" font-weight="700" fill="#1C2541">Text</text>
-      <text x="241.53074360871938" y="202" text-anchor="start" font-size="13" fill="#4A5578">68</text>
+      <text id="rdrNumT" x="241.53074360871938" y="202" text-anchor="start" font-size="13" fill="#4A5578">68</text>
     
       <text x="54.469256391280624" y="186" text-anchor="end" font-size="13" font-weight="700" fill="#1C2541">Scene</text>
-      <text x="54.469256391280624" y="202" text-anchor="end" font-size="13" fill="#4A5578">50</text>
+      <text id="rdrNumSc" x="54.469256391280624" y="202" text-anchor="end" font-size="13" fill="#4A5578">50</text>
     
   </svg></div>
-          <div style="text-align:center"><span style="display:inline-block;background:var(--coral);color:#fff;font-size:13px;font-weight:700;padding:6px 15px;border-radius:100px">다빈치형 · Sound+Text</span><p style="font-size:13px;color:var(--soft);margin-top:10px">듣기와 읽기를 함께 쓰는 균형형</p></div>
+          <div style="text-align:center"><span id="rdrPersona" style="display:inline-block;background:var(--coral);color:#fff;font-size:13px;font-weight:700;padding:6px 15px;border-radius:100px;transition:background .4s">다빈치형 · Sound+Text</span><p id="rdrSub" style="font-size:13px;color:var(--soft);margin-top:10px">듣기와 읽기를 함께 쓰는 균형형</p></div>
         </div>
       </div>
     </div>
@@ -310,7 +310,7 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
       </div>
       <div class="layer-visual">
         <div class="vcard">
-          <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>자신감</span><span style="color:#6B5CA5;font-size:12px">단단한 편</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:72%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>회복력</span><span style="color:#6B5CA5;font-size:12px">빠르게 회복</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:85%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>소통 욕구</span><span style="color:#6B5CA5;font-size:12px">동기가 강함</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:65%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>무대 에너지</span><span style="color:#6B5CA5;font-size:12px">상황에 따라</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:48%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div>
+          <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>자신감</span><span id="g1lbl" style="color:#6B5CA5;font-size:12px">단단한 편</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div id="g1bar" style="height:100%;width:78%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0);transition:width .9s ease"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>회복력</span><span id="g2lbl" style="color:#6B5CA5;font-size:12px">빠르게 회복</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div id="g2bar" style="height:100%;width:72%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0);transition:width .9s ease"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>소통 욕구</span><span id="g3lbl" style="color:#6B5CA5;font-size:12px">동기가 강함</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div id="g3bar" style="height:100%;width:80%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0);transition:width .9s ease"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>무대 에너지</span><span id="g4lbl" style="color:#6B5CA5;font-size:12px">상황에 따라</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div id="g4bar" style="height:100%;width:45%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0);transition:width .9s ease"></div></div></div>
           <p style="font-size:12px;color:var(--soft);margin-top:14px;text-align:center">점수 대신 완곡한 표현으로 전달합니다</p>
         </div>
       </div>
@@ -398,6 +398,44 @@ function countUp(el){
 document.querySelectorAll('.stat .num').forEach(el=>{
   new IntersectionObserver(([e],o)=>{if(e.isIntersecting){countUp(el);o.unobserve(el)}},{threshold:.5}).observe(el);
 });
+</script>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var data=$('rdrData'); if(!data) return;
+  var dS=$('rdrDotS'),dT=$('rdrDotT'),dSc=$('rdrDotSc'),nS=$('rdrNumS'),nT=$('rdrNumT'),nSc=$('rdrNumSc'),per=$('rdrPersona'),sub=$('rdrSub');
+  var bars=[1,2,3,4].map(function(i){return $('g'+i+'bar');});
+  var lbls=[1,2,3,4].map(function(i){return $('g'+i+'lbl');});
+  var presets=[
+    {S:82,T:68,Sc:50,persona:'다빈치형 · Sound+Text',sub:'듣기와 읽기를 함께 쓰는 균형형',g:[[78,'단단한 편'],[72,'빠르게 회복'],[80,'동기가 강함'],[45,'상황에 따라']]},
+    {S:52,T:44,Sc:86,persona:'에디슨형 · Scene 주도형',sub:'상황과 맥락으로 파악하는 직관형',g:[[60,'차분한 편'],[88,'잘 회복함'],[66,'관심 있음'],[82,'무대를 즐김']]},
+    {S:90,T:46,Sc:54,persona:'모차르트형 · Sound 주도형',sub:'소리로 듣고 익히는 청각형',g:[[90,'매우 단단함'],[55,'천천히 회복'],[74,'동기가 강함'],[62,'적극적인 편']]},
+    {S:48,T:78,Sc:70,persona:'퀴리부인형 · Text+Scene',sub:'읽기와 맥락을 함께 쓰는 유형',g:[[52,'조심스러운 편'],[70,'회복하는 편'],[85,'소통 욕구 큼'],[40,'1:1을 선호']]}
+  ];
+  function P(S,T,Sc){return '148,'+(136-0.78*S).toFixed(2)+' '+(148+0.6755*T).toFixed(2)+','+(136+0.39*T).toFixed(2)+' '+(148-0.6755*Sc).toFixed(2)+','+(136+0.39*Sc).toFixed(2);}
+  function setR(S,T,Sc){
+    data.setAttribute('points',P(S,T,Sc));
+    dS.setAttribute('cy',(136-0.78*S).toFixed(2));
+    dT.setAttribute('cx',(148+0.6755*T).toFixed(2));dT.setAttribute('cy',(136+0.39*T).toFixed(2));
+    dSc.setAttribute('cx',(148-0.6755*Sc).toFixed(2));dSc.setAttribute('cy',(136+0.39*Sc).toFixed(2));
+    nS.textContent=Math.round(S);nT.textContent=Math.round(T);nSc.textContent=Math.round(Sc);
+  }
+  function labels(p){per.textContent=p.persona;sub.textContent=p.sub;
+    bars.forEach(function(b,i){if(b)b.style.width=p.g[i][0]+'%';});
+    lbls.forEach(function(l,i){if(l)l.textContent=p.g[i][1];});}
+  var cur={S:82,T:68,Sc:50},idx=0;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function ease(x){return x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2;}
+  function tween(p,dur,done){var f={S:cur.S,T:cur.T,Sc:cur.Sc},t0=null;
+    function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),e=ease(k);
+      cur.S=f.S+(p.S-f.S)*e;cur.T=f.T+(p.T-f.T)*e;cur.Sc=f.Sc+(p.Sc-f.Sc)*e;setR(cur.S,cur.T,cur.Sc);
+      if(k<1)requestAnimationFrame(step);else if(done)done();}
+    requestAnimationFrame(step);}
+  function cycle(){idx=(idx+1)%presets.length;var p=presets[idx];labels(p);tween(p,1100,function(){setTimeout(cycle,2400);});}
+  labels(presets[0]);setR(82,68,50);
+  if(!reduce)setTimeout(cycle,2400);
+})();
 </script>
 </body>
 </html>
