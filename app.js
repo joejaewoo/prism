@@ -136,6 +136,7 @@ function verifyOrg() {
         state.orgVerified = true;
         state.orgName = match.name || '';
         state.orgError = '';
+        try { localStorage.setItem('prism_org', JSON.stringify({ code: input, name: state.orgName })); } catch (e) {}
         state.screen = 'landing';
         render();
       } else {
