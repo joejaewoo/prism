@@ -43,14 +43,7 @@ function adminRender() {
   }
   app.innerHTML = renderAdminMain();
   attachAdminEvents();
-
-  // 기존 모달 제거 후 필요 시 재생성 (중복 누적 방지)
-  const existingModal = document.getElementById('detail-overlay');
-  if (existingModal) existingModal.remove();
-
-  if (adminState.detail) {
-    renderDetailModal(adminState.detail);
-  }
+  attachDetailPanelEvents();
 }
 
 // ===== 기관 코드 관문 (관리자) =====
@@ -119,19 +112,29 @@ function filterByOrg(items) {
 function renderAdminMain() {
   return `
   <div class="top-bar">
-    <div>
-      <div class="top-title font-display">PRISM 응시 기록 관리</div>
-      <div class="top-sub">${adminState.orgName ? escapeHtml(adminState.orgName) + ' · ' + escapeHtml(adminState.orgCode) : 'Profile of Receptive Input, Speaking & Motivation'}</div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <svg width="42" height="36" viewBox="0 0 200 130" fill="none" style="flex-shrink:0">
+        <line x1="100" y1="6" x2="100" y2="50" stroke="#B8BEC8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <path d="M100 94 L100 120" stroke="#2A9D8F" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M109 90 C132 105 152 109 164 111" stroke="#E8A33C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <circle cx="36" cy="111" r="6" fill="#E8633C"/><circle cx="100" cy="120" r="6" fill="#2A9D8F"/><circle cx="164" cy="111" r="6" fill="#E8A33C"/>
+      </svg>
+      <div>
+        <div class="top-title font-display">PRISM 응시 기록 관리</div>
+        <div class="top-sub">${adminState.orgName ? escapeHtml(adminState.orgName) + ' · ' + escapeHtml(adminState.orgCode) : 'Profile of Receptive Input, Speaking & Motivation'}</div>
+      </div>
     </div>
     <div>
-      <a href="test.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="display:inline-block; text-decoration:none; text-align:center;">📝 평가 화면으로 가기</a>
+      <a href="test.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="display:inline-block; text-decoration:none; text-align:center;">📝 평가 화면</a>
       <button class="btn-sm outline" id="btn-org-switch" style="margin-left:8px;">기관 변경</button>
       <button class="btn-sm outline" id="btn-refresh" style="margin-left:8px;">↻ 새로고침</button>
       <button class="btn-sm outline" id="btn-logout" style="margin-left:8px;">로그아웃</button>
     </div>
   </div>
 
-  ${!isApiConfigured() ? `<div class="api-warning">⚠️ API_URL이 설정되지 않았습니다. admin.js 상단의 API_URL을 Apps Script 배포 주소로 변경해주세요.</div>` : ''}
+  ${!isApiConfigured() ? `<div class="api-warning">⚠️ API_URL이 설정되지 않았습니다.</div>` : ''}
 
   <div class="stat-strip">
     <div class="stat-box"><div class="num">${adminState.items.length}</div><div class="lbl">전체 응시</div></div>
@@ -140,22 +143,66 @@ function renderAdminMain() {
     <div class="stat-box"><div class="num">${countByGrade('g3')}</div><div class="lbl">Level 3</div></div>
   </div>
 
-  <div class="filter-bar">
-    <input type="text" id="f-search" placeholder="이름으로 검색" value="${adminState.filters.q}">
-    <select id="f-gradegroup">
-      <option value="">전체 레벨</option>
-      <option value="g1" ${adminState.filters.gradeGroup === 'g1' ? 'selected' : ''}>Level 1 (초1-2)</option>
-      <option value="g2" ${adminState.filters.gradeGroup === 'g2' ? 'selected' : ''}>Level 2 (초3-4)</option>
-      <option value="g3" ${adminState.filters.gradeGroup === 'g3' ? 'selected' : ''}>Level 3 (초5-6)</option>
-    </select>
-    <input type="date" id="f-from" value="${adminState.filters.from}">
-    <input type="date" id="f-to" value="${adminState.filters.to}">
-    <button class="btn-sm" id="btn-search">검색</button>
-    ${adminState.selectedIds.size > 0 ? `<button class="btn-sm outline" id="btn-bulk-print">선택 ${adminState.selectedIds.size}건 인쇄</button>` : ''}
+  <div class="md-layout">
+    <aside class="md-list">
+      <div class="md-list-filter">
+        <input type="text" id="f-search" placeholder="🔍 이름 검색" value="${adminState.filters.q}">
+        <select id="f-gradegroup">
+          <option value="">전체 레벨</option>
+          <option value="g1" ${adminState.filters.gradeGroup === 'g1' ? 'selected' : ''}>Level 1</option>
+          <option value="g2" ${adminState.filters.gradeGroup === 'g2' ? 'selected' : ''}>Level 2</option>
+          <option value="g3" ${adminState.filters.gradeGroup === 'g3' ? 'selected' : ''}>Level 3</option>
+        </select>
+      </div>
+      ${renderListItems()}
+    </aside>
+    <main class="md-detail" id="md-detail">
+      ${renderDetailPanel()}
+    </main>
   </div>
-
-  ${renderTable()}
   `;
+}
+
+// 왼쪽 목록 (2줄 카드형)
+function renderListItems() {
+  if (adminState.loading) return `<div class="loading" style="padding:40px 0;">불러오는 중...</div>`;
+  if (adminState.error) return `<div class="loading" style="padding:30px 16px; font-size:13px;">⚠️ ${escapeHtml(adminState.error)}</div>`;
+  if (adminState.items.length === 0) return `<div class="empty-state" style="padding:40px 16px;">아직 응시 기록이 없습니다.</div>`;
+
+  return `<div class="md-items">
+    ${adminState.items.map(item => {
+      const active = adminState.detail && adminState.detail.item && adminState.detail.item.id === item.id;
+      const l1 = formatPersonaLabel(item.layer1TypeKey, LAYER1_INTERPRET, item.layer1Type);
+      const l2 = formatPersonaLabel(item.layer2TypeKey, LAYER2_INTERPRET, item.layer2Type);
+      return `
+      <div class="md-item ${active ? 'active' : ''}" data-detail-id="${item.id}">
+        <div class="md-item-top">
+          <span class="md-item-name">${escapeHtml(item.name)}</span>
+          <span class="md-item-chip">${GRADE_GROUP_LABEL[item.gradeGroup] || item.gradeGroup}</span>
+        </div>
+        <div class="md-item-sub">${escapeHtml(item.grade)} · ${escapeHtml(item.school || '학교 미입력')}</div>
+        <div class="md-item-types">${escapeHtml(l1)} · ${escapeHtml(l2)}</div>
+        <div class="md-item-date">${formatDate(item.submittedAt)}</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// 오른쪽 상세 패널 (선택 전엔 안내)
+function renderDetailPanel() {
+  if (!adminState.detail) {
+    return `<div class="md-empty">
+      <svg width="60" height="50" viewBox="0 0 200 130" fill="none" style="opacity:.35; margin-bottom:16px">
+        <line x1="100" y1="6" x2="100" y2="50" stroke="#B8BEC8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="#8891A0" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <path d="M100 94 L100 120" stroke="#2A9D8F" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M109 90 C132 105 152 109 164 111" stroke="#E8A33C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div style="font-size:15px; color:var(--ink-soft);">왼쪽에서 학생을 선택하면<br>결과지가 여기에 표시됩니다.</div>
+    </div>`;
+  }
+  return renderDetailContent(adminState.detail);
 }
 
 function countByGrade(g) {
@@ -353,7 +400,7 @@ function loadList() {
 
 function loadDetail(id) {
   adminState.detail = { id, item: null, loading: true, error: null };
-  adminRender();
+  refreshDetailPanel();
 
   fetch(`${API_URL}?action=detail&id=${encodeURIComponent(id)}&pw=${encodeURIComponent(adminState.pw)}`)
     .then(res => res.json())
@@ -363,11 +410,11 @@ function loadDetail(id) {
       } else {
         adminState.detail = { id, item: null, loading: false, error: data.error };
       }
-      adminRender();
+      refreshDetailPanel();
     })
     .catch(err => {
       adminState.detail = { id, item: null, loading: false, error: err.message };
-      adminRender();
+      refreshDetailPanel();
     });
 }
 
@@ -396,16 +443,12 @@ function buildCounselResult(item) {
   };
 }
 
-// ===== 상세 모달 =====
-function renderDetailModal(detail) {
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.id = 'detail-overlay';
-
-  const viewMode = adminState.viewMode || 'parent'; // 'parent' | 'academy' | 'counsel'
+// ===== 상세 패널 (우측) =====
+function renderDetailContent(detail) {
+  const viewMode = adminState.viewMode || 'parent';
   const renderFn = viewMode === 'academy' ? renderAcademyResult : renderParentResult;
 
-  // 상담카드 CSS는 최초 1회만 문서에 주입
+  // 상담카드 CSS 최초 1회 주입
   if (typeof COUNSEL_CARD_CSS !== 'undefined' && !document.getElementById('counsel-card-style')) {
     const st = document.createElement('style');
     st.id = 'counsel-card-style';
@@ -413,8 +456,6 @@ function renderDetailModal(detail) {
     document.head.appendChild(st);
   }
 
-  let bodyHtml;
-  // 학원용 결과지 뒤에 상담카드를 함께 붙이는 헬퍼
   const academyWithCard = (item) => {
     const main = renderAcademyResult(
       { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
@@ -430,18 +471,11 @@ function renderDetailModal(detail) {
     return main + card;
   };
 
+  let bodyHtml;
   if (detail.loading) {
     bodyHtml = `<div class="loading">불러오는 중...</div>`;
   } else if (detail.error) {
     bodyHtml = `<div class="loading">⚠️ ${escapeHtml(detail.error)}</div>`;
-  } else if (adminState.detailMulti) {
-    const fn = viewMode === 'academy'
-      ? academyWithCard
-      : (item) => renderFn(
-          { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
-          { name: item.name, grade: item.grade }
-        );
-    bodyHtml = adminState.detailMulti.map(fn).join('<div style="height:24px;"></div>');
   } else {
     const item = detail.item;
     bodyHtml = viewMode === 'academy'
@@ -452,35 +486,39 @@ function renderDetailModal(detail) {
         );
   }
 
-  overlay.innerHTML = `
-    <div class="modal-box">
-      <div class="modal-toolbar">
+  return `
+    <div class="detail-toolbar">
+      <div class="detail-toolbar-name">${detail.item ? escapeHtml(detail.item.name) : ''} <span>${detail.item ? escapeHtml(detail.item.grade || '') : ''}</span></div>
+      <div class="detail-toolbar-btns">
         <button class="view-toggle ${viewMode === 'parent' ? 'active' : ''}" id="btn-view-parent">학부모용</button>
         <button class="view-toggle ${viewMode === 'academy' ? 'active' : ''}" id="btn-view-academy">학원용</button>
-        <button id="btn-modal-print" style="background:white; color:var(--ink);">🖨 인쇄 / PDF</button>
-        <button class="btn-close" id="btn-modal-close">닫기</button>
+        <button id="btn-detail-print">🖨 인쇄</button>
       </div>
-      <div class="modal-body">${bodyHtml}</div>
     </div>
+    <div class="detail-body" id="detail-body-print">${bodyHtml}</div>
   `;
+}
 
-  document.body.appendChild(overlay);
-
-  document.getElementById('btn-modal-close').addEventListener('click', closeDetailModal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeDetailModal(); });
-  const printBtn = document.getElementById('btn-modal-print');
-  if (printBtn) printBtn.addEventListener('click', () => window.print());
-
-  document.getElementById('btn-view-parent').addEventListener('click', () => {
-    adminState.viewMode = 'parent';
-    overlay.remove();
-    renderDetailModal(adminState.detail);
+// 우측 패널만 다시 그리고 이벤트 재연결
+function refreshDetailPanel() {
+  const panel = document.getElementById('md-detail');
+  if (!panel) return;
+  panel.innerHTML = renderDetailPanel();
+  attachDetailPanelEvents();
+  // 목록 active 상태도 갱신
+  document.querySelectorAll('.md-item').forEach(el => {
+    const on = adminState.detail && adminState.detail.item && el.dataset.detailId === adminState.detail.item.id;
+    el.classList.toggle('active', !!on);
   });
-  document.getElementById('btn-view-academy').addEventListener('click', () => {
-    adminState.viewMode = 'academy';
-    overlay.remove();
-    renderDetailModal(adminState.detail);
-  });
+}
+
+function attachDetailPanelEvents() {
+  const p = document.getElementById('btn-view-parent');
+  const a = document.getElementById('btn-view-academy');
+  const pr = document.getElementById('btn-detail-print');
+  if (p) p.addEventListener('click', () => { adminState.viewMode = 'parent'; refreshDetailPanel(); });
+  if (a) a.addEventListener('click', () => { adminState.viewMode = 'academy'; refreshDetailPanel(); });
+  if (pr) pr.addEventListener('click', () => window.print());
 }
 
 function closeDetailModal() {
@@ -516,12 +554,18 @@ function attachAdminEvents() {
     adminRender();
   });
 
-  const searchBtn = document.getElementById('btn-search');
-  if (searchBtn) searchBtn.addEventListener('click', () => {
-    adminState.filters.q = document.getElementById('f-search').value.trim();
-    adminState.filters.gradeGroup = document.getElementById('f-gradegroup').value;
-    adminState.filters.from = document.getElementById('f-from').value;
-    adminState.filters.to = document.getElementById('f-to').value;
+  const searchInput = document.getElementById('f-search');
+  if (searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        adminState.filters.q = searchInput.value.trim();
+        loadList();
+      }
+    });
+  }
+  const gradeSel = document.getElementById('f-gradegroup');
+  if (gradeSel) gradeSel.addEventListener('change', () => {
+    adminState.filters.gradeGroup = gradeSel.value;
     loadList();
   });
 
