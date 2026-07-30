@@ -3,394 +3,401 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRISM | 영어 학습유형 검사</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Pretendard&display=swap" rel="stylesheet">
+<title>PRISM · 학생을 데이터로 이해하는 학원</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1C2541;--soft:#4A5578;--coral:#E8633C;--teal:#2A9D8F;--purple:#6B5CA5;
+  --bg:#F4F5F7;--line:#DDE1E8;--navy:#0E1525;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard',sans-serif;color:var(--ink);line-height:1.7;background:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.serif{font-family:'Gowun Batang',serif}
+img{display:block;max-width:100%}
 
-:root {
-  --paper: #F4F5F7;
-  --ink: #1C2541;
-  --ink-soft: #4A5578;
-  --coral: #E8633C;
-  --teal: #2A9D8F;
-  --gold: #E8A33C;
-  --line: #DDE1E8;
-  --card: #FFFFFF;
-  --radius: 14px;
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;transition:all .3s}
+nav.scrolled{background:rgba(14,21,37,.85);backdrop-filter:blur(16px);padding:14px 40px}
+.logo{font-size:17px;font-weight:800;color:#fff;letter-spacing:.2em}
+.nav-cta{padding:11px 26px;border-radius:100px;background:var(--coral);color:#fff;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(232,99,60,.3)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(232,99,60,.5)}
+@media(max-width:640px){nav{padding:14px 20px}}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:var(--navy)}
+.hero-bg{position:absolute;inset:0;z-index:1}
+.hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.45}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,21,37,.96) 0%,rgba(14,21,37,.82) 40%,rgba(14,21,37,.45) 100%)}
+/* 움직이는 blob */
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;z-index:2;pointer-events:none}
+.blob1{width:420px;height:420px;background:var(--coral);top:-80px;left:-60px;animation:float1 14s ease-in-out infinite}
+.blob2{width:380px;height:380px;background:var(--teal);bottom:-100px;left:30%;animation:float2 18s ease-in-out infinite}
+.blob3{width:340px;height:340px;background:var(--purple);top:20%;right:-40px;animation:float3 16s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,60px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,-40px)}}
+@keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,50px)}}
+.hero-inner{position:relative;z-index:10;max-width:1180px;margin:0 auto;padding:0 40px;width:100%}
+.hero-logo{display:block;margin-bottom:24px;margin-left:0;filter:drop-shadow(0 4px 20px rgba(0,0,0,.3))}
+.hero-logo .ray{animation:rayglow 3.5s ease-in-out infinite}
+.hero-logo .ray2{animation-delay:.4s}
+.hero-logo .ray3{animation-delay:.8s}
+@keyframes rayglow{0%,100%{opacity:.65}50%{opacity:1}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);font-size:13px;font-weight:600;margin-bottom:28px;backdrop-filter:blur(8px)}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+.hero h1{font-size:clamp(34px,5.5vw,60px);font-weight:700;line-height:1.32;color:#fff;letter-spacing:-.02em;margin-bottom:26px}
+.hero h1 em{font-style:normal;color:var(--coral)}
+.hero-sub{font-size:clamp(16px,1.6vw,19px);color:rgba(255,255,255,.6);line-height:1.85;max-width:540px;margin-bottom:40px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:16px 38px;background:var(--coral);color:#fff;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;transition:all .2s;box-shadow:0 8px 28px rgba(232,99,60,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(232,99,60,.5)}
+.btn-ghost{display:inline-flex;align-items:center;padding:16px 32px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:16px;font-weight:600;border-radius:100px;text-decoration:none;transition:all .2s;backdrop-filter:blur(8px)}
+.btn-ghost:hover{background:rgba(255,255,255,.16)}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:10;color:rgba(255,255,255,.4);font-size:12px;letter-spacing:.1em;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* ===== STATS ===== */
+.stats{background:var(--navy);padding:60px 40px 90px;position:relative;z-index:10}
+.stats-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat{text-align:center;padding:24px 12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.stat .num{font-size:clamp(28px,3.5vw,42px);font-weight:800;color:#fff;letter-spacing:-.02em}
+.stat .num .unit{font-size:.5em;color:var(--coral);margin-left:2px}
+.stat .lbl{font-size:13px;color:rgba(255,255,255,.5);margin-top:6px}
+@media(max-width:640px){.stats-inner{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== SECTION base ===== */
+.section{padding:130px 40px}
+.section-inner{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.sec-title{font-size:clamp(26px,3.6vw,42px);font-weight:700;line-height:1.35;letter-spacing:-.015em}
+.sec-lead{font-size:16px;color:var(--soft);line-height:1.85;margin-top:18px;max-width:560px}
+@media(max-width:768px){.section{padding:80px 24px}}
+
+/* ===== PROBLEM (dark, gradient bg image) ===== */
+.problem{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.problem-bgimg{position:absolute;inset:0;z-index:0}
+.problem-bgimg img{width:100%;height:100%;object-fit:cover;opacity:.22}
+.problem-bgimg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--navy) 0%,rgba(14,21,37,.7) 50%,var(--navy) 100%)}
+.problem .section-inner{position:relative;z-index:2}
+.problem .sec-title{color:#fff}
+.problem .sec-title em{color:var(--coral);font-style:normal}
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.pain{padding:26px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);transition:all .3s}
+.pain:hover{background:rgba(255,255,255,.09);transform:translateY(-3px)}
+.pain .ico{font-size:26px;margin-bottom:12px}
+.pain .txt{font-size:15px;color:rgba(255,255,255,.75);line-height:1.7}
+.pain .txt strong{color:#fff}
+@media(max-width:640px){.pain-grid{grid-template-columns:1fr}}
+
+/* ===== LAYERS ===== */
+.layer-row{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-bottom:110px}
+.layer-row:last-child{margin-bottom:0}
+.layer-row.flip{direction:rtl}.layer-row.flip>*{direction:ltr}
+.layer-tag{display:inline-block;padding:6px 15px;border-radius:100px;font-size:12px;font-weight:800;letter-spacing:.08em;margin-bottom:16px}
+.layer-row h3{font-size:clamp(22px,2.8vw,32px);font-weight:700;line-height:1.4;letter-spacing:-.01em}
+.layer-row .desc{font-size:15.5px;color:var(--soft);line-height:1.8;margin-top:16px}
+.layer-dims{margin-top:22px;display:flex;flex-direction:column;gap:9px}
+.ldim{display:flex;align-items:baseline;gap:10px;font-size:14.5px;padding:11px 15px;border-radius:11px;background:var(--bg)}
+.ldim b{min-width:78px;flex-shrink:0}
+.ldim span{color:var(--soft)}
+.layer-visual{display:flex;justify-content:center;align-items:center}
+.vcard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:0 20px 60px rgba(28,37,65,.1);width:100%;max-width:380px}
+@media(max-width:820px){.layer-row,.layer-row.flip{grid-template-columns:1fr;gap:36px;direction:ltr}.layer-row.flip>*{direction:ltr}}
+
+/* ===== SHOWCASE (tablet with real report) ===== */
+.showcase{position:relative;background:var(--navy);color:#fff;overflow:hidden;padding:130px 40px}
+.showcase-bg{position:absolute;inset:0;z-index:0}
+.showcase-bg img{width:100%;height:100%;object-fit:cover;opacity:.5}
+.showcase-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(14,21,37,.9),rgba(14,21,37,.6))}
+.showcase-inner{position:relative;z-index:2;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.showcase h2{font-size:clamp(26px,3.6vw,40px);font-weight:700;color:#fff;line-height:1.35}
+.showcase .lead{font-size:16px;color:rgba(255,255,255,.65);margin-top:18px;line-height:1.85}
+.report-cards{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+.rcard{padding:20px 22px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
+.rcard .t{font-size:11px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:7px}
+.rcard h4{font-size:17px;font-weight:700;color:#fff;margin-bottom:6px}
+.rcard p{font-size:13.5px;color:rgba(255,255,255,.55);line-height:1.65}
+.tablet-wrap{position:relative}
+.tablet-wrap img.frame{width:100%;filter:drop-shadow(0 30px 60px rgba(0,0,0,.5))}
+/* 태블릿 화면 위에 얹는 실제 결과 미니뷰 */
+.tablet-screen{position:absolute;top:20%;left:26%;width:52%;transform:rotate(-2deg);background:#fff;border-radius:8px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.mini-radar{display:flex;justify-content:center;margin-bottom:8px}
+.mini-type{text-align:center;font-size:10px;font-weight:700;color:#fff;background:var(--coral);border-radius:100px;padding:3px 10px;display:inline-block}
+@media(max-width:820px){.showcase-inner{grid-template-columns:1fr;gap:40px}.tablet-screen{position:static;width:100%;transform:none;margin-top:20px}}
+
+/* ===== CTA ===== */
+.cta{position:relative;padding:120px 40px;text-align:center;overflow:hidden;background:var(--navy)}
+.cta-bg{position:absolute;inset:0;z-index:0}
+.cta-bg img{width:100%;height:100%;object-fit:cover;opacity:.6}
+.cta-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,21,37,.75),rgba(14,21,37,.85))}
+.cta-inner{position:relative;z-index:2;max-width:640px;margin:0 auto}
+.cta h2{font-size:clamp(28px,4.2vw,46px);font-weight:700;color:#fff;line-height:1.35;margin-bottom:18px}
+.cta p{font-size:17px;color:rgba(255,255,255,.7);margin-bottom:38px}
+.cta .btn-primary{font-size:17px;padding:18px 46px}
+
+footer{background:#080d17;color:rgba(255,255,255,.35);text-align:center;padding:40px;font-size:13px}
+footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;margin-bottom:8px}
+
+/* ===== 모바일 세밀 최적화 ===== */
+@media(max-width:640px){
+  nav{padding:12px 18px}
+  .nav-cta{padding:9px 18px;font-size:13px}
+  .logo svg{width:28px;height:24px}
+  .logo span{font-size:15px}
+  .hero{min-height:auto;padding:110px 0 70px}
+  .hero-inner{padding:0 24px}
+  .hero-logo{width:90px;height:auto;margin-bottom:20px}
+  .hero-eyebrow{font-size:12px;padding:7px 14px;margin-bottom:22px}
+  .hero h1{font-size:30px;line-height:1.3;margin-bottom:20px}
+  .hero-sub{font-size:15px;line-height:1.75;margin-bottom:30px}
+  .hero-sub br{display:none}
+  .hero-btns{flex-direction:column;gap:10px}
+  .hero-btns a{width:100%;justify-content:center}
+  .scroll-hint{display:none}
+  .stats{padding:40px 20px 60px}
+  .stats-inner{gap:12px}
+  .stat{padding:20px 10px}
+  .section{padding:70px 22px}
+  .sec-title br{display:none}
+  .pain{padding:22px}
+  .layer-row{margin-bottom:70px}
+  .vcard{padding:24px;max-width:100%}
+  .showcase{padding:70px 22px}
+  .showcase h2 br{display:none}
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'Pretendard', sans-serif;
-  background: var(--paper);
-  color: var(--ink);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-.font-display { font-family: 'Gowun Batang', serif; }
-
-#app { max-width: 720px; margin: 0 auto; min-height: 100vh; position: relative; }
-
-.screen { display: none; padding: 32px 24px 80px; animation: fadeIn 0.35s ease; }
-.screen.active { display: block; }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ===== 공통 ===== */
-.eyebrow {
-  font-size: 13px; letter-spacing: 0.08em; color: var(--ink-soft);
-  font-weight: 600; text-transform: uppercase; margin-bottom: 8px;
-}
-
-/* ===== 랜딩 ===== */
-.prism-hero {
-  padding: 56px 0 0;
-  display: flex; flex-direction: column; align-items: center;
-}
-.prism-diagram { width: 100%; max-width: 360px; display: block; margin: 0 auto; }
-
-.prism-wordmark {
-  font-family: 'Gowun Batang', serif;
-  font-size: 15px; font-weight: 700; letter-spacing: 0.18em;
-  color: var(--ink); margin-top: 4px; text-align: center;
-}
-
-.landing-title {
-  font-family: 'Gowun Batang', serif;
-  font-size: 32px; font-weight: 700; line-height: 1.45;
-  margin: 22px 0 10px; text-align: center;
-}
-.landing-title .accent { color: var(--coral); }
-.landing-sub { color: var(--ink-soft); font-size: 14.5px; margin-bottom: 40px; text-align: center; }
-
-.level-list { display: flex; flex-direction: column; gap: 12px; }
-
-.level-card {
-  position: relative; display: flex; align-items: center; gap: 0;
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: 12px; padding: 0;
-  cursor: pointer; overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-  text-align: left; width: 100%; font-family: inherit;
-}
-.level-card:hover {
-  transform: translateX(3px);
-  box-shadow: 0 8px 20px rgba(28,37,65,0.07);
-}
-.level-stripe {
-  flex-shrink: 0; width: 8px; align-self: stretch;
-}
-.level-stripe.g1 { background: var(--coral); }
-.level-stripe.g2 { background: var(--teal); }
-.level-stripe.g3 { background: var(--gold); }
-.level-card-body { display: flex; align-items: center; gap: 14px; padding: 18px 20px; flex: 1; }
-.level-grade-tag {
-  flex-shrink: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
-  padding: 4px 10px; border-radius: 100px; color: white; white-space: nowrap;
-}
-.level-grade-tag.g1 { background: var(--coral); }
-.level-grade-tag.g2 { background: var(--teal); }
-.level-grade-tag.g3 { background: var(--gold); }
-.level-info { flex: 1; }
-.level-label { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
-.level-sub { font-size: 12.5px; color: var(--ink-soft); }
-.level-arrow { color: var(--ink-soft); font-size: 18px; flex-shrink: 0; padding-right: 4px; }
-
-.contact-box {
-  margin-top: 44px; padding: 20px 0; text-align: center;
-  border-top: 1px solid var(--line);
-}
-.contact-box .label {
-  font-family: 'Gowun Batang', serif; font-size: 13px; letter-spacing: 0.1em;
-  color: var(--ink-soft); margin-bottom: 6px;
-}
-.contact-box .value { font-weight: 600; font-size: 12.5px; color: var(--ink-soft); }
-
-/* ===== 검사 소개 ===== */
-.intro-stats {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-  margin: 24px 0 32px;
-}
-.stat-card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-  padding: 16px 8px; text-align: center;
-}
-.stat-num { font-size: 22px; font-weight: 700; }
-.stat-label { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
-
-.form-section-title {
-  font-size: 14px; font-weight: 700; color: var(--ink-soft);
-  letter-spacing: 0.04em; margin: 28px 0 14px;
-  padding-bottom: 8px; border-bottom: 1px solid var(--line);
-}
-.field { margin-bottom: 16px; }
-.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--ink-soft); }
-.field input, .field select {
-  width: 100%; padding: 13px 14px; border: 1px solid var(--line); border-radius: 10px;
-  font-size: 15px; font-family: inherit; background: white; color: var(--ink);
-}
-.field input:focus, .field select:focus { outline: 2px solid var(--coral); outline-offset: 1px; }
-.field .hint { font-size: 12px; color: #999; margin-top: 4px; }
-.field .error { font-size: 12px; color: var(--coral); margin-top: 4px; display: none; }
-
-.btn-primary {
-  width: 100%; padding: 16px; background: var(--ink); color: white;
-  border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
-  cursor: pointer; margin-top: 24px; transition: opacity 0.15s;
-  font-family: inherit;
-}
-.btn-primary:hover { opacity: 0.88; }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-text {
-  width: 100%; padding: 12px; background: none; border: none;
-  color: var(--ink-soft); font-size: 14px; cursor: pointer; font-family: inherit;
-}
-
-/* ===== 검사 진행 ===== */
-.progress-track { height: 6px; background: var(--line); border-radius: 100px; overflow: hidden; margin-bottom: 8px; }
-.progress-fill { height: 100%; background: var(--coral); border-radius: 100px; transition: width 0.3s ease; }
-.progress-label { font-size: 13px; color: var(--ink-soft); text-align: right; margin-bottom: 40px; font-weight: 600; }
-
-.q-text {
-  font-size: 22px; font-weight: 700; line-height: 1.5; margin-bottom: 32px;
-  min-height: 100px;
-}
-
-.option-card {
-  display: flex; align-items: flex-start; gap: 14px;
-  background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
-  padding: 20px; margin-bottom: 14px; cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  text-align: left; width: 100%; font-family: inherit;
-}
-.option-card:hover { border-color: var(--coral); background: #FFF9F6; }
-.option-letter {
-  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
-  background: var(--ink); color: white; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px;
-}
-.option-text { font-size: 16px; padding-top: 4px; line-height: 1.5; }
-
-.nav-row { display: flex; justify-content: center; margin-top: 8px; }
-.nav-back {
-  background: none; border: none; color: var(--ink-soft); font-size: 14px;
-  cursor: pointer; padding: 10px; font-family: inherit;
-}
-
-/* ===== 결과지 ===== */
-.print-bar {
-  position: sticky; top: 0; z-index: 10; background: var(--paper);
-  display: flex; gap: 10px; padding: 16px 0; border-bottom: 1px solid var(--line);
-  margin-bottom: 8px;
-}
-.print-btn {
-  flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--ink);
-  background: white; color: var(--ink); font-weight: 700; font-size: 14px;
-  cursor: pointer; font-family: inherit;
-}
-.print-btn.primary { background: var(--ink); color: white; }
-
-.result-page {
-  background: white; border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 32px 24px; margin-bottom: 20px;
-}
-.result-header { text-align: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
-.result-header .title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-.result-header .meta { font-size: 13px; color: var(--ink-soft); }
-
-.section-title {
-  font-size: 16px; font-weight: 700; margin: 28px 0 16px;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-title:first-child { margin-top: 0; }
-
-/* 레이어별 색상 변수 */
-:root {
-  --l1-color: #E8633C;
-  --l2-color: #2A9D8F;
-  --l3-color: #6B5CA5;
-}
-
-.layer-block {
-  border-radius: 16px; padding: 22px 18px; margin-bottom: 24px;
-  border: 1.5px solid var(--line);
-}
-.layer-block:last-child { margin-bottom: 0; }
-.layer-block--l1 { background: linear-gradient(180deg, #FFF4EF 0%, #FFFFFF 60%); border-color: #F3CDBC; }
-.layer-block--l2 { background: linear-gradient(180deg, #EEF8F6 0%, #FFFFFF 60%); border-color: #BFE3DD; }
-.layer-block--l3 { background: linear-gradient(180deg, #F1EEF8 0%, #FFFFFF 60%); border-color: #D6CCEA; }
-
-.layer-block-head {
-  display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;
-}
-.layer-icon { font-size: 18px; }
-.layer-name { font-size: 17px; font-weight: 700; }
-.layer-sub { font-size: 12.5px; color: var(--ink-soft); }
-
-.academy-only-badge {
-  display: inline-block; background: #FFF3E0; color: #B5752E;
-  font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px;
-  margin-bottom: 14px; letter-spacing: 0.02em;
-}
-
-.radar-wrap { display: flex; justify-content: center; margin: 16px 0 20px; }
-
-.axis-legend { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; padding: 0 4px; }
-.axis-legend-item { display: flex; align-items: baseline; gap: 7px; font-size: 12.5px; }
-.axis-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
-.axis-name { font-weight: 700; flex-shrink: 0; min-width: 56px; }
-.axis-desc { color: var(--ink-soft); }
-
-.type-label {
-  display: inline-block; background: var(--ink); color: white;
-  font-size: 15px; font-weight: 700; padding: 8px 16px; border-radius: 100px;
-  margin-bottom: 12px;
-}
-.type-desc { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 16px; }
-
-.detail-grid { display: grid; gap: 10px; margin-top: 14px; }
-.detail-row { display: flex; gap: 10px; font-size: 13.5px; padding: 10px 12px; background: #F7F4EE; border-radius: 8px; }
-.detail-row .k { font-weight: 700; flex-shrink: 0; min-width: 76px; color: var(--ink-soft); }
-
-.gauge-row { margin-bottom: 18px; }
-.gauge-head { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px; }
-.gauge-band-label { color: var(--l3-color); font-weight: 700; }
-.gauge-track { height: 12px; background: var(--line); border-radius: 100px; overflow: hidden; }
-.gauge-fill { height: 100%; border-radius: 100px; }
-.gauge-text { font-size: 13px; color: var(--ink-soft); margin-top: 8px; line-height: 1.55; }
-
-.recipe-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-.recipe-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.recipe-num {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 50%; background: var(--coral); color: white;
-  font-size: 12px; font-weight: 700; margin-right: 8px;
-}
-.recipe-title { font-weight: 700; font-size: 14.5px; display: inline; }
-.recipe-body { font-size: 13.5px; color: var(--ink-soft); margin-top: 8px; padding-left: 30px; }
-
-.academy-section { margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
-.academy-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.academy-section-title {
-  font-weight: 700; font-size: 14.5px; margin-bottom: 8px;
-  color: var(--ink); display: flex; align-items: center; gap: 6px;
-}
-.academy-body { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
-
-.guide-box {
-  background: #F7F4EE; border-radius: 10px; padding: 16px; margin-bottom: 14px;
-}
-.guide-box .gtitle { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
-.guide-box ul { padding-left: 18px; font-size: 13.5px; color: var(--ink-soft); }
-.guide-box li { margin-bottom: 4px; }
-
-@media print {
-  @page { size: A4; margin: 12mm 14mm; }
-  .print-bar, .no-print, #submit-badge { display: none !important; }
-  html, body {
-    background: white;
-    height: auto !important;
-    overflow: visible !important;
-    margin: 0 !important; padding: 0 !important;
-  }
-  #app {
-    max-width: 100% !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    position: static !important;
-  }
-  .screen {
-    display: block !important;
-    animation: none !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-  .result-page {
-    border: none; padding: 0; margin: 0;
-    overflow: visible !important;
-  }
-  .result-page + .result-page { margin-top: 8mm; padding-top: 6mm; border-top: 1px dashed #C9CDD6; }
-  .layer-block { page-break-inside: avoid; break-inside: avoid; }
-  .guide-box { page-break-inside: avoid; break-inside: avoid; }
-  .academy-section { page-break-inside: avoid; break-inside: avoid; }
-  svg { max-width: 100% !important; }
-
-  /* ===== 인쇄 집약 레이아웃: 화면용 1단 구조를 인쇄 전용으로 축소·2단화 ===== */
-  * { print-color-adjust: exact !important; -webkit-print-color-adjust: exact !important; }
-
-  .result-header { margin-bottom: 10px; padding-bottom: 8px; }
-  .result-header .title { font-size: 17px; }
-  .result-header .meta { font-size: 11px; }
-
-  .io-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
-  .gauge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
-  .academy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
-  .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
-
-  .layer-block {
-    padding: 9px 10px 9px 13px; margin-bottom: 8px; border-radius: 6px;
-    border-width: 1px; border-left-width: 5px;
-  }
-  .layer-block--l1 { background: #FDE9DF !important; border-color: #E8633C !important; }
-  .layer-block--l2 { background: #DEF1ED !important; border-color: #2A9D8F !important; }
-  .layer-block--l3 { background: #E7E1F2 !important; border-color: #6B5CA5 !important; }
-  .layer-block-head { margin-bottom: 2px; }
-  .layer-icon { font-size: 12px; }
-  .layer-name { font-size: 11.5px; }
-  .layer-sub { font-size: 9px; }
-
-  .radar-wrap svg { width: 130px !important; height: 130px !important; }
-  .radar-wrap { margin: 4px 0 6px; }
-
-  .axis-legend { gap: 2px; margin-bottom: 6px; }
-  .axis-legend-item { font-size: 8.5px; }
-  .axis-name { min-width: 38px; }
-  .axis-dot { width: 6px; height: 6px; }
-
-  .type-label { font-size: 10px; padding: 3px 9px; margin-bottom: 5px; }
-  .type-desc { font-size: 9.5px; margin-bottom: 6px; line-height: 1.4; }
-  .detail-grid { gap: 4px; margin-top: 5px; }
-  .detail-row { font-size: 9px; padding: 5px 7px; gap: 5px; line-height: 1.35; background: rgba(255,255,255,0.75) !important; border: 1px solid rgba(28,37,65,0.12); }
-  .detail-row .k { min-width: 48px; }
-
-  .gauge-row { margin-bottom: 0; background: rgba(255,255,255,0.6) !important; padding: 4px 6px; border-radius: 4px; }
-  .gauge-head { font-size: 9.5px; margin-bottom: 2px; }
-  .gauge-track { height: 5px; margin-bottom: 3px; background: rgba(28,37,65,0.12) !important; }
-  .gauge-text { font-size: 8.5px; line-height: 1.35; }
-
-  .section-title { font-size: 13px; margin: 0 0 8px; }
-  .academy-only-badge { font-size: 8.5px; padding: 2px 7px; margin-bottom: 8px; background: #FFE0B0 !important; color: #8A5A1E !important; }
-  .academy-section { margin-bottom: 9px; padding-bottom: 8px; border-bottom: 1px solid #C9CDD6 !important; }
-  .academy-section-title { font-size: 10.5px; margin-bottom: 3px; }
-  .academy-body { font-size: 9px; line-height: 1.45; }
-
-  .guide-box { padding: 9px 9px 9px 12px; margin-bottom: 0; border-left: 5px solid #C9CDD6; background: #EFEEEA !important; border-radius: 6px; }
-  .guide-box:nth-of-type(1) { border-left-color: #2A9D8F !important; background: #DEF1ED !important; }
-  .guide-box:nth-of-type(2) { border-left-color: #E8633C !important; background: #FDE9DF !important; }
-  .guide-box:nth-of-type(3) { border-left-color: #E8A33C !important; background: #FCEFD9 !important; }
-  .guide-box:nth-of-type(4) { border-left-color: #9A937F !important; background: #EFEBE0 !important; }
-  .gtitle { font-size: 10.5px; margin-bottom: 4px; }
-  .guide-box ul { font-size: 9px; line-height: 1.45; padding-left: 16px; }
-  .guide-box li { margin-bottom: 2px; }
-}
-
-@media (max-width: 420px) {
-  .q-text { font-size: 19px; }
-  .landing-title { font-size: 24px; }
-}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.rv.v{opacity:1;transform:none}
 </style>
 </head>
 <body>
-<div id="app"></div>
 
-<script src="questions.js"></script>
-<script src="scoring.js"></script>
-<script src="interpretations.js"></script>
-<script src="result-renderer.js"></script>
-<script src="app.js"></script>
+<nav id="nav">
+  <a href="#" class="logo" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+    <svg width="48" height="42" viewBox="0 0 200 130" fill="none" style="flex-shrink:0">
+      <line x1="100" y1="6" x2="100" y2="50" stroke="rgba(255,255,255,.5)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path d="M100 94 L100 120" stroke="#2A9D8F" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M109 90 C132 105 152 109 164 111" stroke="#E8A33C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <circle cx="36" cy="111" r="6" fill="#E8633C"/><circle cx="100" cy="120" r="6" fill="#2A9D8F"/><circle cx="164" cy="111" r="6" fill="#E8A33C"/>
+    </svg>
+    <span>P R I S M</span>
+  </a>
+  <a href="test.html" class="nav-cta">검사하기 →</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-bg"><img src="assets/hero.png" alt=""></div>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow rv"><span class="dot"></span>초등 영어 학습유형 진단 솔루션</div>
+    <h1 class="serif rv">같은 레벨, 같은 점수.<br>그런데 왜 <em>다르게</em> 배울까요.</h1>
+    <p class="hero-sub rv">레벨테스트는 실력을 알려주지만, 성향은 알려주지 않습니다.<br>PRISM은 학생 한 명 한 명의 학습 성향을 데이터로 진단해<br>상담과 수업 설계를 바꿔드립니다.</p>
+    <div class="hero-btns rv">
+      <a href="test.html" class="btn-primary">지금 검사 시작하기 →</a>
+      <a href="#how" class="btn-ghost">어떻게 작동하나요</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL ↓</div>
+</header>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat rv"><div class="num" data-target="10">0</div><div class="lbl">측정 차원</div></div>
+    <div class="stat rv"><div class="num" data-target="15">0</div><div class="lbl">학습 유형</div></div>
+    <div class="stat rv"><div class="num" data-target="3">0</div><div class="lbl">학년군별 검사</div></div>
+    <div class="stat rv"><div class="num" data-target="15">0<span class="unit">분</span></div><div class="lbl">소요 시간</div></div>
+  </div>
+</section>
+
+<!-- ===== PROBLEM ===== -->
+<section class="section problem">
+  <div class="problem-bgimg"><img src="assets/gradient.png" alt=""></div>
+  <div class="section-inner">
+    <p class="eyebrow" style="color:var(--coral)" >WHY PRISM</p>
+    <h2 class="sec-title serif rv">레벨로는 관리되지 않는<br><em>이탈의 순간들</em></h2>
+    <p class="sec-lead rv" style="color:rgba(255,255,255,.6)">교사는 직감으로 알고 있지만, 근거로 설명하기 어려웠던 것들. PRISM은 그 직감에 데이터를 더합니다.</p>
+    <div class="pain-grid">
+      <div class="pain rv"><div class="ico">👂</div><div class="txt"><strong>노래로는 문장을 통째로 외우면서,</strong> 교재만 펴면 멍해지는 아이. 이유가 있습니다.</div></div>
+      <div class="pain rv"><div class="ico">🤐</div><div class="txt"><strong>완벽해야 입을 여는 학생</strong>에게 "왜 발표를 안 하니"라고 하고 있진 않나요.</div></div>
+      <div class="pain rv"><div class="ico">📉</div><div class="txt"><strong>레벨업 직후 흔들리는 학생</strong>을 그냥 "적응 중"으로만 넘기고 있진 않나요.</div></div>
+      <div class="pain rv"><div class="ico">💬</div><div class="txt">퇴원 상담에서 <strong>"우리가 이 아이를 이렇게 챙깁니다"</strong>라고 보여줄 근거가 있으신가요.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW / LAYERS ===== -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div style="text-align:center;margin-bottom:70px">
+      <p class="eyebrow" style="color:var(--teal)">HOW IT WORKS</p>
+      <h2 class="sec-title serif rv">한 학생을 세 겹으로 읽습니다</h2>
+      <p class="sec-lead rv" style="margin:18px auto 0">빛이 프리즘을 지나 여러 색으로 나뉘듯,<br>학생의 영어 학습을 입력·출력·동력 세 층으로 분해해 고유한 프로파일을 만듭니다.</p>
+    </div>
+
+    <div class="layer-row rv">
+      <div>
+        <span class="layer-tag" style="background:#FDE9DF;color:var(--coral)">LAYER 1 · 입력</span>
+        <h3 class="serif">이 학생은 <em style="color:var(--coral);font-style:normal">듣고</em> 배우고,<br>저 학생은 <em style="color:var(--coral);font-style:normal">읽고</em> 배웁니다</h3>
+        <p class="desc">영어를 받아들이는 경로가 학생마다 다릅니다. 소리·글자·상황 세 경로의 강도를 측정해 가장 효율적인 학습 진입점을 찾습니다.</p>
+        <div class="layer-dims">
+          <div class="ldim"><b style="color:var(--coral)">Sound</b><span>소리로 듣고 익히는 힘</span></div>
+          <div class="ldim"><b style="color:var(--coral)">Text</b><span>글자를 읽고 이해하는 힘</span></div>
+          <div class="ldim"><b style="color:var(--coral)">Scene</b><span>상황과 맥락으로 짐작하는 힘</span></div>
+        </div>
+      </div>
+      <div class="layer-visual">
+        <div class="vcard">
+          <div style="display:flex;justify-content:center;margin-bottom:14px">
+  <svg width="296" height="272" viewBox="0 0 296 272" style="max-width:100%; height:auto;">
+    <polygon points="148,116.5 164.88749537379655,145.75 131.11250462620345,145.75" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,97 181.7749907475931,155.5 114.22500925240689,155.5" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,77.5 198.66248612138966,165.25 97.33751387861034,165.25" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,58 215.54998149518622,175 80.45001850481378,175" fill="none" stroke="#E3DDD1" stroke-width="1"/>
+    <line x1="148" y1="136" x2="148" y2="58" stroke="#E3DDD1" stroke-width="1"/><line x1="148" y1="136" x2="215.54998149518622" y2="175" stroke="#E3DDD1" stroke-width="1"/><line x1="148" y1="136" x2="80.45001850481378" y2="175" stroke="#E3DDD1" stroke-width="1"/>
+    <polygon points="148,72.04 193.93398741672664,162.52 114.22500925240689,155.5" fill="#E8633C22" stroke="#1C2541" stroke-width="2"/>
+    <circle cx="148" cy="72.04" r="4" fill="#E8633C"/><circle cx="193.93398741672664" cy="162.52" r="4" fill="#2A9D8F"/><circle cx="114.22500925240689" cy="155.5" r="4" fill="#E8A33C"/>
+    
+      <text x="148" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#1C2541">Sound</text>
+      <text x="148" y="40" text-anchor="middle" font-size="13" fill="#4A5578">82</text>
+    
+      <text x="241.53074360871938" y="186" text-anchor="start" font-size="13" font-weight="700" fill="#1C2541">Text</text>
+      <text x="241.53074360871938" y="202" text-anchor="start" font-size="13" fill="#4A5578">68</text>
+    
+      <text x="54.469256391280624" y="186" text-anchor="end" font-size="13" font-weight="700" fill="#1C2541">Scene</text>
+      <text x="54.469256391280624" y="202" text-anchor="end" font-size="13" fill="#4A5578">50</text>
+    
+  </svg></div>
+          <div style="text-align:center"><span style="display:inline-block;background:var(--coral);color:#fff;font-size:13px;font-weight:700;padding:6px 15px;border-radius:100px">다빈치형 · Sound+Text</span><p style="font-size:13px;color:var(--soft);margin-top:10px">듣기와 읽기를 함께 쓰는 균형형</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-row flip rv">
+      <div>
+        <span class="layer-tag" style="background:#DEF1ED;color:var(--teal)">LAYER 2 · 출력</span>
+        <h3 class="serif">같은 말을 하는데,<br><em style="color:var(--teal);font-style:normal">말하는 방식</em>이 다릅니다</h3>
+        <p class="desc">일단 말하는 학생, 정확히 말하는 학생, 새로운 표현에 도전하는 학생. 표현 성향에 따라 수업 설계가 완전히 달라집니다.</p>
+        <div class="layer-dims">
+          <div class="ldim"><b style="color:var(--teal)">Flow</b><span>틀려도 일단 말하고 쓰는 편</span></div>
+          <div class="ldim"><b style="color:var(--teal)">Form</b><span>정확하게 말하고 쓰려는 편</span></div>
+          <div class="ldim"><b style="color:var(--teal)">Frontier</b><span>새로운 표현을 시도하는 편</span></div>
+        </div>
+      </div>
+      <div class="layer-visual">
+        <div class="vcard">
+          <div style="text-align:center;margin-bottom:16px"><span style="display:inline-block;background:var(--teal);color:#fff;font-size:13px;font-weight:700;padding:6px 15px;border-radius:100px">처칠형 · 거침없는 소통가</span></div>
+          <div style="background:#F2FAF8;border-radius:11px;padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:5px">성장 방향</div><div style="font-size:13.5px;color:var(--ink)">유창성은 충분합니다. 이제 정확성을 한 단계 올릴 시기예요.</div></div>
+          <div style="background:#FFF6F0;border-radius:11px;padding:14px"><div style="font-size:12px;font-weight:700;color:var(--coral);margin-bottom:5px">주의</div><div style="font-size:13.5px;color:var(--soft)">즉시 교정하면 말하는 양이 줄 수 있어요.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-row rv">
+      <div>
+        <span class="layer-tag" style="background:#E7E1F2;color:var(--purple)">LAYER 3 · 동력</span>
+        <h3 class="serif">점수가 아니라,<br><em style="color:var(--purple);font-style:normal">마음을 읽습니다</em></h3>
+        <p class="desc">자신감, 회복력, 소통 욕구, 무대 에너지. 같은 유형이라도 이 네 가지가 다르면 필요한 케어가 완전히 다릅니다.</p>
+        <div class="layer-dims">
+          <div class="ldim"><b style="color:var(--purple)">Confidence</b><span>영어에 대한 심리적 준비도</span></div>
+          <div class="ldim"><b style="color:var(--purple)">Resilience</b><span>실수 후 다시 시도하는 힘</span></div>
+          <div class="ldim"><b style="color:var(--purple)">Connection</b><span>소통 도구로 여기는 정도</span></div>
+          <div class="ldim"><b style="color:var(--purple)">Stage</b><span>여러 사람 앞에서의 에너지</span></div>
+        </div>
+      </div>
+      <div class="layer-visual">
+        <div class="vcard">
+          <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>자신감</span><span style="color:#6B5CA5;font-size:12px">단단한 편</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:72%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>회복력</span><span style="color:#6B5CA5;font-size:12px">빠르게 회복</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:85%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>소통 욕구</span><span style="color:#6B5CA5;font-size:12px">동기가 강함</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:65%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div><div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px"><span>무대 에너지</span><span style="color:#6B5CA5;font-size:12px">상황에 따라</span></div><div style="height:8px;background:#EDEBF2;border-radius:100px;overflow:hidden"><div style="height:100%;width:48%;border-radius:100px;background:linear-gradient(90deg,#6B5CA5,#8B7DC0)"></div></div></div>
+          <p style="font-size:12px;color:var(--soft);margin-top:14px;text-align:center">점수 대신 완곡한 표현으로 전달합니다</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOWCASE ===== -->
+<section class="showcase">
+  <div class="showcase-bg"><img src="assets/tablet.png" alt=""></div>
+  <div class="showcase-inner">
+    <div class="rv">
+      <p class="eyebrow" style="color:var(--coral)">DUAL REPORT</p>
+      <h2 class="serif">한 번의 검사,<br>두 장의 결과지</h2>
+      <p class="lead">학부모에게는 이해를, 교사에게는 전략을. 같은 데이터를 두 관점으로 전달합니다.</p>
+      <div class="report-cards">
+        <div class="rcard"><div class="t">FOR PARENTS</div><h4>학부모용 프로파일</h4><p>레이더 차트 + 유형 이름 + 가정 가이드. "우리 아이가 이렇게 배우는군요"를 한 장에.</p></div>
+        <div class="rcard"><div class="t">FOR TEACHERS</div><h4>학원용 수업설계서 + 상담카드</h4><p>수업 전략·활동 레시피 + 이탈 가능성 참고 + 상담 요약. 내일 수업부터 바로.</p></div>
+      </div>
+    </div>
+    <div class="rv" style="display:flex;justify-content:center;align-items:center">
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:34px;backdrop-filter:blur(10px);width:100%;max-width:360px">
+        <div style="display:flex;justify-content:center;margin-bottom:16px">
+  <svg width="296" height="272" viewBox="0 0 296 272" style="max-width:100%; height:auto;">
+    <polygon points="148,116.5 164.88749537379655,145.75 131.11250462620345,145.75" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,97 181.7749907475931,155.5 114.22500925240689,155.5" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,77.5 198.66248612138966,165.25 97.33751387861034,165.25" fill="none" stroke="#E3DDD1" stroke-width="1"/><polygon points="148,58 215.54998149518622,175 80.45001850481378,175" fill="none" stroke="#E3DDD1" stroke-width="1"/>
+    <line x1="148" y1="136" x2="148" y2="58" stroke="#E3DDD1" stroke-width="1"/><line x1="148" y1="136" x2="215.54998149518622" y2="175" stroke="#E3DDD1" stroke-width="1"/><line x1="148" y1="136" x2="80.45001850481378" y2="175" stroke="#E3DDD1" stroke-width="1"/>
+    <polygon points="148,89.2 171.64249352331518,149.65 87.2050166543324,171.1" fill="#E8633C22" stroke="#1C2541" stroke-width="2"/>
+    <circle cx="148" cy="89.2" r="4" fill="#E8633C"/><circle cx="171.64249352331518" cy="149.65" r="4" fill="#2A9D8F"/><circle cx="87.2050166543324" cy="171.1" r="4" fill="#E8A33C"/>
+    
+      <text x="148" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#1C2541">Sound</text>
+      <text x="148" y="40" text-anchor="middle" font-size="13" fill="#4A5578">60</text>
+    
+      <text x="241.53074360871938" y="186" text-anchor="start" font-size="13" font-weight="700" fill="#1C2541">Text</text>
+      <text x="241.53074360871938" y="202" text-anchor="start" font-size="13" fill="#4A5578">35</text>
+    
+      <text x="54.469256391280624" y="186" text-anchor="end" font-size="13" font-weight="700" fill="#1C2541">Scene</text>
+      <text x="54.469256391280624" y="202" text-anchor="end" font-size="13" fill="#4A5578">90</text>
+    
+  </svg></div>
+        <div style="text-align:center"><span style="display:inline-block;background:var(--coral);color:#fff;font-size:13px;font-weight:700;padding:6px 15px;border-radius:100px">에디슨형 · Scene 주도형</span></div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:9px"><div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px;color:#fff"><span>자신감</span><span style="color:#B9A9E0;font-size:11px">단단한 편</span></div><div style="height:7px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden"><div style="height:100%;width:75%;border-radius:100px;background:linear-gradient(90deg,#8B7DC0,#B9A9E0)"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px;color:#fff"><span>회복력</span><span style="color:#B9A9E0;font-size:11px">빠르게 회복</span></div><div style="height:7px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden"><div style="height:100%;width:80%;border-radius:100px;background:linear-gradient(90deg,#8B7DC0,#B9A9E0)"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px;color:#fff"><span>소통 욕구</span><span style="color:#B9A9E0;font-size:11px">매우 강함</span></div><div style="height:7px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden"><div style="height:100%;width:88%;border-radius:100px;background:linear-gradient(90deg,#8B7DC0,#B9A9E0)"></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <div class="cta-bg"><img src="assets/consult.png" alt=""></div>
+  <div class="cta-inner rv">
+    <h2 class="serif">학생을 데이터로<br>이해하는 학원이 되세요</h2>
+    <p>15분이면 끝납니다. 지금 바로 시작해보세요.</p>
+    <a href="test.html" class="btn-primary">지금 검사 시작하기 →</a>
+  </div>
+</section>
+
+<footer>
+  <svg width="60" height="48" viewBox="0 0 200 130" fill="none" style="margin:0 auto 14px">
+    <line x1="100" y1="6" x2="100" y2="50" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M100 94 L100 120" stroke="#2A9D8F" stroke-width="4" stroke-linecap="round"/>
+    <path d="M109 90 C132 105 152 109 164 111" stroke="#E8A33C" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <circle cx="36" cy="111" r="5.5" fill="#E8633C"/><circle cx="100" cy="120" r="5.5" fill="#2A9D8F"/><circle cx="164" cy="111" r="5.5" fill="#E8A33C"/>
+  </svg>
+  <div class="fl">P R I S M</div>
+  Profile of Receptive Input, Speaking &amp; Motivation<br>
+  초등 영어 학습유형 프로파일 검사
+</footer>
+
+<script>
+// nav scroll
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>50));
+// reveal
+document.querySelectorAll('.rv').forEach(el=>{
+  new IntersectionObserver(([e],o)=>{if(e.isIntersecting){el.classList.add('v');o.unobserve(el)}},{threshold:.12}).observe(el);
+});
+// count up
+function countUp(el){
+  const t=+el.dataset.target;let c=0;const step=Math.max(1,Math.ceil(t/40));
+  const unit=el.querySelector('.unit')?el.querySelector('.unit').outerHTML:'';
+  const tick=()=>{c+=step;if(c>=t){c=t}else requestAnimationFrame(tick);el.innerHTML=c+unit;};tick();
+}
+document.querySelectorAll('.stat .num').forEach(el=>{
+  new IntersectionObserver(([e],o)=>{if(e.isIntersecting){countUp(el);o.unobserve(el)}},{threshold:.5}).observe(el);
+});
+</script>
 </body>
 </html>
