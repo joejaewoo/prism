@@ -48,30 +48,38 @@ function renderCounselCard(result, meta = {}) {
 
   return `
 <div class="counsel-card">
+  <div class="academy-only-badge">학원 내부용</div>
+  <div class="section-title">🗂 ${name} 학생 상담 요약 카드</div>
+  <p style="font-size:13px; color:var(--ink-soft); margin-bottom:18px;">상담 테이블에서 바로 쓰는 한 장 요약입니다. 성향 → 힘들 수 있는 점 → 케어 계획 순으로 정리했어요.</p>
   <div class="cc-head">
     <div class="cc-title">${name} <span class="cc-sub">${gradeStr}</span></div>
     <div class="cc-logo">PRISM 상담 요약</div>
   </div>
 
   <!-- ① 성향 -->
-  <div class="cc-section">
+  <div class="cc-section cc-sec-l1">
     <div class="cc-label cc-l1">① 이 아이는 이런 성향입니다</div>
-    <div class="cc-persona">
-      <span class="cc-tag cc-tag-l1">${l1.persona || ''} · ${l1.title || ''}</span>
-      <span class="cc-tag cc-tag-l2">${l2.title || ''}</span>
+    <div class="cc-persona-block">
+      ${typeof getPersonaIcon === 'function' ? `<span class="cc-persona-icon">${getPersonaIcon(l1.persona)}</span>` : ''}
+      <div class="cc-persona-info">
+        <div class="cc-persona">
+          <span class="cc-tag cc-tag-l1">${l1.persona || ''} · ${l1.title || ''}</span>
+          <span class="cc-tag cc-tag-l2">${l2.title || ''}</span>
+        </div>
+        <p class="cc-desc">${l1.desc || ''}</p>
+      </div>
     </div>
-    <p class="cc-desc">${l1.desc || ''}</p>
     <div class="cc-bands">${l3summary}</div>
   </div>
 
   <!-- ② 힘들 수 있는 부분 -->
-  <div class="cc-section">
+  <div class="cc-section cc-sec-l2">
     <div class="cc-label cc-l2">② 그래서 이런 부분이 힘들 수 있어요</div>
     <ul class="cc-list cc-concern">${concernHtml}</ul>
   </div>
 
   <!-- ③ 케어 계획 -->
-  <div class="cc-section">
+  <div class="cc-section cc-sec-l3">
     <div class="cc-label cc-l3">③ 그래서 저희는 이렇게 하겠습니다</div>
     <ul class="cc-list cc-plan">${planHtml}</ul>
   </div>
@@ -82,31 +90,38 @@ function renderCounselCard(result, meta = {}) {
 
 // 카드 전용 CSS (결과지와 별도로 삽입해서 씀)
 const COUNSEL_CARD_CSS = `
-.counsel-card{max-width:640px;margin:0 auto;background:#fff;border:1px solid #DDE1E8;border-radius:16px;padding:28px 26px;font-family:'Pretendard',sans-serif;color:#1C2541;line-height:1.6}
+.counsel-card{max-width:640px;margin:0 auto;background:#fff;font-family:'Pretendard',sans-serif;color:#1C2541;line-height:1.6}
+.result-page .counsel-card{max-width:100%}
 .cc-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #1C2541;padding-bottom:14px;margin-bottom:18px}
 .cc-title{font-size:22px;font-weight:700}
 .cc-sub{font-size:14px;color:#4A5578;font-weight:400;margin-left:8px}
 .cc-logo{font-size:12px;font-weight:700;letter-spacing:.1em;color:#9A937F}
-.cc-section{margin-bottom:20px}
-.cc-label{font-size:14px;font-weight:700;padding:6px 12px;border-radius:8px;display:inline-block;margin-bottom:10px}
-.cc-l1{background:#FDE9DF;color:#E8633C}
-.cc-l2{background:#DEF1ED;color:#2A9D8F}
-.cc-l3{background:#E7E1F2;color:#6B5CA5}
+.cc-section{margin-bottom:20px;padding:18px 18px 16px;border-radius:12px;border:1px solid #ECECF0}
+.cc-sec-l1{background:#FFF8F5;border-color:#F5D9CC}
+.cc-sec-l2{background:#F3FAF8;border-color:#CFE8E1}
+.cc-sec-l3{background:#F6F3FB;border-color:#DED4EE}
+.cc-persona-block{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.cc-persona-icon{display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;flex-shrink:0;border:1.5px solid #E8633C;color:#E8633C;border-radius:12px;background:#fff}
+.cc-persona-info{flex:1;min-width:0}
+.cc-label{font-size:14px;font-weight:700;padding:7px 14px;border-radius:8px;display:inline-block;margin-bottom:14px}
+.cc-l1{background:#FDE0D3;color:#C24A22}
+.cc-l2{background:#D3EDE7;color:#1F7A6E}
+.cc-l3{background:#E3DAF3;color:#544387}
 .cc-persona{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .cc-tag{font-size:13px;font-weight:700;padding:5px 12px;border-radius:100px;color:#fff}
 .cc-tag-l1{background:#E8633C}
 .cc-tag-l2{background:#2A9D8F}
-.cc-desc{font-size:13.5px;color:#4A5578;margin-bottom:10px}
-.cc-bands{display:flex;gap:6px;flex-wrap:wrap}
-.cc-band{font-size:12px;font-weight:600;color:#6B5CA5;background:#F1EEF8;padding:4px 10px;border-radius:100px}
+.cc-desc{font-size:13.5px;color:#4A5578;margin-bottom:0;line-height:1.65}
+.cc-bands{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px dashed #E5D5CC}
+.cc-band{font-size:12px;font-weight:600;color:#6B5CA5;background:#fff;padding:5px 11px;border-radius:100px;border:1px solid #E0D8EE}
 .cc-list{list-style:none;padding:0;margin:0}
-.cc-list li{font-size:13.5px;color:#4A5578;padding:8px 0 8px 20px;position:relative;border-bottom:1px solid #F0F0F0}
-.cc-list li:last-child{border-bottom:none}
-.cc-concern li:before{content:'•';position:absolute;left:4px;color:#E8A33C;font-weight:700}
-.cc-plan li:before{content:'✓';position:absolute;left:2px;color:#2A9D8F;font-weight:700}
+.cc-list li{font-size:13.5px;color:#3A4360;padding:12px 14px 12px 34px;position:relative;line-height:1.6;background:#fff;border-radius:9px;margin-bottom:8px}
+.cc-list li:last-child{margin-bottom:0}
+.cc-concern li:before{content:'•';position:absolute;left:14px;top:12px;color:#E8A33C;font-weight:700;font-size:16px}
+.cc-plan li:before{content:'✓';position:absolute;left:13px;top:12px;color:#2A9D8F;font-weight:700}
 .cc-none{color:#2A9D8F !important}
 .cc-none:before{content:'✓' !important;color:#2A9D8F !important}
-.cc-foot{font-size:11px;color:#9A937F;line-height:1.5;border-top:1px solid #DDE1E8;padding-top:12px;margin-top:6px}
+.cc-foot{font-size:11px;color:#9A937F;line-height:1.5;border-top:1px solid #DDE1E8;padding-top:14px;margin-top:8px}
 
 /* ===== 인쇄 전용: A4 한 장 고정 + 색상 또렷하게 ===== */
 @media print{
@@ -127,24 +142,29 @@ const COUNSEL_CARD_CSS = `
   .cc-sub{font-size:13px}
   .cc-logo{font-size:11px}
 
-  /* 각 섹션이 페이지 중간에서 잘리지 않도록 */
-  .cc-section{margin-bottom:14px;page-break-inside:avoid;break-inside:avoid}
-  .cc-label{font-size:13px;padding:5px 11px;margin-bottom:8px}
-  .cc-persona{margin-bottom:8px}
-  .cc-tag{font-size:12.5px;padding:4px 11px}
-  .cc-desc{font-size:12.5px;margin-bottom:8px;line-height:1.5}
-  .cc-band{font-size:11px;padding:3px 9px}
+  /* 각 섹션이 페이지 중간에서 잘리지 않도록 + 배경색 유지 */
+  .cc-section{margin-bottom:12px;padding:12px 12px 10px;page-break-inside:avoid;break-inside:avoid}
+  .cc-sec-l1{background:#FFF8F5 !important;border-color:#F5D9CC !important}
+  .cc-sec-l2{background:#F3FAF8 !important;border-color:#CFE8E1 !important}
+  .cc-sec-l3{background:#F6F3FB !important;border-color:#DED4EE !important}
+  .cc-persona-block{margin-bottom:8px;gap:10px}
+  .cc-persona-icon{width:40px !important;height:40px !important}
+  .cc-persona-icon .persona-icon{width:30px;height:30px}
+  .cc-label{font-size:12px;padding:4px 10px;margin-bottom:8px}
+  .cc-persona{margin-bottom:6px}
+  .cc-tag{font-size:11.5px;padding:4px 10px}
+  .cc-desc{font-size:11.5px;margin-bottom:0;line-height:1.5}
+  .cc-bands{padding-top:8px}
+  .cc-band{font-size:10.5px;padding:3px 9px}
 
-  .cc-list li{font-size:12.5px;padding:6px 0 6px 20px;line-height:1.5;page-break-inside:avoid;break-inside:avoid}
-  /* 배지·불릿 색상 인쇄 강제 (일부 브라우저가 :before 색을 지우는 것 방지) */
-  .cc-l1{background:#FDE9DF !important;color:#E8633C !important}
-  .cc-l2{background:#DEF1ED !important;color:#2A9D8F !important}
-  .cc-l3{background:#E7E1F2 !important;color:#6B5CA5 !important}
+  .cc-list li{font-size:11.5px;padding:8px 10px 8px 28px;line-height:1.5;margin-bottom:5px;background:#fff !important;page-break-inside:avoid;break-inside:avoid}
+  .cc-l1{background:#FDE0D3 !important;color:#C24A22 !important}
+  .cc-l2{background:#D3EDE7 !important;color:#1F7A6E !important}
+  .cc-l3{background:#E3DAF3 !important;color:#544387 !important}
   .cc-tag-l1{background:#E8633C !important;color:#fff !important}
   .cc-tag-l2{background:#2A9D8F !important;color:#fff !important}
-  .cc-band{background:#F1EEF8 !important;color:#6B5CA5 !important}
-  .cc-concern li:before{color:#E8A33C !important}
-  .cc-plan li:before{color:#2A9D8F !important}
+  .cc-concern li:before{color:#E8A33C !important;left:11px;top:8px}
+  .cc-plan li:before{color:#2A9D8F !important;left:10px;top:8px}
 
   .cc-foot{font-size:10px;padding-top:10px;margin-top:4px}
 }

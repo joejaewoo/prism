@@ -8,8 +8,10 @@ function renderAxisLegend(dims) {
   <div class="axis-legend">
     ${dims.map(d => `
       <div class="axis-legend-item">
-        <span class="axis-dot" style="background:${COLORS[d]};"></span>
-        <span class="axis-name">${DIM_LABELS[d]}</span>
+        <span class="axis-top">
+          <span class="axis-dot" style="background:${COLORS[d]};"></span>
+          <span class="axis-name">${DIM_LABELS[d]}</span>
+        </span>
         <span class="axis-desc">${DIM_DESCRIPTIONS[d]}</span>
       </div>
     `).join('')}
@@ -56,9 +58,14 @@ function renderResultPage1(r, respondent, today) {
           <span class="layer-name">입력 회로</span>
           <span class="layer-sub">영어를 어떻게 받아들이는가</span>
         </div>
-        <div class="radar-wrap">${renderRadarSVG(['sound','text','scene'], r.layer1)}</div>
-        ${renderAxisLegend(['sound','text','scene'])}
-        <div class="type-label" style="background:var(--l1-color);">${l1.persona} <span style="opacity:0.75; font-weight:500;">· ${r.layer1.type}</span></div>
+        <div class="radar-legend-row">
+          <div class="radar-wrap">${renderRadarSVG(['sound','text','scene'], r.layer1)}</div>
+          ${renderAxisLegend(['sound','text','scene'])}
+        </div>
+        <div class="type-label-row">
+          ${typeof getPersonaIcon === 'function' ? `<span class="persona-icon-wrap" style="color:var(--l1-color);">${getPersonaIcon(l1.persona)}</span>` : ''}
+          <div class="type-label" style="background:var(--l1-color);">${l1.persona} <span style="opacity:0.75; font-weight:500;">· ${r.layer1.type}</span></div>
+        </div>
         <div class="type-desc">${l1.desc}</div>
         <div class="detail-grid">
           <div class="detail-row"><span class="k">강점</span><span>${l1.strength}</span></div>
@@ -73,9 +80,14 @@ function renderResultPage1(r, respondent, today) {
           <span class="layer-name">출력 성향</span>
           <span class="layer-sub">영어를 어떻게 표현하는가</span>
         </div>
-        <div class="radar-wrap">${renderRadarSVG(['flow','form','frontier'], r.layer2)}</div>
-        ${renderAxisLegend(['flow','form','frontier'])}
-        <div class="type-label" style="background:var(--l2-color);">${l2.persona} <span style="opacity:0.75; font-weight:500;">· ${r.layer2.type}</span></div>
+        <div class="radar-legend-row">
+          <div class="radar-wrap">${renderRadarSVG(['flow','form','frontier'], r.layer2)}</div>
+          ${renderAxisLegend(['flow','form','frontier'])}
+        </div>
+        <div class="type-label-row">
+          ${typeof getPersonaIcon === 'function' ? `<span class="persona-icon-wrap" style="color:var(--l2-color);">${getPersonaIcon(l2.persona)}</span>` : ''}
+          <div class="type-label" style="background:var(--l2-color);">${l2.persona} <span style="opacity:0.75; font-weight:500;">· ${r.layer2.type}</span></div>
+        </div>
         <div class="type-desc">${l2.desc}</div>
         <div class="detail-grid">
           <div class="detail-row"><span class="k">성장 포인트</span><span>${l2.growth}</span></div>
@@ -137,17 +149,17 @@ function renderRecipePage(r, respondent) {
 
     <div class="academy-grid">
       <div class="academy-section">
-        <div class="academy-section-title">1. 입력 설계 — 어떤 자극을 먼저 줄 것인가</div>
+        <div class="academy-section-title">1. 무엇으로 배우게 할까 — 자료와 순서</div>
         <div class="academy-body">${computeInputDesign(r)}</div>
       </div>
 
       <div class="academy-section">
-        <div class="academy-section-title">2. 출력 설계 — 어떻게 말하고 쓰게 할 것인가</div>
+        <div class="academy-section-title">2. 어떻게 말하고 쓰게 할까</div>
         <div class="academy-body">${computeOutputDesign(r)}</div>
       </div>
 
       <div class="academy-section">
-        <div class="academy-section-title">3. 교정 피드백 프로토콜</div>
+        <div class="academy-section-title">3. 틀린 것을 고쳐주는 방법</div>
         <div class="academy-body">${computeFeedbackStrategy(r)}</div>
       </div>
 
@@ -218,8 +230,8 @@ function renderParentGuidePage(r) {
       </div>
 
       <div class="guide-box">
-        <div class="gtitle">🔄 재검사 안내</div>
-        <div style="font-size:13.5px; color:var(--ink-soft);">6개월 후 재검사를 권장합니다. 같은 검사를 다시 받으면 아이의 성장 변화를 객관적으로 확인할 수 있어요.</div>
+        <div class="gtitle">📌 참고</div>
+        <div style="font-size:13.5px; color:var(--ink-soft);">이 결과는 아이의 현재 성향을 보여주는 참고 자료입니다. 아이를 이해하고 대화의 실마리를 찾는 데 활용해주세요.</div>
       </div>
     </div>
   </div>
@@ -232,8 +244,8 @@ function computeFeedbackStrategy(r) {
   const formHigh = r.layer2.form >= 60;
   const flowHigh = r.layer2.flow >= 60;
 
-  if (flowHigh && sound) return "지연 교정 + 구두 피드백: 대화 흐름을 유지한 후, 끝나고 나서 1~2개만 짚어주세요.";
-  if (flowHigh && !sound) return "지연 교정 + 서면 피드백: 활동 녹음 후 텍스트로 교정 포인트를 정리해 전달해주세요.";
+  if (flowHigh && sound) return "말이 끝난 뒤 고쳐주기(말로): 대화를 끊지 말고, 끝난 다음에 1~2개만 짚어주세요.";
+  if (flowHigh && !sound) return "말이 끝난 뒤 고쳐주기(글로): 활동을 녹음해두고, 나중에 글로 정리해서 전달해주세요.";
   if (formHigh && sound) return "즉시 교정 + 구두 피드백: 발음·표현을 현장에서 바로 교정해주세요. 이 유형은 정확한 피드백을 환영합니다.";
   if (formHigh && !sound) return "즉시 교정 + 서면 피드백: 글로 표시되는 교정을 환영하는 유형입니다.";
   if (r.layer2.frontier >= 60) return "선택적 교정: 새 표현 시도 자체를 칭찬하고, 더 정확한 표현은 대안으로 제시해주세요.";
@@ -248,7 +260,7 @@ function computeInputDesign(r) {
   const weakest = sorted[sorted.length - 1];
 
   const materialMap = {
-    sound: "오디오북, 챈트, 원어민 음성 자료를 수업 도입부 5분에 배치하세요. 새 단원 시작 시 텍스트보다 음성을 먼저 들려주는 순서가 정착도를 높입니다.",
+    sound: "오디오북, 챈트, 원어민 음성 자료를 수업 도입부 5분에 배치하세요. 새 단원을 시작할 때 글자보다 소리를 먼저 들려주면 더 잘 기억합니다.",
     text: "워크북, 리딩 패시지, 문법 정리표를 중심 자료로 사용하세요. 새 표현은 음성보다 문장으로 먼저 제시한 뒤 발음을 붙이는 순서가 효과적입니다.",
     scene: "상황극 카드, 영상 클립, 역할극 시나리오를 도입 자료로 활용하세요. 규칙을 먼저 설명하기보다 상황 속에 던져넣고 패턴을 스스로 알아채게 하는 방식이 맞습니다."
   };
@@ -266,14 +278,14 @@ function computeOutputDesign(r) {
   const { flow, form, frontier } = r.layer2;
 
   const activityMap = {
-    flow_dominant: "자유 대화, 즉석 롤플레이, 1분 스피치처럼 발화량 자체를 늘리는 활동 비중을 높이세요. 작문은 초안을 빠르게 쓰게 한 뒤 별도 시간에 첨삭하는 2단계 구성이 맞습니다.",
-    form_dominant: "문장 단위 정확도를 요구하는 받아쓰기, 문법 빈칸 채우기, 정밀 작문이 효과적입니다. 발화 활동에서는 충분한 사전 준비 시간(생각할 시간)을 보장해주세요.",
+    flow_dominant: "자유 대화, 즉석 역할극, 1분 말하기처럼 말을 많이 하게 하는 활동을 늘리세요. 글쓰기는 일단 빠르게 쓰게 한 뒤, 나중에 따로 고쳐주는 2단계로 하면 좋습니다.",
+    form_dominant: "받아쓰기, 문법 빈칸 채우기, 꼼꼼한 글쓰기가 잘 맞습니다. 말하기 활동에서는 미리 생각할 시간을 충분히 주세요.",
     frontier_dominant: "같은 의미를 여러 표현으로 바꿔보는 패러프레이징 활동, 신조어·관용구 탐구 코너를 정기적으로 배치하세요. 어휘 확장 욕구를 수업의 동력으로 활용할 수 있습니다.",
-    balanced: "자유 발화와 정밀 교정 활동을 번갈아 배치하는 로테이션 구성이 적합합니다. 한 차시 안에서도 앞 절반은 자유롭게, 뒤 절반은 정확하게 점검하는 식으로 모드를 전환해주세요.",
+    balanced: "자유롭게 말하는 활동과 꼼꼼히 고치는 활동을 번갈아 하면 좋습니다. 한 수업 안에서도 앞 절반은 자유롭게, 뒤 절반은 정확하게 점검하는 식으로 나눠보세요.",
     flow_frontier: "프로젝트형 창작 과제(짧은 이야기 쓰기, 광고 만들기 등)에 강점이 있습니다. 결과물을 만들고 난 뒤 사후 교정을 더하는 순서로 진행하세요.",
-    form_frontier: "디베이트, 에세이처럼 정교함과 새로운 표현이 모두 필요한 과제에서 두각을 보입니다. 다만 발화 속도를 높이는 타이머 활동을 보조적으로 섞어주세요.",
+    form_frontier: "토론, 에세이처럼 정확함과 새로운 표현이 모두 필요한 과제에서 잘합니다. 다만 빠르게 말하는 연습(타이머 활동)도 가끔 섞어주세요.",
     potential: "아직 출력 스타일이 고정되지 않았으므로, 말하기·쓰기·역할극 등 다양한 출력 형태를 한 학기 동안 골고루 경험시키며 패턴을 관찰해주세요.",
-    observer: "전체 발표보다 1:1 또는 짝 활동 중심으로 출력 기회를 설계하세요. \"A 또는 B\" 같은 선택형 질문으로 짧은 발화부터 유도하는 것이 효과적입니다."
+    observer: "전체 발표보다 1:1이나 짝 활동으로 말할 기회를 주세요. 'A 아니면 B?' 같은 선택형 질문으로 짧게 말하는 것부터 시작하면 좋습니다.",
   };
 
   return `${activityMap[r.layer2.typeKey] || activityMap.balanced} (Flow ${flow} · Form ${form} · Frontier ${frontier})`;
@@ -318,7 +330,7 @@ function computeCurriculumPlacement(r) {
 function computeTeachingRisks(r) {
   const risks = [];
   const avoidMap = {
-    flow_dominant: "말할 때마다 즉시 문법을 교정하면 발화량이 급격히 줄어들 수 있습니다. 교정은 반드시 활동 종료 후로 미뤄주세요.",
+    flow_dominant: "말할 때마다 바로 문법을 고쳐주면 말하는 양이 확 줄 수 있습니다. 고쳐주는 건 활동이 끝난 뒤로 미뤄주세요.",
     form_dominant: "\"빨리 말해봐\" 같은 속도 압박은 완벽주의 성향을 자극해 오히려 침묵으로 이어질 수 있습니다.",
     frontier_dominant: "\"배운 표현만 써라\"는 제한은 이 학생의 핵심 동기 자체를 꺾습니다. 새 표현 시도는 막지 말고 정확도만 사후에 보완해주세요.",
     observer: "준비 없이 전체 학생 앞에서 갑자기 호명하는 방식은 이 학생을 더 위축시킵니다. 발표 전 반드시 사전 신호나 준비 시간을 주세요."
@@ -346,13 +358,13 @@ function computeConsultingQA(r) {
   const l3 = r.layer3;
 
   if (l3.confidence < 40 || l3.stage < 30) {
-    items.push("Q. \"우리 아이는 왜 말을 잘 안 하려고 하나요?\" → A. 출력 회로가 아직 열리기 전인 자연스러운 단계이며, 많은 학생이 이런 침묵기를 거친 뒤 한 번에 발화가 터지는 경험을 합니다. 현재는 안전한 소규모 환경에서 성공 경험을 쌓는 단계라고 설명해주세요.");
+    items.push("Q. \"우리 아이는 왜 말을 잘 안 하려고 하나요?\" → A. 아직 말문이 트이기 전의 자연스러운 단계이며, 많은 학생이 이런 조용한 시기를 거친 뒤 한 번에 말이 터집니다. 지금은 편안한 소규모 환경에서 작은 성공을 쌓는 단계라고 설명해주세요.");
   }
   if (r.layer2.typeKey === 'form_dominant') {
     items.push("Q. \"문법은 아는데 왜 말은 못 하나요?\" → A. 정확하게 말하려는 성향이 강해 스스로 검증이 끝난 문장만 꺼내는 경향 때문입니다. 결함이 아니라 신중한 성향의 결과이며, 시간 제한 말하기 같은 연습으로 점진적으로 속도를 끌어올릴 수 있다고 안내해주세요.");
   }
   if (r.layer2.typeKey === 'flow_dominant') {
-    items.push("Q. \"문법 실수가 많은데 괜찮은가요?\" → A. 유창성이 먼저 발달하는 학생은 정확성이 자연스럽게 따라오는 경우가 많습니다. 현재는 발화량 자체가 자산이며, 정확도는 의도적인 교정 루틴으로 단계적으로 채워가고 있다고 설명해주세요.");
+    items.push("Q. \"문법 실수가 많은데 괜찮은가요?\" → A. 말이 먼저 트이는 학생은 정확함이 나중에 자연스럽게 따라오는 경우가 많습니다. 지금은 말을 많이 하는 것 자체가 큰 강점이고, 정확함은 차근차근 고쳐가며 채워간다고 설명해주세요.");
   }
   if (items.length === 0) {
     items.push("Q. \"지금 단계에서 뭘 더 신경 써야 하나요?\" → A. 전반적으로 균형 잡힌 프로파일이므로, 한 가지를 더 보강하기보다 다양한 활동을 통해 경험의 폭을 넓혀주는 시기라고 안내해주세요.");
@@ -367,9 +379,9 @@ function computeNextStepProposal(r) {
     return "\"지금처럼 적극적으로 말하는 힘을 다음 단계에서는 디베이트·프레젠테이션 트랙으로 연결해보면 좋을 것 같습니다\"라는 방향으로 다음 단계를 제안해보세요.";
   }
   if (l2Type === 'observer' || r.layer3.stage < 30) {
-    return "\"지금은 안전하게 자신감을 쌓는 시기이고, 소그룹 환경을 조금 더 유지하면서 6개월 후 재검사로 변화를 함께 확인해보면 좋겠습니다\"라는 방향으로, 성급한 레벨업보다 안정적인 환경 유지를 제안해보세요.";
+    return "'지금은 편안하게 자신감을 쌓는 시기이니, 소그룹 환경을 조금 더 유지하면서 천천히 가면 좋겠습니다'라는 방향으로, 성급한 레벨업보다 안정적인 환경을 제안해보세요.";
   }
-  return "\"현재 프로파일을 기준으로 6개월 후 재검사를 진행하면 성장 곡선을 객관적으로 보여드릴 수 있습니다\"라는 방향으로 재검사 일정을 함께 제안해보세요.";
+  return "'지금 이 성향을 참고해서 아이에게 맞는 방식으로 지도하겠습니다'라는 방향으로, 앞으로의 지도 계획을 함께 안내해보세요.";
 }
 
 function computeHomeTips(r) {

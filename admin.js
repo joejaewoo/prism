@@ -115,10 +115,19 @@ function attachLoginEvents() {
   pwInput.focus();
 }
 
+// 관리자 진입 비밀번호 (클라이언트 게이트)
+const ADMIN_PASSWORD = '7905';
+
 function verifyPassword() {
+  // 1) 클라이언트에서 먼저 비밀번호 확인
+  if (adminState.pw !== ADMIN_PASSWORD) {
+    adminState.authError = true;
+    adminRender();
+    return;
+  }
   if (!isApiConfigured()) {
     adminState.authError = false;
-    adminState.authed = true; // API 미설정 상태에서는 비밀번호 검증 자체가 불가하므로 통과시키고 화면에서 경고 표시
+    adminState.authed = true; // API 미설정 상태에서는 통과시키고 화면에서 경고 표시
     adminState.error = 'API_URL 미설정';
     adminRender();
     return;
@@ -129,12 +138,16 @@ function verifyPassword() {
       if (data.ok) {
         adminState.authed = true;
         adminState.authError = false;
-        adminState.items = data.items; // 검증 요청 결과를 그대로 재사용 (중복 호출 방지)
+        adminState.items = data.items;
         adminState.error = null;
         sessionStorage.setItem('prism_admin_pw', adminState.pw);
         adminRender();
       } else {
-        adminState.authError = true;
+        // 비번은 맞지만 서버 조회 실패 → 서버(code.gs) 비번이 다를 수 있음.
+        // 진입은 허용하되 데이터 오류로 표시.
+        adminState.authed = true;
+        adminState.authError = false;
+        adminState.error = (data.error || '데이터 조회 실패') + ' (서버 비밀번호 확인 필요)';
         adminRender();
       }
     })
@@ -326,32 +339,42 @@ function renderDetailModal(detail) {
   }
 
   let bodyHtml;
+  // 학원용 결과지 뒤에 상담카드를 함께 붙이는 헬퍼
+  const academyWithCard = (item) => {
+    const main = renderAcademyResult(
+      { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
+      { name: item.name, grade: item.grade }
+    );
+    let card = '';
+    if (typeof renderCounselCard === 'function') {
+      card = `<div class="result-page">${renderCounselCard(
+        buildCounselResult(item),
+        { name: item.name, grade: item.grade, school: item.school, gradeGroup: item.gradeGroup }
+      )}</div>`;
+    }
+    return main + card;
+  };
+
   if (detail.loading) {
     bodyHtml = `<div class="loading">불러오는 중...</div>`;
   } else if (detail.error) {
     bodyHtml = `<div class="loading">⚠️ ${escapeHtml(detail.error)}</div>`;
-  } else if (viewMode === 'counsel') {
-    // ===== 상담카드 뷰 =====
-    const cardOf = (item) => renderCounselCard(
-      buildCounselResult(item),
-      { name: item.name, grade: item.grade, school: item.school, gradeGroup: item.gradeGroup }
-    );
-    if (adminState.detailMulti) {
-      bodyHtml = adminState.detailMulti.map(cardOf).join('<div style="height:24px;"></div>');
-    } else {
-      bodyHtml = cardOf(detail.item);
-    }
   } else if (adminState.detailMulti) {
-    bodyHtml = adminState.detailMulti.map(item => renderFn(
-      { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
-      { name: item.name, grade: item.grade }
-    )).join('<div style="height:24px;"></div>');
+    const fn = viewMode === 'academy'
+      ? academyWithCard
+      : (item) => renderFn(
+          { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
+          { name: item.name, grade: item.grade }
+        );
+    bodyHtml = adminState.detailMulti.map(fn).join('<div style="height:24px;"></div>');
   } else {
     const item = detail.item;
-    bodyHtml = renderFn(
-      { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
-      { name: item.name, grade: item.grade }
-    );
+    bodyHtml = viewMode === 'academy'
+      ? academyWithCard(item)
+      : renderFn(
+          { layer1: item.layer1, layer2: item.layer2, layer3: item.layer3, recipe: item.recipe },
+          { name: item.name, grade: item.grade }
+        );
   }
 
   overlay.innerHTML = `
@@ -359,7 +382,6 @@ function renderDetailModal(detail) {
       <div class="modal-toolbar">
         <button class="view-toggle ${viewMode === 'parent' ? 'active' : ''}" id="btn-view-parent">학부모용</button>
         <button class="view-toggle ${viewMode === 'academy' ? 'active' : ''}" id="btn-view-academy">학원용</button>
-        <button class="view-toggle ${viewMode === 'counsel' ? 'active' : ''}" id="btn-view-counsel">상담카드</button>
         <button id="btn-modal-print" style="background:white; color:var(--ink);">🖨 인쇄 / PDF</button>
         <button class="btn-close" id="btn-modal-close">닫기</button>
       </div>
@@ -381,11 +403,6 @@ function renderDetailModal(detail) {
   });
   document.getElementById('btn-view-academy').addEventListener('click', () => {
     adminState.viewMode = 'academy';
-    overlay.remove();
-    renderDetailModal(adminState.detail);
-  });
-  document.getElementById('btn-view-counsel').addEventListener('click', () => {
-    adminState.viewMode = 'counsel';
     overlay.remove();
     renderDetailModal(adminState.detail);
   });
