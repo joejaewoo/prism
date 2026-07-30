@@ -1,0 +1,206 @@
+/**
+ * PRISM (Profile of Receptive Input, Speaking & Motivation) — Apps Script 백엔드
+ *
+ * 역할:
+ *  - doPost: 학생 검사 페이지에서 응시 결과를 전송받아 Sheets에 저장
+ *  - doGet : 관리자 페이지에서 목록/상세 조회
+ *
+ * 시트 구조 (스프레드시트 1개, 탭 1개: "응시기록")
+ * A:id  B:접수일시  C:이름  D:학년  E:학년군  F:학교  G:학부모연락처
+ * H:layer1_json  I:layer2_json  J:layer3_json  K:recipe_json  L:answers_json
+ *
+ * 배포 방법:
+ *  1. 구글 시트 새로 만들기 → 확장 프로그램 > Apps Script
+ *  2. 이 코드를 code.gs에 붙여넣기
+ *  3. 배포 > 새 배포 > 웹 앱 > 액세스 권한: 전체 공개(익명 포함) > 배포
+ *  4. 발급된 /exec URL을 학생 페이지(app.js)와 관리자 페이지(admin.js)의 API_URL에 입력
+ */
+
+const SHEET_NAME = '응시기록';
+const HEADERS = ['id', '접수일시', '이름', '학년', '학년군', '학교', '학부모연락처', 'layer1', 'layer2', 'layer3', 'recipe', 'answers', '기관코드', '기관명'];
+const ADMIN_PASSWORD = '7905'; // 관리자 페이지 접근 비밀번호
+
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    sheet.appendRow(HEADERS);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function jsonResponse_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function generateId_() {
+  return 'R' + new Date().getTime() + Math.floor(Math.random() * 1000);
+}
+
+/**
+ * POST body 예시:
+ * {
+ *   "action": "submit",
+ *   "respondent": { "name": "홍길동", "grade": "초3", "gradeGroup": "g2", "school": "즐거움초", "phone": "010-0000-0000" },
+ *   "result": { "layer1": {...}, "layer2": {...}, "layer3": {...}, "recipe": {...} },
+ *   "answers": { "q1": "A", "q2": "B", ... }
+ * }
+ */
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    const action = body.action;
+
+    if (action === 'submit') {
+      return handleSubmit_(body);
+    }
+
+    return jsonResponse_({ ok: false, error: 'unknown action: ' + action });
+  } catch (err) {
+    return jsonResponse_({ ok: false, error: err.message });
+  }
+}
+
+function handleSubmit_(body) {
+  const sheet = getSheet_();
+  const id = generateId_();
+  const r = body.respondent || {};
+  const result = body.result || {};
+
+  sheet.appendRow([
+    id,
+    new Date(),
+    r.name || '',
+    r.grade || '',
+    r.gradeGroup || '',
+    r.school || '',
+    r.phone || '',
+    JSON.stringify(result.layer1 || {}),
+    JSON.stringify(result.layer2 || {}),
+    JSON.stringify(result.layer3 || {}),
+    JSON.stringify(result.recipe || {}),
+    JSON.stringify(body.answers || {}), 
+    r.orgCode || '', 
+    r.orgName || ''
+    
+    
+  ]);
+
+  return jsonResponse_({ ok: true, id: id });
+}
+
+/**
+ * GET 파라미터:
+ *  ?action=list&pw=비밀번호                        → 전체 목록 (요약 정보만)
+ *  ?action=list&pw=비밀번호&from=...&to=...&q=...&gradeGroup=g2  → 필터링된 목록
+ *  ?action=detail&pw=비밀번호&id=R123...           → 단건 상세 (결과지 렌더링용 전체 데이터)
+ *
+ * 조회(action=list, detail)는 관리자 전용이므로 pw 파라미터로 비밀번호를 확인합니다.
+ */
+function doGet(e) {
+  try {
+    const action = e.parameter.action;
+
+   if (action === 'orgs') {
+      const ss = SpreadsheetApp.getActiveSpreadsheet();
+      const sh = ss.getSheetByName('기관');
+      if (!sh) return jsonResponse_({ ok: true, orgs: [] });
+      const rows = sh.getDataRange().getValues();
+      const orgs = [];
+      for (let i = 1; i < rows.length; i++) {
+        const code = String(rows[i][0]).trim();
+        const name = String(rows[i][1]).trim();
+        const active = String(rows[i][2]).trim().toUpperCase();
+        if (code && active === 'Y') orgs.push({ code: code, name: name });
+      }
+      return jsonResponse_({ ok: true, orgs: orgs });
+    }
+
+
+    if (action === 'list' || action === 'detail') {
+      if (e.parameter.pw !== ADMIN_PASSWORD) {
+        return jsonResponse_({ ok: false, error: 'unauthorized' });
+      }
+    }
+
+    if (action === 'list') {
+      return jsonResponse_({ ok: true, items: listRecords_(e.parameter) });
+    }
+    if (action === 'detail') {
+      const item = getRecordById_(e.parameter.id);
+      if (!item) return jsonResponse_({ ok: false, error: 'not found' });
+      return jsonResponse_({ ok: true, item: item });
+    }
+
+    return jsonResponse_({ ok: false, error: 'unknown action' });
+  } catch (err) {
+    return jsonResponse_({ ok: false, error: err.message });
+  }
+}
+
+function rowToRecord_(row) {
+  return {
+    id: row[0],
+    submittedAt: row[1] instanceof Date ? row[1].toISOString() : row[1],
+    name: row[2],
+    grade: row[3],
+    gradeGroup: row[4],
+    school: row[5],
+    phone: row[6],
+    layer1: safeParse_(row[7]),
+    layer2: safeParse_(row[8]),
+    layer3: safeParse_(row[9]),
+    recipe: safeParse_(row[10]),
+    answers: safeParse_(row[11])
+  };
+}
+
+function safeParse_(str) {
+  try { return JSON.parse(str); } catch (e) { return {}; }
+}
+
+function listRecords_(params) {
+  const sheet = getSheet_();
+  const data = sheet.getDataRange().getValues();
+  data.shift(); // 헤더 제거
+
+  let records = data.map(rowToRecord_).reverse(); // 최신순
+
+  if (params.gradeGroup) {
+    records = records.filter(r => r.gradeGroup === params.gradeGroup);
+  }
+  if (params.q) {
+    const q = params.q.trim();
+    records = records.filter(r => r.name.includes(q));
+  }
+  if (params.from) {
+    const from = new Date(params.from);
+    records = records.filter(r => new Date(r.submittedAt) >= from);
+  }
+  if (params.to) {
+    const to = new Date(params.to);
+    to.setHours(23, 59, 59);
+    records = records.filter(r => new Date(r.submittedAt) <= to);
+  }
+
+  // 목록에서는 무거운 answers/recipe 제외하고 요약만 반환
+  return records.map(r => ({
+    id: r.id, submittedAt: r.submittedAt, name: r.name, grade: r.grade,
+    gradeGroup: r.gradeGroup, school: r.school,
+    layer1Type: r.layer1.type, layer2Type: r.layer2.type,
+    layer1TypeKey: r.layer1.typeKey, layer2TypeKey: r.layer2.typeKey
+  }));
+}
+
+function getRecordById_(id) {
+  const sheet = getSheet_();
+  const data = sheet.getDataRange().getValues();
+  data.shift();
+  for (const row of data) {
+    if (row[0] === id) return rowToRecord_(row);
+  }
+  return null;
+}
