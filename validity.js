@@ -37,6 +37,8 @@ function computeValidity(gradeGroup, answers, times) {
   var t = Object.keys(times).map(function (k) { return times[k]; })
     .filter(function (v) { return typeof v === 'number' && v > 0; });
   var totalTimed = t.length;
+  var totalMs = t.reduce(function (s, v) { return s + v; }, 0);
+  var avgMs = totalTimed ? Math.round(totalMs / totalTimed) : 0;
   var fastCount = t.filter(function (v) { return v < VALIDITY_FAST_MS; }).length;
   var medianMs = _median(t);
   var fastHeavy = totalTimed > 0 && ((fastCount / totalTimed) >= 0.5 || (medianMs > 0 && medianMs < 1200));
@@ -56,7 +58,8 @@ function computeValidity(gradeGroup, answers, times) {
 
   return {
     nPairs: nPairs, mismatches: mismatches,
-    fastCount: fastCount, totalTimed: totalTimed, medianMs: Math.round(medianMs),
+    fastCount: fastCount, totalTimed: totalTimed,
+    totalMs: totalMs, avgMs: avgMs, medianMs: Math.round(medianMs),
     flag: flag, note: note
   };
 }

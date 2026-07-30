@@ -81,6 +81,7 @@ function attachOrgGateEvents() {
           adminState.orgName = match.name || '';
           adminState.orgAuthed = true;
           adminState.orgError = '';
+          sessionStorage.setItem('prism_admin_org', JSON.stringify({ code: code, name: adminState.orgName }));
           loadList();
         } else {
           adminState.orgError = '등록되지 않은 기관 코드입니다.';
@@ -92,6 +93,7 @@ function attachOrgGateEvents() {
   if (document.getElementById('btn-admin-org')) document.getElementById('btn-admin-org').addEventListener('click', submit);
   document.getElementById('btn-admin-logout').addEventListener('click', () => {
     sessionStorage.removeItem('prism_admin_pw');
+    sessionStorage.removeItem('prism_admin_org');
     adminState.authed = false; adminState.orgAuthed = false; adminState.pw = '';
     adminState.orgCode = ''; adminState.orgName = '';
     adminRender();
@@ -261,10 +263,10 @@ function verifyPassword() {
       if (data.ok) {
         adminState.authed = true;
         adminState.authError = false;
-        adminState.items = data.items;
         adminState.error = null;
         sessionStorage.setItem('prism_admin_pw', adminState.pw);
-        adminRender();
+        if (adminState.orgAuthed) { loadList(); }
+        else { adminState.items = data.items; adminRender(); }
       } else {
         // 비번은 맞지만 서버 조회 실패 → 서버(code.gs) 비번이 다를 수 있음.
         // 진입은 허용하되 데이터 오류로 표시.
@@ -445,17 +447,31 @@ function buildCounselResult(item) {
 }
 
 // ===== 상세 패널 (우측) =====
-// 응답 신뢰도 참고 배지 (화면 전용, 인쇄 제외)
+// 응답 신뢰도 참고 (화면 전용, 인쇄 제외). 항상 표시해 선생님이 신뢰도를 명확히 보게 함.
+function fmtDuration(ms) {
+  if (!ms || ms < 0) return '-';
+  const s = Math.round(ms / 1000);
+  const m = Math.floor(s / 60), r = s % 60;
+  return m > 0 ? `${m}분 ${r}초` : `${r}초`;
+}
 function validityBadge(item) {
   const v = item && item.answers && item.answers.__validity;
-  if (!v || v.flag === 'ok') return '';
+  if (!v) {
+    return `<div class="validity-note" style="margin:0 0 14px;padding:9px 14px;border-radius:10px;background:#F1F2F5;color:#8A8F9C;font-size:12.5px">참고 · 이 기록은 신뢰도 측정 도입 이전에 저장되어 측정값이 없습니다.</div>`;
+  }
   const styleMap = {
-    unreliable:      { label: '신뢰도 낮음', bg: '#FDE0D3', color: '#C24A22' },
-    low_consistency: { label: '응답 엇갈림', bg: '#FFE9C7', color: '#8A5A1E' },
-    fast:            { label: '빠른 응답',   bg: '#EEF0F4', color: '#4A5578' }
+    ok:              { label: '양호', bg: '#E4F3EE', color: '#1F7A6E' },
+    fast:            { label: '참고 (빠른 응답)', bg: '#EEF0F4', color: '#4A5578' },
+    low_consistency: { label: '주의 (응답 엇갈림)', bg: '#FFE9C7', color: '#8A5A1E' },
+    unreliable:      { label: '낮음', bg: '#FDE0D3', color: '#C24A22' }
   };
-  const s = styleMap[v.flag] || styleMap.fast;
-  return `<div class="validity-note" style="margin:0 0 14px;padding:11px 15px;border-radius:10px;background:${s.bg};color:${s.color};font-size:13px;line-height:1.55"><b>참고 · ${s.label}</b> — ${escapeHtml(v.note || '')}</div>`;
+  const s = styleMap[v.flag] || styleMap.ok;
+  const matched = (v.nPairs || 0) - (v.mismatches || 0);
+  const metrics = `확인 문항 ${matched}/${v.nPairs || 0}쌍 일치 · 총 응답 ${fmtDuration(v.totalMs)} (평균 ${(v.avgMs/1000).toFixed(1)}초/문항)`;
+  const noteHtml = v.note ? `<div style="margin-top:5px">${escapeHtml(v.note)}</div>` : '';
+  return `<div class="validity-note" style="margin:0 0 14px;padding:11px 15px;border-radius:10px;background:${s.bg};color:${s.color};font-size:13px;line-height:1.55">
+    <b>응답 신뢰도 · ${s.label}</b>
+    <div style="margin-top:3px;font-size:12.5px;opacity:.9">${metrics}</div>${noteHtml}</div>`;
 }
 
 function renderDetailContent(detail) {
@@ -549,6 +565,7 @@ function attachAdminEvents() {
   document.getElementById('btn-refresh').addEventListener('click', loadList);
   document.getElementById('btn-logout').addEventListener('click', () => {
     sessionStorage.removeItem('prism_admin_pw');
+    sessionStorage.removeItem('prism_admin_org');
     adminState.authed = false;
     adminState.orgAuthed = false;
     adminState.orgCode = '';
@@ -560,6 +577,7 @@ function attachAdminEvents() {
   });
   const switchBtn = document.getElementById('btn-org-switch');
   if (switchBtn) switchBtn.addEventListener('click', () => {
+    sessionStorage.removeItem('prism_admin_org');
     adminState.orgAuthed = false;
     adminState.orgCode = '';
     adminState.orgName = '';
@@ -638,6 +656,10 @@ function loadBulkDetail() {
 const savedPw = sessionStorage.getItem('prism_admin_pw');
 if (savedPw) {
   adminState.pw = savedPw;
+  const savedOrg = sessionStorage.getItem('prism_admin_org');
+  if (savedOrg) {
+    try { const o = JSON.parse(savedOrg); if (o && o.code) { adminState.orgCode = o.code; adminState.orgName = o.name || ''; adminState.orgAuthed = true; } } catch (e) {}
+  }
   verifyPassword();
 } else {
   adminRender();

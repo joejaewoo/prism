@@ -170,7 +170,7 @@ function renderLanding() {
           <span class="level-grade-tag ${g}">${m.grades.join('·')}</span>
           <div class="level-info">
             <div class="level-label">${m.label}</div>
-            <div class="level-sub">약 ${m.time} · ${m.count}문항</div>
+            <div class="level-sub">약 ${m.time} · ${totalCount(g)}문항</div>
           </div>
           <div class="level-arrow">→</div>
         </div>
@@ -226,7 +226,7 @@ function renderIntro() {
   </p>
 
   <div class="intro-stats">
-    <div class="stat-card"><div class="stat-num">${m.count}</div><div class="stat-label">문항</div></div>
+    <div class="stat-card"><div class="stat-num">${totalCount(state.gradeGroup)}</div><div class="stat-label">문항</div></div>
     <div class="stat-card"><div class="stat-num">${m.time}</div><div class="stat-label">소요 시간</div></div>
   </div>
 
@@ -270,6 +270,7 @@ function getTestQuestions(gg) {
   const seconds = checks.filter(q => /b$/.test(q.id));
   return base.concat(firsts, seconds);
 }
+function totalCount(gg) { return getTestQuestions(gg).length; }
 
 function renderTest() {
   const questions = getTestQuestions(state.gradeGroup);
