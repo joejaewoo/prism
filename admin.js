@@ -16,7 +16,12 @@ const adminState = {
   selectedIds: new Set(),
   detail: null, // { item, loading, error } - 단건 상세
   detailMulti: null, // 다중 선택 인쇄용 [item, item, ...]
-  viewMode: 'parent' // 'parent' | 'academy' - 상세 모달에서 보는 결과지 종류
+  viewMode: 'parent', // 'parent' | 'academy' - 상세 모달에서 보는 결과지 종류
+  // 기관 코드 게이트 (로그인 후 자기 기관 학생만 조회)
+  orgAuthed: false,
+  orgCode: '',
+  orgName: '',
+  orgError: ''
 };
 
 function isApiConfigured() {
@@ -28,6 +33,12 @@ function adminRender() {
   if (!adminState.authed) {
     app.innerHTML = renderLogin();
     attachLoginEvents();
+    return;
+  }
+  // 로그인 후 기관 코드 미입력 상태면 기관 코드 관문 표시
+  if (!adminState.orgAuthed) {
+    app.innerHTML = renderOrgGate();
+    attachOrgGateEvents();
     return;
   }
   app.innerHTML = renderAdminMain();
@@ -42,15 +53,79 @@ function adminRender() {
   }
 }
 
+// ===== 기관 코드 관문 (관리자) =====
+function renderOrgGate() {
+  return `
+  <div style="max-width:400px; margin:80px auto 0; text-align:center;">
+    <div class="top-title font-display" style="font-size:22px; margin-bottom:8px;">기관 선택</div>
+    <div class="top-sub" style="margin-bottom:28px;">조회할 기관의 6자리 코드를 입력해주세요</div>
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:28px 24px;">
+      <input type="text" id="admin-org-input" placeholder="예: HANA01" maxlength="6"
+        style="width:100%; padding:14px; border:1.5px solid var(--line); border-radius:10px; font-size:18px; text-align:center; letter-spacing:.2em; text-transform:uppercase; font-weight:700; margin-bottom:12px; font-family:inherit;">
+      ${adminState.orgError ? `<div style="color:var(--coral); font-size:13px; margin-bottom:12px;">${adminState.orgError}</div>` : ''}
+      <button class="btn-sm" id="btn-admin-org" style="width:100%; padding:13px;">이 기관 학생 조회</button>
+      <button class="btn-sm outline" id="btn-admin-logout" style="width:100%; padding:11px; margin-top:8px;">로그아웃</button>
+    </div>
+  </div>`;
+}
+
+function attachOrgGateEvents() {
+  const input = document.getElementById('admin-org-input');
+  const submit = () => {
+    const code = (input.value || '').trim().toUpperCase();
+    if (code.length !== 6) { adminState.orgError = '기관 코드는 6자리입니다.'; adminRender(); return; }
+    adminState.orgError = '';
+    const btn = document.getElementById('btn-admin-org');
+    if (btn) { btn.textContent = '확인 중...'; btn.disabled = true; }
+    // 기관 목록에서 코드 검증
+    fetch(`${API_URL}?action=orgs`)
+      .then(r => r.json())
+      .then(data => {
+        const orgs = (data && data.orgs) || [];
+        const match = orgs.find(o => String(o.code).trim().toUpperCase() === code);
+        if (match) {
+          adminState.orgCode = code;
+          adminState.orgName = match.name || '';
+          adminState.orgAuthed = true;
+          adminState.orgError = '';
+          loadList();
+        } else {
+          adminState.orgError = '등록되지 않은 기관 코드입니다.';
+          adminRender();
+        }
+      })
+      .catch(() => { adminState.orgError = '확인 중 오류가 발생했습니다.'; adminRender(); });
+  };
+  if (document.getElementById('btn-admin-org')) document.getElementById('btn-admin-org').addEventListener('click', submit);
+  document.getElementById('btn-admin-logout').addEventListener('click', () => {
+    sessionStorage.removeItem('prism_admin_pw');
+    adminState.authed = false; adminState.orgAuthed = false; adminState.pw = '';
+    adminState.orgCode = ''; adminState.orgName = '';
+    adminRender();
+  });
+  if (input) { input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); }); input.focus(); }
+}
+
+// 현재 기관 코드로 학생 목록 필터
+function filterByOrg(items) {
+  if (!adminState.orgCode) return items;
+  return items.filter(i => {
+    const code = (i.orgCode || i['기관코드'] || '').toString().trim().toUpperCase();
+    return code === adminState.orgCode.toUpperCase();
+  });
+}
+
+
 function renderAdminMain() {
   return `
   <div class="top-bar">
     <div>
       <div class="top-title font-display">PRISM 응시 기록 관리</div>
-      <div class="top-sub">Profile of Receptive Input, Speaking &amp; Motivation</div>
+      <div class="top-sub">${adminState.orgName ? escapeHtml(adminState.orgName) + ' · ' + escapeHtml(adminState.orgCode) : 'Profile of Receptive Input, Speaking & Motivation'}</div>
     </div>
     <div>
-      <a href="index.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="display:inline-block; text-decoration:none; text-align:center;">📝 평가 화면으로 가기</a>
+      <a href="test.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="display:inline-block; text-decoration:none; text-align:center;">📝 평가 화면으로 가기</a>
+      <button class="btn-sm outline" id="btn-org-switch" style="margin-left:8px;">기관 변경</button>
       <button class="btn-sm outline" id="btn-refresh" style="margin-left:8px;">↻ 새로고침</button>
       <button class="btn-sm outline" id="btn-logout" style="margin-left:8px;">로그아웃</button>
     </div>
@@ -263,7 +338,7 @@ function loadList() {
     .then(data => {
       adminState.loading = false;
       if (data.ok) {
-        adminState.items = data.items;
+        adminState.items = filterByOrg(data.items);
       } else {
         adminState.error = data.error || '알 수 없는 오류';
       }
@@ -422,9 +497,22 @@ function attachAdminEvents() {
   document.getElementById('btn-logout').addEventListener('click', () => {
     sessionStorage.removeItem('prism_admin_pw');
     adminState.authed = false;
+    adminState.orgAuthed = false;
+    adminState.orgCode = '';
+    adminState.orgName = '';
     adminState.pw = '';
     adminState.items = [];
     adminState.selectedIds = new Set();
+    adminRender();
+  });
+  const switchBtn = document.getElementById('btn-org-switch');
+  if (switchBtn) switchBtn.addEventListener('click', () => {
+    adminState.orgAuthed = false;
+    adminState.orgCode = '';
+    adminState.orgName = '';
+    adminState.items = [];
+    adminState.selectedIds = new Set();
+    adminState.filters = { q: '', gradeGroup: '', from: '', to: '' };
     adminRender();
   });
 

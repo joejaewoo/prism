@@ -5,13 +5,18 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbwIwHar6DeouN7pg8g-Oaqb4Sy0me2-IZzF3I7dtDVzm-_GbZdj5DH1c_tx4b9oCZaH/exec';
 
 const state = {
-  screen: 'landing',
+  screen: 'gate',
   gradeGroup: null,
   respondent: { name: '', grade: '', school: '', phone: '' },
   answers: {},
   currentQ: 0,
   result: null,
-  submitStatus: 'idle' // idle | sending | success | error
+  submitStatus: 'idle', // idle | sending | success | error
+  // 기관 코드 게이트
+  orgCode: '',
+  orgName: '',
+  orgVerified: false,
+  orgError: ''
 };
 
 // COLORS는 result-renderer.js에 정의됨
@@ -28,7 +33,7 @@ function submitResult() {
     headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Apps Script CORS 우회용
     body: JSON.stringify({
       action: 'submit',
-      respondent: { ...state.respondent, gradeGroup: state.gradeGroup },
+      respondent: { ...state.respondent, gradeGroup: state.gradeGroup, orgCode: state.orgCode, orgName: state.orgName },
       result: state.result,
       answers: state.answers
     })
@@ -67,7 +72,8 @@ function render() {
   const screen = document.createElement('div');
   screen.className = 'screen active';
 
-  if (state.screen === 'landing') screen.innerHTML = renderLanding();
+  if (state.screen === 'gate') screen.innerHTML = renderGate();
+  else if (state.screen === 'landing') screen.innerHTML = renderLanding();
   else if (state.screen === 'intro') screen.innerHTML = renderIntro();
   else if (state.screen === 'test') screen.innerHTML = renderTest();
   else if (state.screen === 'result') screen.innerHTML = renderResult();
@@ -75,6 +81,62 @@ function render() {
   app.appendChild(screen);
   attachEvents();
   window.scrollTo(0, 0);
+}
+
+// ===================== ORG GATE (기관 코드 관문) =====================
+function renderGate() {
+  return `
+  <div style="max-width:420px; margin:70px auto 0; text-align:center; padding:0 20px;">
+    ${renderPrismDiagram ? '' : ''}
+    <div style="font-size:15px; font-weight:800; letter-spacing:.2em; color:var(--ink); margin-bottom:6px;">P R I S M</div>
+    <div style="font-size:13px; color:var(--ink-soft); margin-bottom:34px;">초등 영어 학습유형 검사</div>
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:34px 26px; box-shadow:0 8px 30px rgba(28,37,65,.06);">
+      <div style="font-size:18px; font-weight:700; margin-bottom:8px;">기관 코드를 입력해주세요</div>
+      <div style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin-bottom:22px;">검사를 진행하려면 학원에서 안내받은<br>6자리 기관 코드가 필요합니다.</div>
+      <input type="text" id="org-input" maxlength="6" placeholder="예: HANA01"
+        value="${state.orgCode}"
+        style="width:100%; padding:15px; border:1.5px solid var(--line); border-radius:12px; font-size:20px; text-align:center; letter-spacing:.25em; text-transform:uppercase; font-weight:700; font-family:inherit; margin-bottom:14px;">
+      ${state.orgError ? `<div style="color:var(--coral); font-size:13px; margin-bottom:14px;">${state.orgError}</div>` : ''}
+      <button id="btn-org" style="width:100%; padding:15px; border:none; border-radius:12px; background:var(--coral); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit;">확인</button>
+    </div>
+    <div style="font-size:12px; color:var(--ink-soft); margin-top:20px; opacity:.7;">기관 코드가 없으신가요? 학원에 문의해주세요.</div>
+  </div>`;
+}
+
+// 기관 코드 검증: 서버에서 orgs 목록을 받아 클라이언트에서 대조
+function verifyOrg() {
+  const input = (document.getElementById('org-input').value || '').trim().toUpperCase();
+  if (input.length !== 6) {
+    state.orgError = '기관 코드는 6자리입니다.';
+    render();
+    return;
+  }
+  state.orgCode = input;
+  state.orgError = '';
+  // 버튼 로딩 표시
+  const btn = document.getElementById('btn-org');
+  if (btn) { btn.textContent = '확인 중...'; btn.disabled = true; }
+
+  fetch(`${API_URL}?action=orgs`)
+    .then(res => res.json())
+    .then(data => {
+      const orgs = (data && data.orgs) || [];
+      const match = orgs.find(o => String(o.code).trim().toUpperCase() === input);
+      if (match) {
+        state.orgVerified = true;
+        state.orgName = match.name || '';
+        state.orgError = '';
+        state.screen = 'landing';
+        render();
+      } else {
+        state.orgError = '등록되지 않은 기관 코드입니다. 다시 확인해주세요.';
+        render();
+      }
+    })
+    .catch(() => {
+      state.orgError = '확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+      render();
+    });
 }
 
 // ===================== LANDING =====================
@@ -234,6 +296,16 @@ function renderResult() {
 
 // ===================== 이벤트 =====================
 function attachEvents() {
+  if (state.screen === 'gate') {
+    const btn = document.getElementById('btn-org');
+    const input = document.getElementById('org-input');
+    if (btn) btn.addEventListener('click', verifyOrg);
+    if (input) {
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyOrg(); });
+      input.focus();
+    }
+  }
+
   if (state.screen === 'landing') {
     document.querySelectorAll('.level-card').forEach(el => {
       el.addEventListener('click', () => {
