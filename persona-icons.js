@@ -6,19 +6,19 @@ const PERSONA_ICONS = {
   // 모차르트 → 음표
   '모차르트형': '<path d="M22 8 L22 30 M22 8 C30 8 34 10 40 8 L40 14 C34 16 30 14 22 14" /><circle cx="17" cy="30" r="5" /><circle cx="35" cy="26" r="5" /><path d="M40 26 L40 8" />',
   // 다윈 → 거북이 (진화)
-  '다윈형': '<ellipse cx="26" cy="28" rx="14" ry="9" /><path d="M18 26 Q26 18 34 26" /><path d="M22 24 L22 30 M26 22 L26 32 M30 24 L30 30" /><circle cx="41" cy="24" r="3.5" /><path d="M12 30 L8 32 M40 34 L42 37 M16 35 L14 39" />',
+  '다윈형': '<ellipse cx="24" cy="27" rx="12" ry="8" /><path d="M16 25 Q24 17 32 25" /><path d="M20 23 L20 29 M24 22 L24 30 M28 23 L28 29" /><circle cx="37" cy="24" r="3" /><path d="M14 33 L11 36 M34 32 L37 35 M18 34 L16 37" />',
   // 에디슨 → 전구
-  '에디슨형': '<circle cx="26" cy="20" r="11" /><path d="M21 30 L31 30 M22 34 L30 34 M24 38 L28 38" /><path d="M26 15 L23 22 L29 22 L26 28" />',
+  '에디슨형': '<circle cx="26" cy="20" r="11" /><path d="M21 31 L31 31 M22 35 L30 35 M24 39 L28 39" /><path d="M26 15 L23 22 L29 22 L26 28" />',
   // 다빈치 → 비트루비안(원+사각) 상징
   '다빈치형': '<circle cx="26" cy="24" r="15" /><rect x="14" y="12" width="24" height="24" /><path d="M26 9 L26 39 M11 24 L41 24" />',
   // 헤밍웨이 → 만년필
-  '헤밍웨이형': '<path d="M14 38 L34 18 L38 22 L18 42 Z" transform="translate(-2,-6)" /><path d="M32 12 L36 16" /><path d="M12 40 L16 36" /><path d="M30 16 L34 20" />',
-  // 퀴리부인 → 플라스크(방사선)
-  '퀴리부인형': '<path d="M22 10 L22 20 L14 36 Q13 40 18 40 L34 40 Q39 40 38 36 L30 20 L30 10" /><path d="M19 10 L33 10" /><path d="M18 32 L34 32" /><circle cx="26" cy="35" r="1.5" /><circle cx="22" cy="37" r="1.2" /><circle cx="30" cy="37" r="1.2" />',
-  // 프랭클린 → 연 + 번개
-  '프랭클린형': '<path d="M26 8 L38 20 L26 32 L14 20 Z" /><path d="M26 8 L26 32 M14 20 L38 20" /><path d="M26 32 L24 42 M26 36 L30 34 L27 39 L31 38" />',
-  // 처칠 → 시가 + V
-  '처칠형': '<path d="M12 16 L20 24 M20 24 L28 16" stroke-width="3" /><rect x="26" y="30" width="18" height="5" rx="2.5" /><path d="M44 31 Q47 32.5 44 34" /><path d="M40 26 Q41 23 40 21 M44 27 Q45 24 44 22" />',
+  '헤밍웨이형': '<path d="M14 40 L30 24 L34 28 L18 44 Z" transform="translate(0,-8)" /><path d="M30 16 L34 20" /><path d="M13 33 L17 29" />',
+  // 퀴리부인 → 플라스크
+  '퀴리부인형': '<path d="M22 11 L22 21 L15 35 Q14 39 18 39 L34 39 Q38 39 37 35 L30 21 L30 11" /><path d="M20 11 L32 11" /><path d="M17 31 L35 31" /><circle cx="26" cy="34" r="1.3" fill="currentColor" stroke="none" /><circle cx="22" cy="36" r="1.1" fill="currentColor" stroke="none" />',
+  // 프랭클린 → 연
+  '프랭클린형': '<path d="M26 9 L37 20 L26 31 L15 20 Z" /><path d="M26 9 L26 31 M15 20 L37 20" /><path d="M26 31 L26 42" /><path d="M26 36 L22 34 M26 39 L30 37" />',
+  // 처칠 → 승리의 V 사인
+  '처칠형': '<path d="M18 14 L24 32 L30 14" /><path d="M24 32 L24 40" /><circle cx="24" cy="43" r="1.5" fill="currentColor" stroke="none" /><path d="M15 12 L18 14 M33 12 L30 14" />',
   // 페르마 → 삼각자/각도기
   '페르마형': '<path d="M12 38 L40 38 L12 14 Z" /><path d="M12 30 L20 30 L20 38" /><path d="M17 38 A12 12 0 0 0 12 26" />',
   // 콜럼버스 → 나침반

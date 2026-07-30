@@ -145,7 +145,7 @@ function renderRecipePage(r, respondent) {
   <div class="result-page">
     <div class="academy-only-badge">학원 내부용</div>
     <div class="section-title">📋 ${name} 학생 수업 설계서</div>
-    <p style="font-size:13px; color:var(--ink-soft); margin-bottom:18px;">PRISM 프로파일을 바탕으로 한 담당 강사용 지도 자료입니다. 학부모님께는 별도의 학부모용 결과지를 안내해주세요.</p>
+    <p style="font-size:13px; color:var(--ink-soft); margin-bottom:18px;">담당 강사용 지도 자료입니다. 학부모님께는 별도의 학부모용 결과지를 안내해주세요.</p>
 
     <div class="academy-grid">
       <div class="academy-section">
@@ -288,7 +288,7 @@ function computeOutputDesign(r) {
     observer: "전체 발표보다 1:1이나 짝 활동으로 말할 기회를 주세요. 'A 아니면 B?' 같은 선택형 질문으로 짧게 말하는 것부터 시작하면 좋습니다.",
   };
 
-  return `${activityMap[r.layer2.typeKey] || activityMap.balanced} (Flow ${flow} · Form ${form} · Frontier ${frontier})`;
+  return `${activityMap[r.layer2.typeKey] || activityMap.balanced}`;
 }
 
 function computeMotivation(r) {
@@ -349,7 +349,7 @@ function computeTeachingRisks(r) {
 function computeConsultingKeyMessage(r, name) {
   const l1 = LAYER1_INTERPRET[r.layer1.typeKey];
   const l2 = LAYER2_INTERPRET[r.layer2.typeKey];
-  return `${name} 학생은 입력 측면에서 ${l1.persona}(${r.layer1.type}) 성향을, 출력 측면에서 ${l2.persona}(${l2.title}) 성향을 보입니다. 상담 시에는 "부족한 부분을 보완한다"는 결핍 프레임 대신 "이 아이의 강점 경로(${l1.strength})를 통해 영어를 안정적으로 늘려가고 있다"는 강점 프레임으로 설명하는 것이 학부모의 신뢰와 협조를 끌어내기 좋습니다.`;
+  return `${name} 학생은 영어를 받아들일 때 ${l1.persona}(${r.layer1.type}), 표현할 때 ${l2.persona}(${l2.title}) 모습을 보입니다. 상담할 때는 "부족한 걸 고쳐야 한다"보다 "이 아이가 잘하는 방식(${l1.strength})으로 영어가 안정적으로 늘고 있다"고 설명하시면 학부모님이 더 안심하고 믿어주십니다.`;
 }
 
 // 상담: 자주 나오는 학부모 질문에 대한 대응 포인트
@@ -367,7 +367,7 @@ function computeConsultingQA(r) {
     items.push("Q. \"문법 실수가 많은데 괜찮은가요?\" → A. 말이 먼저 트이는 학생은 정확함이 나중에 자연스럽게 따라오는 경우가 많습니다. 지금은 말을 많이 하는 것 자체가 큰 강점이고, 정확함은 차근차근 고쳐가며 채워간다고 설명해주세요.");
   }
   if (items.length === 0) {
-    items.push("Q. \"지금 단계에서 뭘 더 신경 써야 하나요?\" → A. 전반적으로 균형 잡힌 프로파일이므로, 한 가지를 더 보강하기보다 다양한 활동을 통해 경험의 폭을 넓혀주는 시기라고 안내해주세요.");
+    items.push("Q. \"지금 단계에서 뭘 더 신경 써야 하나요?\" → A. 전반적으로 고르게 발달한 편이므로, 한 가지를 더 시키기보다 다양한 활동으로 경험의 폭을 넓혀주는 시기라고 안내해주세요.");
   }
   return items.join(' ');
 }
