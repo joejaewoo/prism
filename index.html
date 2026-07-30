@@ -356,6 +356,72 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
   </div>
 </section>
 
+<!-- ===== AI 응답 신뢰도 검증 ===== -->
+<section class="trust">
+  <style>
+    .trust{position:relative;background:var(--navy);color:#fff;overflow:hidden;padding:120px 40px}
+    .trust::before,.trust::after{content:'';position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;z-index:0}
+    .trust::before{width:360px;height:360px;background:var(--teal);top:-80px;right:-40px}
+    .trust::after{width:320px;height:320px;background:var(--purple);bottom:-100px;left:-60px}
+    .trust-inner{position:relative;z-index:2;max-width:1000px;margin:0 auto}
+    .trust-eyebrow{display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:100px;background:rgba(47,179,158,.12);border:1px solid rgba(47,179,158,.35);font-size:12px;font-weight:700;letter-spacing:.14em;color:#7BE0CE;font-family:'Courier New',monospace;margin-bottom:26px}
+    .trust-eyebrow .pulse{width:8px;height:8px;border-radius:50%;background:#2FB39E;box-shadow:0 0 0 0 rgba(47,179,158,.7);animation:trustPulse 1.8s infinite}
+    @keyframes trustPulse{0%{box-shadow:0 0 0 0 rgba(47,179,158,.6)}70%{box-shadow:0 0 0 9px rgba(47,179,158,0)}100%{box-shadow:0 0 0 0 rgba(47,179,158,0)}}
+    .trust h2{font-size:clamp(28px,3.8vw,44px);font-weight:700;line-height:1.3;letter-spacing:-.01em}
+    .trust h2 .grad{background:linear-gradient(90deg,#fff 0%,#7BE0CE 55%,#E8633C 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .trust-lead{font-size:16px;color:rgba(255,255,255,.68);line-height:1.9;margin-top:20px;max-width:620px}
+    .trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+    .trust-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:28px;backdrop-filter:blur(8px)}
+    .trust-card .ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+    .trust-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+    .trust-card p{font-size:14px;color:rgba(255,255,255,.62);line-height:1.75}
+    .trust-card .mono{display:block;font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-bottom:12px}
+    .trust-badges{margin-top:44px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:26px 28px}
+    .trust-badges .cap{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:18px}
+    .trust-badges .cap b{color:#fff;font-weight:700}
+    .tb-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .tb{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;background:rgba(255,255,255,.94)}
+    .tb .dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .tb .lbl{font-size:14px;font-weight:700}
+    .tb .sub{font-size:11.5px;color:#6B7280;margin-top:1px}
+    @media(max-width:760px){.trust{padding:80px 22px}.trust-grid,.tb-row{grid-template-columns:1fr}}
+  </style>
+  <div class="trust-inner rv">
+    <div class="trust-eyebrow"><span class="pulse"></span>AI RELIABILITY ENGINE</div>
+    <h2 class="serif">막 찍은 결과는,<br><span class="grad">결과가 아닙니다.</span></h2>
+    <p class="trust-lead">아이가 문항을 대충 넘기면, 어떤 검사든 결과가 왜곡됩니다. PRISM은 응답의 <b style="color:#fff">일관성</b>과 <b style="color:#fff">속도</b>를 실시간으로 분석해, 신뢰할 수 없는 응답을 자동으로 걸러냅니다. 일반 학습유형 검사에는 없는 검증 장치입니다.</p>
+
+    <div class="trust-grid">
+      <div class="trust-card">
+        <span class="mono">01 · CONSISTENCY CHECK</span>
+        <div class="ico" style="background:rgba(47,157,143,.18)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4FD1BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9"/><path d="M4 12h6"/><path d="M4 17h9"/><path d="M20 8l-3 8-2-4-2 1"/></svg>
+        </div>
+        <h3>같은 성향을 다르게 되묻습니다</h3>
+        <p>같은 특성을 표현만 바꿔 여러 번 질문하고, 선택지 순서까지 뒤집어 배치합니다. 답이 서로 엇갈리면 신뢰도 신호로 잡아냅니다.</p>
+      </div>
+      <div class="trust-card">
+        <span class="mono">02 · RESPONSE SPEED</span>
+        <div class="ico" style="background:rgba(232,99,60,.18)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#F0916E"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        </div>
+        <h3>문항별 응답 속도를 분석합니다</h3>
+        <p>문항마다 걸린 시간을 기록해, 읽지 않고 넘긴 듯한 비정상적으로 빠른 응답을 감지합니다. 엇갈림과 겹치면 신뢰도를 낮춥니다.</p>
+      </div>
+    </div>
+
+    <div class="trust-badges">
+      <div class="cap">분석 결과는 <b>선생님 화면에 이렇게 표시</b>됩니다</div>
+      <div class="tb-row">
+        <div class="tb"><span class="dot" style="background:#1F7A6E"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><div><div class="lbl" style="color:#1F7A6E">신뢰할 수 있어요</div><div class="sub">일관되고 충분한 시간</div></div></div>
+        <div class="tb"><span class="dot" style="background:#4A5578"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span><div><div class="lbl" style="color:#4A5578">너무 빨리 응답했어요</div><div class="sub">전반적으로 매우 빠름</div></div></div>
+        <div class="tb"><span class="dot" style="background:#B4791E"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5"/><circle cx="12" cy="16.6" r="0.6" fill="#fff" stroke="none"/></svg></span><div><div class="lbl" style="color:#B4791E">응답이 엇갈렸어요</div><div class="sub">확인 문항 여러 개 불일치</div></div></div>
+        <div class="tb"><span class="dot" style="background:#C24A22"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5"/><circle cx="12" cy="16.6" r="0.6" fill="#fff" stroke="none"/></svg></span><div><div class="lbl" style="color:#C24A22">신뢰하기 어려워요</div><div class="sub">엇갈림 + 매우 빠름</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CTA ===== -->
 <section class="cta">
   <div class="cta-bg"><img src="assets/consult.png" alt=""></div>
