@@ -1,7 +1,7 @@
 // PRISM 관리자 페이지 로직
 
 // ===== Apps Script 웹앱 배포 URL을 여기에 입력하세요 (학생 페이지 app.js와 동일한 URL) =====
-const API_URL = 'https://script.google.com/macros/s/AKfycby2hxGOQrjasEaoAvhI7FhRfAqx1KoUkJJ7DxxhrOWVGBVF2E7fchM7wJg5IWkSrrbr/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwIwHar6DeouN7pg8g-Oaqb4Sy0me2-IZzF3I7dtDVzm-_GbZdj5DH1c_tx4b9oCZaH/exec';
 
 const GRADE_GROUP_LABEL = { g1: 'Level 1 (초1-2)', g2: 'Level 2 (초3-4)', g3: 'Level 3 (초5-6)' };
 

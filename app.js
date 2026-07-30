@@ -2,7 +2,7 @@
 
 // ===== Apps Script 웹앱 배포 URL을 여기에 입력하세요 =====
 // 구글 시트 > 확장 프로그램 > Apps Script > code.gs 배포 후 발급된 /exec 주소
-const API_URL = 'https://script.google.com/macros/s/AKfycby2hxGOQrjasEaoAvhI7FhRfAqx1KoUkJJ7DxxhrOWVGBVF2E7fchM7wJg5IWkSrrbr/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwIwHar6DeouN7pg8g-Oaqb4Sy0me2-IZzF3I7dtDVzm-_GbZdj5DH1c_tx4b9oCZaH/exec';
 
 const state = {
   screen: 'landing',
