@@ -47,7 +47,17 @@ function renderResultPage1(r, respondent, today) {
   return `
   <div class="result-page">
     <div class="result-header">
-      <div class="title font-display">PRISM 영어 학습유형 검사 결과지</div>
+      <div class="result-header-logo">
+        <svg width="60" height="39" viewBox="0 0 200 130" fill="none">
+          <line x1="100" y1="6" x2="100" y2="50" stroke="#B8BEC8" stroke-width="3" stroke-linecap="round"/>
+          <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="#1C2541" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+          <path d="M100 94 L100 120" stroke="#2A9D8F" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M109 90 C132 105 152 109 164 111" stroke="#E8A33C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+          <circle cx="36" cy="111" r="6" fill="#E8633C"/><circle cx="100" cy="120" r="6" fill="#2A9D8F"/><circle cx="164" cy="111" r="6" fill="#E8A33C"/>
+        </svg>
+        <div class="title font-display">PRISM 영어 학습유형 검사 결과지</div>
+      </div>
       <div class="meta">이름: ${respondent.name} · 학년: ${respondent.grade} · 검사일: ${today}</div>
     </div>
 
@@ -231,7 +241,7 @@ function renderParentGuidePage(r) {
 
       <div class="guide-box">
         <div class="gtitle">📌 참고</div>
-        <div style="font-size:13.5px; color:var(--ink-soft);">이 결과는 아이의 현재 성향을 보여주는 참고 자료입니다. 아이를 이해하고 대화의 실마리를 찾는 데 활용해주세요.</div>
+        <ul style="list-style:none; padding-left:0; margin:0;"><li>이 결과는 아이의 현재 성향을 보여주는 참고 자료입니다. 아이를 이해하고 대화의 실마리를 찾는 데 활용해주세요.</li></ul>
       </div>
     </div>
   </div>

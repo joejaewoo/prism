@@ -87,7 +87,14 @@ function render() {
 function renderGate() {
   return `
   <div style="max-width:420px; margin:70px auto 0; text-align:center; padding:0 20px;">
-    ${renderPrismDiagram ? '' : ''}
+    <svg width="66" height="43" viewBox="0 0 200 130" fill="none" style="display:block; margin:0 auto 12px;">
+      <line x1="100" y1="6" x2="100" y2="50" stroke="#B8BEC8" stroke-width="3" stroke-linecap="round"/>
+      <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path d="M100 94 L100 120" stroke="#2A9D8F" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M109 90 C132 105 152 109 164 111" stroke="#E8A33C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <circle cx="36" cy="111" r="6" fill="#E8633C"/><circle cx="100" cy="120" r="6" fill="#2A9D8F"/><circle cx="164" cy="111" r="6" fill="#E8A33C"/>
+    </svg>
     <div style="font-size:15px; font-weight:800; letter-spacing:.2em; color:var(--ink); margin-bottom:6px;">P R I S M</div>
     <div style="font-size:13px; color:var(--ink-soft); margin-bottom:34px;">초등 영어 학습유형 검사</div>
     <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:34px 26px; box-shadow:0 8px 30px rgba(28,37,65,.06);">
