@@ -113,7 +113,7 @@ function renderAdminMain() {
   return `
   <div class="top-bar">
     <div style="display:flex; align-items:center; gap:14px;">
-      <svg width="42" height="36" viewBox="0 0 200 130" fill="none" style="flex-shrink:0">
+      <svg width="84" height="55" viewBox="0 0 200 130" fill="none" style="flex-shrink:0">
         <line x1="100" y1="6" x2="100" y2="50" stroke="#B8BEC8" stroke-width="3" stroke-linecap="round"/>
         <path d="M100 48 L126 92 L74 92 Z" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
         <path d="M91 90 C68 105 48 109 36 111" stroke="#E8633C" stroke-width="4.5" stroke-linecap="round" fill="none"/>
@@ -126,11 +126,11 @@ function renderAdminMain() {
         <div class="top-sub">${adminState.orgName ? escapeHtml(adminState.orgName) + ' · ' + escapeHtml(adminState.orgCode) : 'Profile of Receptive Input, Speaking & Motivation'}</div>
       </div>
     </div>
-    <div>
-      <a href="test.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="display:inline-block; text-decoration:none; text-align:center;">📝 평가 화면</a>
-      <button class="btn-sm outline" id="btn-org-switch" style="margin-left:8px;">기관 변경</button>
-      <button class="btn-sm outline" id="btn-refresh" style="margin-left:8px;">↻ 새로고침</button>
-      <button class="btn-sm outline" id="btn-logout" style="margin-left:8px;">로그아웃</button>
+    <div class="top-actions">
+      <a href="test.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="text-decoration:none;">📝 평가 화면</a>
+      <button class="btn-sm outline" id="btn-org-switch">기관 변경</button>
+      <button class="btn-sm outline" id="btn-refresh">↻ 새로고침</button>
+      <button class="btn-sm outline" id="btn-logout">로그아웃</button>
     </div>
   </div>
 
@@ -219,8 +219,9 @@ function renderLogin() {
       <input type="password" id="login-pw" placeholder="비밀번호" maxlength="20"
         style="width:100%; padding:13px 14px; border:1px solid var(--line); border-radius:10px; font-size:15px; text-align:center; margin-bottom:12px; font-family:inherit;">
       ${adminState.authError ? '<div style="color:var(--coral); font-size:13px; margin-bottom:12px;">비밀번호가 올바르지 않습니다.</div>' : ''}
-      <button class="btn-sm" id="btn-login" style="width:100%; padding:13px;">입장하기</button>
+      <button class="btn-sm" id="btn-login" style="width:100%; height:auto; padding:13px;">입장하기</button>
     </div>
+    <a href="index.html" style="display:inline-block; margin-top:18px; font-size:13px; color:var(--ink-soft); text-decoration:none;">← 소개 페이지로 돌아가기</a>
   </div>
   `;
 }

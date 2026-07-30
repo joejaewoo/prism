@@ -35,10 +35,14 @@ body { font-family: 'Pretendard', sans-serif; background: var(--paper); color: v
 }
 .filter-bar input[type="text"] { flex: 1; min-width: 160px; }
 .btn-sm {
-  padding: 9px 16px; border-radius: 8px; border: none; background: var(--ink); color: white;
-  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+  padding: 0 16px; height: 38px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; border: none; background: var(--ink); color: white; box-sizing: border-box;
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; line-height: 1; vertical-align: middle;
 }
 .btn-sm.outline { background: white; border: 1px solid var(--ink); color: var(--ink); }
+.top-bar .btn-sm { margin-left: 8px; }
+.top-actions { display: flex; gap: 8px; }
+.top-actions .btn-sm { margin-left: 0; width: 116px; padding: 0 8px; white-space: nowrap; }
 
 /* ===== 통계 카드 ===== */
 .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -79,6 +83,8 @@ tr:last-child td { border-bottom: none; }
 
 .result-page { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 22px; margin-bottom: 16px; }
 .result-header { text-align: center; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); }
+.result-header-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px; }
+.result-header-logo svg { flex-shrink: 0; }
 .result-header .title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
 .result-header .meta { font-size: 13px; color: var(--ink-soft); }
 .section-title { font-size: 15px; font-weight: 700; margin: 24px 0 14px; }
@@ -225,7 +231,7 @@ tr:last-child td { border-bottom: none; }
   .guide-box li { margin-bottom: 2px; }
 }
 /* ===== 마스터-디테일 레이아웃 ===== */
-.md-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; margin-top: 20px; align-items: start; }
+.md-layout { display: grid; grid-template-columns: 260px 1fr; gap: 20px; margin-top: 20px; align-items: start; }
 .md-list { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; position: sticky; top: 20px; max-height: calc(100vh - 40px); display: flex; flex-direction: column; }
 .md-list-filter { padding: 14px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
 .md-list-filter input, .md-list-filter select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13.5px; font-family: inherit; width: 100%; }
