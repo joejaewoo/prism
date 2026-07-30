@@ -458,16 +458,27 @@ function fmtDuration(ms) {
 function validityBadge(item) {
   const v = item && item.answers && item.answers.__validity;
   if (!v) return '';
+  const ic = {
+    check: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>',
+    bolt:  '<svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>',
+    warn:  '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5"/><circle cx="12" cy="16.6" r="0.6" fill="#fff" stroke="none"/></svg>'
+  };
   const map = {
-    ok:              { l: '양호', bg: '#E4F3EE', c: '#1F7A6E' },
-    fast:            { l: '참고', bg: '#EEF0F4', c: '#4A5578' },
-    low_consistency: { l: '주의', bg: '#FFE9C7', c: '#8A5A1E' },
-    unreliable:      { l: '낮음', bg: '#FDE0D3', c: '#C24A22' }
+    ok:              { l: '신뢰할 수 있어요',    icon: ic.check, c: '#1F7A6E', bg: '#E7F4EF', bd: '#BFE3DA' },
+    fast:            { l: '너무 빨리 응답했어요', icon: ic.bolt,  c: '#4A5578', bg: '#EEF1F6', bd: '#D3DAE6' },
+    low_consistency: { l: '응답이 엇갈렸어요',    icon: ic.warn,  c: '#B4791E', bg: '#FFF4DC', bd: '#F0DBAE' },
+    unreliable:      { l: '신뢰하기 어려워요',    icon: ic.warn,  c: '#C24A22', bg: '#FDE8DE', bd: '#F3C9B8' }
   };
   const s = map[v.flag] || map.ok;
-  let totalMs = (v.totalMs != null && !isNaN(v.totalMs)) ? v.totalMs
-              : ((v.medianMs && v.totalTimed) ? v.medianMs * v.totalTimed : 0);
-  return `<div class="validity-note" style="margin:0 0 14px;padding:10px 15px;border-radius:10px;background:${s.bg};color:${s.c};font-size:14px;font-weight:600">응답 신뢰도 · ${s.l} · 소요 ${fmtDuration(totalMs)}</div>`;
+  const totalMs = (v.totalMs != null && !isNaN(v.totalMs)) ? v.totalMs
+                : ((v.medianMs && v.totalTimed) ? v.medianMs * v.totalTimed : 0);
+  return `<div class="validity-note" style="display:flex;align-items:center;gap:12px;margin:0 0 16px;padding:12px 15px;border-radius:12px;background:${s.bg};border:1px solid ${s.bd}">
+    <div style="width:32px;height:32px;border-radius:50%;background:${s.c};display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.icon}</div>
+    <div style="line-height:1.35">
+      <div style="font-size:14.5px;font-weight:700;color:${s.c}">응답 신뢰도 · ${s.l}</div>
+      <div style="font-size:12.5px;color:#6B7280;margin-top:1px">검사 소요 시간 ${fmtDuration(totalMs)}</div>
+    </div>
+  </div>`;
 }
 
 function renderDetailContent(detail) {
