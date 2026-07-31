@@ -478,6 +478,99 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
   </div>
 </section>
 
+<!-- ===== FAMILY COMPATIBILITY ===== -->
+<section class="family">
+  <style>
+    .family{position:relative;background:#FDF8F4;overflow:hidden;padding:110px 40px}
+    .family::before{content:'';position:absolute;width:420px;height:420px;border-radius:50%;background:rgba(232,99,60,.06);top:-120px;left:-100px}
+    .family::after{content:'';position:absolute;width:340px;height:340px;border-radius:50%;background:rgba(107,92,165,.06);bottom:-80px;right:-60px}
+    .family-inner{position:relative;z-index:2;max-width:1040px;margin:0 auto}
+    .family-eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border-radius:100px;background:rgba(232,99,60,.10);border:1px solid rgba(232,99,60,.22);font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--coral);margin-bottom:22px}
+    .family h2{font-size:clamp(26px,3.6vw,42px);font-weight:700;line-height:1.32;letter-spacing:-.01em;color:var(--ink)}
+    .family h2 .hl{color:var(--coral)}
+    .family-lead{font-size:16px;color:var(--soft);line-height:1.9;margin-top:18px;max-width:600px}
+    .family-hero{display:grid;grid-template-columns:1fr 120px 1fr;align-items:center;gap:0;margin-top:48px;background:#fff;border:1px solid #EDE1D8;border-radius:22px;padding:36px 32px;box-shadow:0 12px 40px rgba(28,37,65,.06)}
+    .fcard{text-align:center}
+    .fcard-icon{width:64px;height:64px;border-radius:16px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+    .fcard-icon.child{background:rgba(232,99,60,.10)}
+    .fcard-icon.parent{background:rgba(107,92,165,.10)}
+    .fcard-icon svg{width:30px;height:30px}
+    .fcard-who{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--soft);margin-bottom:4px}
+    .fcard-type{font-size:20px;font-weight:800;color:var(--ink)}
+    .fcard-sub{font-size:13px;color:var(--soft);margin-top:4px;line-height:1.55}
+    .fmid{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .fmid-pill{width:100%;text-align:center;padding:7px 0;border-radius:10px;font-size:12px;font-weight:800;letter-spacing:.04em}
+    .fmid-pill.match{background:#E7F4EF;color:var(--teal)}
+    .fmid-pill.diff{background:#FDE8DE;color:var(--coral)}
+    .fmid-pill.impact{background:#F0ECF8;color:var(--purple)}
+    .fmid-label{font-size:10.5px;color:var(--soft);font-weight:700}
+    .family-features{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}
+    .ffeat{background:#fff;border:1px solid #EDE1D8;border-radius:16px;padding:22px 22px;transition:transform .2s ease,box-shadow .2s ease}
+    .ffeat:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(28,37,65,.08)}
+    .ffeat-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .ffeat-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ffeat h4{font-size:16px;font-weight:700;color:var(--ink);margin:0}
+    .ffeat p{font-size:14px;color:var(--soft);line-height:1.75;margin:0}
+    .family-note{margin-top:32px;font-size:14.5px;color:var(--soft);line-height:1.8;max-width:640px}
+    .family-note b{color:var(--ink)}
+    @media(max-width:760px){.family{padding:80px 22px}.family-hero{grid-template-columns:1fr;gap:20px;padding:26px 20px}.fmid{flex-direction:row;gap:10px}.fmid-pill{flex:1}.family-features{grid-template-columns:1fr}}
+  </style>
+  <div class="family-inner rv">
+    <div class="family-eyebrow">💗 AFTER THE TEST</div>
+    <h2 class="serif">검사하고 끝? 아닙니다.<br><span class="hl">부모와 아이의 영어 궁합</span>까지.</h2>
+    <p class="family-lead">같은 영어인데 왜 집에서 자꾸 부딪힐까요? 대부분 <b style="color:var(--ink)">부모의 도움 방식</b>과 <b style="color:var(--ink)">아이의 학습 방식</b>이 달라서 생기는 일입니다. PRISM은 검사 결과에서 한 발 더 — 부모님도 1분만 답하면, 어디가 맞고 어디가 어긋나는지 바로 알려드립니다.</p>
+
+    <div class="family-hero">
+      <div class="fcard">
+        <div class="fcard-icon child">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v2"/></svg>
+        </div>
+        <div class="fcard-who">아이</div>
+        <div class="fcard-type">소리로 배워요</div>
+        <div class="fcard-sub">Flow형 · 자신감 여린 편</div>
+      </div>
+
+      <div class="fmid">
+        <div><div class="fmid-label">입력</div><div class="fmid-pill diff">차이</div></div>
+        <div><div class="fmid-label">출력</div><div class="fmid-pill diff">차이</div></div>
+        <div><div class="fmid-label">동력</div><div class="fmid-pill impact">주의 필요</div></div>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-icon parent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="fcard-who">부모</div>
+        <div class="fcard-type">글자로 도와요</div>
+        <div class="fcard-sub">바로 고쳐주는 편</div>
+      </div>
+    </div>
+
+    <div class="family-features">
+      <div class="ffeat">
+        <div class="ffeat-head">
+          <div class="ffeat-ic" style="background:rgba(232,99,60,.10)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M7 4v6"/><path d="M17 14v6"/></svg>
+          </div>
+          <h4>방식 차이를 짚어줍니다</h4>
+        </div>
+        <p>아이는 소리로 배우는데 단어장으로 도와주고 있진 않은지, 아이는 일단 말하고 싶은데 자꾸 고쳐주고 있진 않은지. 어긋나는 지점과 해법을 구체적으로 알려드려요.</p>
+      </div>
+      <div class="ffeat">
+        <div class="ffeat-head">
+          <div class="ffeat-ic" style="background:rgba(107,92,165,.10)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <h4>자신감·회복력을 지킵니다</h4>
+        </div>
+        <p>부모의 반응이 아이의 자신감과 회복력을 키우기도, 깎기도 합니다. 지금 대처가 아이 동력에 어떻게 작용하는지 짚어드리고, 무엇을 바꾸면 좋을지 안내해요.</p>
+      </div>
+    </div>
+
+    <p class="family-note">검사 완료 후 결과지에 나오는 <b>링크 또는 QR</b>로 바로 시작할 수 있어요. 부모님 문항 11개, 약 1분이면 끝나고, 레벨이나 콘텐츠가 아닌 <b>대하는 방식과 태도</b>에 대한 리포트입니다. — 다른 영어 검사에는 없는, PRISM만의 기능입니다.</p>
+  </div>
+</section>
+
 <!-- ===== CTA ===== -->
 <section class="cta">
   <div class="cta-bg"><img src="assets/consult.png" alt=""></div>
