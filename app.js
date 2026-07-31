@@ -300,17 +300,36 @@ function renderTest() {
 }
 
 // ===================== RESULT =====================
+// 아이 결과 → 학부모 궁합검사 링크 파라미터
+function familyParams(result, name) {
+  const l1 = result.layer1 || {}, l2 = result.layer2 || {}, l3 = result.layer3 || {};
+  const band = (v) => (v >= 60 ? 'high' : v >= 40 ? 'mid' : 'low');
+  const input = l1.dominant || 'sound';
+  const output = (l2.flow || 0) >= (l2.form || 0) ? 'flow' : 'form';
+  const q = new URLSearchParams({
+    i: input, o: output,
+    c: band(l3.confidence || 0), r: band(l3.resilience || 0),
+    n: name || '아이'
+  });
+  return 'family.html?' + q.toString();
+}
+
 function renderResult() {
   return `
   <div style="max-width:420px; margin:80px auto 0; text-align:center;">
     <div style="font-size:48px; margin-bottom:20px;">✅</div>
     <div class="landing-title font-display" style="font-size:24px; margin-bottom:14px;">검사가 완료되었어요</div>
-    <p style="color:var(--ink-soft); font-size:14.5px; line-height:1.7; margin-bottom:28px;">
+    <p style="color:var(--ink-soft); font-size:14.5px; line-height:1.7; margin-bottom:24px;">
       ${state.respondent.name || '학생'}님의 응답이 안전하게 제출되었습니다.<br>
       결과지는 학원 선생님께서 확인하신 뒤 별도로 안내해 드릴 예정이에요.
     </p>
     ${renderSubmitBadgeHTML()}
-    <button class="btn-primary" id="btn-restart" style="margin-top:8px;">처음으로</button>
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; text-align:left;">
+      <div style="font-weight:700; font-size:15px; margin-bottom:4px;">💗 이어서 · 학부모 영어 궁합 검사</div>
+      <div style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin-bottom:12px;">부모님이 이어서 1분만 답하면, 아이와 영어를 대하는 방식이 얼마나 맞는지 바로 알려드려요.</div>
+      <a href="${familyParams(state.result || {}, state.respondent.name)}" class="btn-primary" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">학부모 궁합 검사 시작하기</a>
+    </div>
+    <button class="btn-primary" id="btn-restart" style="background:#fff; color:var(--ink-soft); border:1px solid var(--line);">처음으로</button>
   </div>
   `;
 }

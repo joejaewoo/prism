@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 집 영어 궁합 리포트 · PRISM</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2541; --soft:#5A6482; --paper:#F5F6F9; --line:#E2E5EC;
+  --sound:#E8633C; --text:#2A9D8F; --scene:#E8A33C; --flow:#E8633C; --form:#2A9D8F;
+  --good:#2A9D8F; --warn:#E8633C; --mid:#E8A33C; --purple:#6B5CA5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Pretendard',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.bar{height:5px;background:linear-gradient(90deg,var(--sound),var(--scene),var(--form),var(--purple))}
+.wrap{max-width:640px;margin:0 auto;padding:32px 22px 70px}
+.eyebrow{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--soft)}
+h1{font-size:22px;font-weight:800;margin:6px 0 6px}
+.lead{color:var(--soft);font-size:14px;line-height:1.75;margin:4px 0 8px}
+.hint{font-size:12.5px;color:var(--soft);background:#EEF1F6;border-radius:10px;padding:10px 12px;margin:16px 0}
+.child-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:18px 0 24px;display:flex;align-items:center;gap:14px}
+.child-emoji{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:#FDF2ED}
+.child-card b{font-size:16px}
+.child-card .sub{color:var(--soft);font-size:13px;margin-top:2px}
+.btn{width:100%;padding:15px;border:none;border-radius:13px;font-size:15.5px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn.grad{background:linear-gradient(90deg,var(--sound),var(--purple))}
+.btn.ink{background:var(--ink)}
+.btn:disabled{background:var(--line);cursor:not-allowed}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--soft);font-weight:700;font-size:14}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.progress > div{height:100%;background:linear-gradient(90deg,var(--sound),var(--purple));transition:width .3s}
+.q{margin-bottom:20px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.q .qt{font-weight:700;font-size:15px;margin-bottom:11px;line-height:1.5}
+.opt{display:block;width:100%;text-align:left;padding:11px 13px;border-radius:11px;border:2px solid var(--line);background:#fff;color:var(--ink);font-size:14.5px;font-weight:500;cursor:pointer;margin-bottom:8px;font-family:inherit}
+.opt.sel{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+.diagram{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:22px}
+.drow{display:flex;align-items:center;margin-bottom:10px}
+.drow .l,.drow .r{flex:1;font-weight:700;font-size:14}
+.drow .r{text-align:right}
+.drow .mid{width:74px;display:flex;flex-direction:column;align-items:center}
+.drow .conn{width:100%;height:2px;position:relative;margin:3px 0}
+.drow .conn span{position:absolute;left:50%;top:-4px;transform:translateX(-50%);width:9px;height:9px;border-radius:99px}
+.summary{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.summary .k{font-size:12px;font-weight:800;margin-bottom:4px}
+.summary .st{font-weight:700;font-size:15px;margin-bottom:4px;line-height:1.5}
+.summary .sb{color:var(--soft);font-size:13.5px;line-height:1.7}
+.sec{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.sec .head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sec .ax{font-weight:800;font-size:14}
+.sec .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.sec .st{font-weight:700;font-size:14.5px;margin-bottom:4px;line-height:1.5}
+.sec .sb{color:var(--soft);font-size:13.5px;line-height:1.7}
+.selfnote{background:#F6F3FB;border:1px solid #E3DAF3;border-radius:14px;padding:14px 16px;margin-top:12px;color:var(--purple);font-size:13.5px;line-height:1.75}
+.section-label{font-size:13px;font-weight:800;color:var(--soft);margin:6px 0 10px}
+.err{max-width:520px;margin:80px auto;text-align:center;padding:0 24px;color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="bar"></div>
+<div class="wrap" id="app"></div>
+
+<script>
+// ---------- 팔레트 ----------
+var C = { ink:"#1C2541", soft:"#5A6482", good:"#2A9D8F", warn:"#E8633C", mid:"#E8A33C", purple:"#6B5CA5" };
+
+// ---------- 아이 데이터: URL 파라미터에서 ----------
+function getChild(){
+  var q = new URLSearchParams(location.search);
+  var i = q.get('i'), o = q.get('o'), c = q.get('c'), r = q.get('r');
+  if(!i || !o || !c || !r) return null;
+  return { input:i, output:o, confidence:c, resilience:r, name: q.get('n') || '아이' };
+}
+
+var INPUT_LABEL = { sound:"소리로 배우는 아이", text:"글자로 배우는 아이", scene:"상황으로 배우는 아이" };
+var INPUT_SHORT = { sound:"소리(듣기·말하기)", text:"글자·규칙", scene:"상황·맥락" };
+var INPUT_EMOJI = { sound:"🎧", text:"📖", scene:"🎬" };
+var OUTPUT_LABEL = { flow:"Flow형", form:"Form형" };
+var BAND_LABEL = { low:"여린 편", mid:"보통", high:"단단한 편" };
+
+// ---------- 부모 7문항 ----------
+var Q = [
+  { id:"pIn", q:"아이 영어 공부를 도와줄 때, 나는 주로…", a:[
+    {t:"같이 소리 내어 읽거나 들려준다", v:"sound"},
+    {t:"단어장·문제집으로 규칙을 짚어준다", v:"text"},
+    {t:"영상·상황·게임으로 접하게 한다", v:"scene"} ] },
+  { id:"pOut", q:"아이가 영어 문장을 틀리게 말하면, 나는…", a:[
+    {t:"바로 고쳐준다", v:"form"},
+    {t:"일단 끝까지 말하게 둔다", v:"flow"} ] },
+  { id:"pErr", q:"아이가 틀리거나 잘 못했을 때, 나는…", a:[
+    {t:"어디가 틀렸는지 바로 짚어준다", v:"correct"},
+    {t:"시도한 것을 먼저 인정하고 넘어간다", v:"support"} ] },
+  { id:"pWin", q:"아이가 잘했을 때, 나는…", a:[
+    {t:"당연한 거라 크게 반응하진 않는다", v:"flat"},
+    {t:"무엇을 잘했는지 구체적으로 칭찬한다", v:"praise"} ] },
+  { id:"pRisk", q:"아이가 배운 것 외의 새 표현을 시도하면, 나는…", a:[
+    {t:"정확히 아는 것부터 하라고 한다", v:"accuracy"},
+    {t:"틀려도 시도한 것을 응원한다", v:"encourage"} ] },
+  { id:"pExp", q:"아이 영어에 대해 나는…", a:[
+    {t:"또래보다 잘하길 기대하는 편", v:"push"},
+    {t:"아이 속도에 맞추려는 편", v:"paced"} ] },
+  { id:"pSelf", q:"나에게 영어는…", a:[
+    {t:"편하다 — 내가 직접 도와줄 수 있다", v:"comfort"},
+    {t:"부담된다 — 내가 잘하는 편은 아니다", v:"nervous"} ] }
+];
+
+// ---------- 상태 ----------
+var child = getChild();
+var screen = "intro";
+var ans = {};
+var app = document.getElementById('app');
+
+// ---------- 리포트 로직 ----------
+function build(){
+  var sections = [];
+  // 1) 입력
+  if(ans.pIn === child.input){
+    sections.push({ ax:"입력", level:"good",
+      title:"둘 다 "+INPUT_SHORT[child.input]+" 중심 — 손발이 잘 맞아요",
+      body:"아이도 부모도 "+INPUT_SHORT[child.input]+"으로 접근하는 편이에요. 지금처럼 이어가되, 가끔 다른 통로도 살짝 곁들이면 균형이 좋아집니다." });
+  } else {
+    var need = { sound:"단어장을 쥐여주기보다 같이 소리 내어 읽고 들려주세요. 이 아이는 소리로 익힐 때 가장 잘 남아요.",
+      text:"영상만 보여주기보다, 문장을 눈으로 보며 규칙을 함께 찾아보세요. 이 아이는 글자로 정리될 때 이해가 깊어져요.",
+      scene:"단어를 따로 외우게 하기보다, 영상·상황·게임 속에서 자연스럽게 만나게 해주세요. 이 아이는 맥락 속에서 익혀요." }[child.input];
+    sections.push({ ax:"입력", level:"warn",
+      title:"아이는 "+INPUT_SHORT[child.input]+"로 배우는데, 도움 방식이 조금 달라요", body:need });
+  }
+  // 2) 출력
+  if(ans.pOut === child.output){
+    sections.push({ ax:"출력", level:"good", title:"표현 방식이 서로 잘 맞아요",
+      body: child.output==="flow"
+        ? "아이는 일단 말하고 싶어 하고, 부모도 끝까지 들어주는 편이에요. 이 조합에서 아이는 편하게 말이 늘어요."
+        : "아이는 정확히 하고 싶어 하고, 부모도 바로바로 짚어주는 편이에요. 이 조합은 정확성을 키우기 좋아요." });
+  } else if(child.output==="flow"){
+    sections.push({ ax:"출력", level:"warn", title:"아이는 일단 말하고 싶은데, 바로 고쳐주는 편이에요",
+      body:"말하는 중간에 교정이 들어오면 이 아이는 입을 닫아버릴 수 있어요. 다 말한 뒤 가장 중요한 것 하나만 부드럽게 짚어주세요. 발화량이 먼저, 정확성은 그다음입니다." });
+  } else {
+    sections.push({ ax:"출력", level:"mid", title:"아이는 정확히 하고 싶은데, 그냥 넘어가는 편이에요",
+      body:"이 아이는 틀린 채로 지나가면 오히려 답답해할 수 있어요. 아이가 원할 때는 정확한 표현을 짚어주는 것도 좋아요." });
+  }
+  // 3) 회복력
+  var resWeak = child.resilience !== "high";
+  if(resWeak && ans.pErr==="correct"){
+    sections.push({ ax:"회복력", level:"warn", title:"지금 방식이 아이의 회복력을 더 깎을 수 있어요",
+      body:"이 아이는 실수 뒤 회복이 더딘 편이에요. 그런데 틀린 걸 바로 짚는 방식이라, 아이가 '나는 자꾸 틀려'라고 느끼기 쉬워요. 틀린 걸 짚기 전에 '시도한 것' '한 발 나아간 것'을 먼저 말로 인정해 주세요." });
+  } else if(resWeak && ans.pErr==="support"){
+    sections.push({ ax:"회복력", level:"good", title:"아이 회복력을 지켜주는 방식이에요",
+      body:"회복이 더딘 아이에게, 시도를 먼저 인정해 주는 지금 방식은 아주 잘 맞아요. 이 반응이 쌓이면 아이는 '틀려도 괜찮다'를 배우고 회복력이 자랍니다. 계속 이렇게 해주세요." });
+  } else if(!resWeak){
+    sections.push({ ax:"회복력", level:"good", title:"회복력이 단단한 아이예요",
+      body:"웬만한 지적에도 금방 털어내는 편이에요. 다만 이 강점에 기대 너무 자주 지적하면 조금씩 지칠 수 있으니, 인정과 교정의 균형을 유지해 주세요." });
+  }
+  // 4) 자신감
+  var confWeak = child.confidence !== "high";
+  if(confWeak && (ans.pWin==="flat" || ans.pExp==="push")){
+    sections.push({ ax:"자신감", level:"warn", title:"자신감이 아직 여린 아이 — 지금 신호가 부담일 수 있어요",
+      body:(ans.pExp==="push"?"또래와 비교하거나 높은 기대를 비치면":"잘한 걸 당연하게 넘기면")+" 이 아이는 더 움츠러들어요. \"이번 주에 이 문장 스스로 말했네\"처럼 작은 성공을 구체적으로 짚어주는 게 이 아이에겐 특히 중요해요." });
+  } else if(confWeak && ans.pWin==="praise"){
+    sections.push({ ax:"자신감", level:"good", title:"아이 자신감을 키워주는 방식이에요",
+      body:"자신감이 여린 아이에게 구체적 칭찬은 가장 좋은 영양분이에요. 지금처럼 '무엇을' 잘했는지 짚어주는 방식을 이어가 주세요." });
+  }
+  // 5) 도전
+  if(confWeak && ans.pRisk==="accuracy"){
+    sections.push({ ax:"도전", level:"mid", title:"새 시도를 정확성으로 막고 있진 않은지",
+      body:"틀릴까 봐 '아는 것부터 하라'고 하면, 이 아이는 도전 자체를 멈춰요. 틀린 시도라도 '오, 그 표현 써봤네!' 하고 먼저 응원해 주면 표현의 폭이 넓어집니다." });
+  }
+  // 부모 자신
+  var selfNote = ans.pSelf==="nervous"
+    ? "영어가 부담되셔도 괜찮아요. 이 리포트의 조언은 대부분 '영어 실력'이 아니라 '반응하는 태도'에 관한 거예요. 발음을 못 고쳐줘도, 아이 시도를 인정해 주는 것만으로 충분히 큰 역할을 하고 계신 거예요."
+    : null;
+
+  var order = ["회복력","자신감","출력","도전","입력"];
+  var warns = sections.filter(function(s){return s.level==="warn";}).sort(function(a,b){return order.indexOf(a.ax)-order.indexOf(b.ax);});
+  var goods = sections.filter(function(s){return s.level==="good";});
+  var headline = { flow:"틀려도 일단 말하는 아이", form:"정확하게 말하려는 아이" }[child.output]
+    + " × " + { sound:"소리로 돕는", text:"글자로 돕는", scene:"상황으로 돕는" }[ans.pIn] + " 부모";
+
+  return { sections:sections, topWarn:warns[0]||null, topGood:goods[0]||null, selfNote:selfNote, headline:headline };
+}
+
+// ---------- 렌더 ----------
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+function render(){
+  if(!child){
+    app.innerHTML = '<div class="err"><div style="font-size:40px;margin-bottom:14px">🔗</div>'+
+      '<h1 style="color:#1C2541">아이 검사가 먼저 필요해요</h1>'+
+      '<p class="lead">이 궁합 리포트는 아이의 PRISM 검사 결과와 연결됩니다. 아이 검사를 완료하면 나오는 링크나 QR로 다시 들어와 주세요.</p>'+
+      '<a class="btn ink" style="text-decoration:none;margin-top:16px" href="index.html">PRISM 소개 보기</a></div>';
+    return;
+  }
+  if(screen==="intro") return renderIntro();
+  if(screen==="quiz") return renderQuiz();
+  if(screen==="report") return renderReport();
+}
+
+function renderIntro(){
+  app.innerHTML =
+    '<div class="eyebrow">💗 우리 집 영어 궁합 리포트</div>'+
+    '<h1>부모의 방식과 아이의 방식, 얼마나 맞을까요?</h1>'+
+    '<p class="lead">아이와 부모가 <b>영어를 대하는 방식이 서로 맞는지</b>, 그리고 <b>부모의 반응이 아이의 자신감·회복력에 어떻게 작용하는지</b> 짚어드립니다. 7문항, 1분이면 끝나요.</p>'+
+    '<div class="child-card">'+
+      '<div class="child-emoji">'+INPUT_EMOJI[child.input]+'</div>'+
+      '<div><b>'+esc(child.name)+'</b> · '+INPUT_LABEL[child.input]+
+      '<div class="sub">출력 '+OUTPUT_LABEL[child.output]+' · 자신감 '+BAND_LABEL[child.confidence]+' · 회복력 '+BAND_LABEL[child.resilience]+'</div></div>'+
+    '</div>'+
+    '<button class="btn grad" id="go">부모 진단 시작하기 →</button>';
+  document.getElementById('go').onclick = function(){ screen="quiz"; render(); window.scrollTo(0,0); };
+}
+
+function renderQuiz(){
+  var done = Object.keys(ans).length;
+  var html = '<div class="section-label">부모 진단 · '+done+'/'+Q.length+'</div>'+
+    '<div class="progress"><div style="width:'+(done/Q.length*100)+'%"></div></div>';
+  Q.forEach(function(q){
+    html += '<div class="q"><div class="qt">'+q.q+'</div>';
+    q.a.forEach(function(o){
+      html += '<button class="opt'+(ans[q.id]===o.v?' sel':'')+'" data-q="'+q.id+'" data-v="'+o.v+'">'+o.t+'</button>';
+    });
+    html += '</div>';
+  });
+  var ready = Q.every(function(q){return ans[q.id];});
+  html += '<button class="btn grad" id="go" '+(ready?'':'disabled')+'>궁합 리포트 보기 →</button>';
+  app.innerHTML = html;
+  Array.prototype.forEach.call(document.querySelectorAll('.opt'), function(b){
+    b.onclick = function(){ ans[b.dataset.q]=b.dataset.v; render(); };
+  });
+  var go = document.getElementById('go');
+  if(ready) go.onclick = function(){ screen="report"; render(); window.scrollTo(0,0); };
+}
+
+function renderReport(){
+  var R = build();
+  var LS = { good:{c:C.good,bg:"#E7F4EF",tag:"잘 맞아요",ic:"✓"},
+    warn:{c:C.warn,bg:"#FDE8DE",tag:"신경 써주세요",ic:"!"},
+    mid:{c:C.mid,bg:"#FFF4DC",tag:"참고하세요",ic:"!"} };
+
+  var pInLabel = { sound:"소리로", text:"글자로", scene:"상황으로" }[ans.pIn];
+  var rows = [
+    { ax:"입력", l:INPUT_LABEL[child.input].replace(" 아이",""), r:pInLabel, match: ans.pIn===child.input },
+    { ax:"출력", l:OUTPUT_LABEL[child.output], r: ans.pOut==="flow"?"들어줌":"고쳐줌", match: ans.pOut===child.output }
+  ];
+
+  var html = '<div class="eyebrow">💗 우리 집 영어 궁합 리포트</div>'+
+    '<h1>'+esc(R.headline)+'</h1>';
+
+  // 다이어그램
+  html += '<div class="diagram"><div class="drow" style="font-size:12;color:'+C.soft+';font-weight:700">'+
+    '<div class="l" style="color:'+C.soft+'">아이</div><div class="mid"></div><div class="r" style="color:'+C.soft+'">부모</div></div>';
+  rows.forEach(function(row){
+    var col = row.match?C.good:C.warn;
+    html += '<div class="drow"><div class="l">'+row.l+'</div>'+
+      '<div class="mid"><div style="font-size:10px;color:'+C.soft+'">'+row.ax+'</div>'+
+      '<div class="conn" style="background:'+col+'"><span style="background:'+col+'"></span></div>'+
+      '<div style="font-size:10px;font-weight:700;color:'+col+'">'+(row.match?"맞음":"차이")+'</div></div>'+
+      '<div class="r">'+row.r+'</div></div>';
+  });
+  html += '<div class="drow"><div class="l">자신감 '+BAND_LABEL[child.confidence]+' · 회복력 '+BAND_LABEL[child.resilience]+'</div>'+
+    '<div class="mid"><div style="font-size:10px;color:'+C.soft+'">동력</div></div>'+
+    '<div class="r" style="color:'+C.purple+';font-size:13px">부모 반응의 영향 ↓</div></div></div>';
+
+  if(R.topWarn){
+    html += '<div class="summary" style="border-left:5px solid '+C.warn+'">'+
+      '<div class="k" style="color:'+C.warn+'">가장 신경 써주실 점</div>'+
+      '<div class="st">'+esc(R.topWarn.title)+'</div><div class="sb">'+esc(R.topWarn.body)+'</div></div>';
+  }
+  if(R.topGood){
+    html += '<div class="summary" style="border-left:5px solid '+C.good+'">'+
+      '<div class="k" style="color:'+C.good+'">이미 잘 하고 계신 점</div>'+
+      '<div class="st">'+esc(R.topGood.title)+'</div><div class="sb">'+esc(R.topGood.body)+'</div></div>';
+  }
+
+  html += '<div class="section-label" style="margin-top:16px">항목별 자세히</div>';
+  R.sections.forEach(function(s){
+    var st = LS[s.level];
+    html += '<div class="sec"><div class="head">'+
+      '<span style="width:20px;height:20px;border-radius:99px;background:'+st.c+';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px">'+st.ic+'</span>'+
+      '<span class="ax">'+s.ax+'</span>'+
+      '<span class="tag" style="color:'+st.c+';background:'+st.bg+'">'+st.tag+'</span></div>'+
+      '<div class="st">'+esc(s.title)+'</div><div class="sb">'+esc(s.body)+'</div></div>';
+  });
+
+  if(R.selfNote) html += '<div class="selfnote">'+esc(R.selfNote)+'</div>';
+
+  html += '<button class="btn ghost" id="again" style="margin-top:24px">↺ 처음부터 다시</button>';
+  app.innerHTML = html;
+  document.getElementById('again').onclick = function(){ ans={}; screen="intro"; render(); window.scrollTo(0,0); };
+}
+
+render();
+</script>
+</body>
+</html>

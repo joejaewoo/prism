@@ -23,8 +23,47 @@ function renderParentResult(result, respondent) {
   const today = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
   return [
     renderResultPage1(result, respondent, today),
-    renderParentGuidePage(result)
+    renderParentGuidePage(result),
+    renderFamilyCTA(result, respondent)
   ].join('');
+}
+
+// 학부모 궁합검사 링크 파라미터 (아이 결과를 URL에 담아 로그인 없이 연결)
+function familyLinkParams(result, name) {
+  const l1 = result.layer1 || {}, l2 = result.layer2 || {}, l3 = result.layer3 || {};
+  const band = (v) => (v >= 60 ? 'high' : v >= 40 ? 'mid' : 'low');
+  const output = (l2.flow || 0) >= (l2.form || 0) ? 'flow' : 'form';
+  const q = new URLSearchParams({
+    i: l1.dominant || 'sound', o: output,
+    c: band(l3.confidence || 0), r: band(l3.resilience || 0), n: name || '아이'
+  });
+  return q.toString();
+}
+
+// 결과지 하단 · 학부모 궁합검사 안내 (링크 + QR)
+function renderFamilyCTA(result, respondent) {
+  const origin = (typeof location !== 'undefined' && location.origin) ? location.origin : '';
+  const url = origin + '/family.html?' + familyLinkParams(result, (respondent || {}).name);
+  const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' + encodeURIComponent(url);
+  return `
+  <div class="result-page family-cta">
+    <div class="section-title">💗 부모님께 · 우리 집 영어 궁합 리포트</div>
+    <div style="display:flex; gap:22px; align-items:center; background:#FDF2ED; border:1px solid #F3D9CC; border-radius:14px; padding:20px 22px;">
+      <div style="flex:1;">
+        <p style="font-size:14px; color:var(--ink); line-height:1.75; margin:0 0 12px;">
+          부모님이 이어서 <b>1분(7문항)</b>만 답하면, 아이와 영어를 대하는 방식이 얼마나 맞는지,
+          그리고 부모님의 반응이 아이의 자신감·회복력에 어떻게 작용하는지 알려드립니다.
+        </p>
+        <div style="font-size:12.5px; color:var(--ink-soft); word-break:break-all;">아래 QR을 스캔하거나, 링크로 접속하세요<br>
+          <span style="color:var(--coral); font-weight:600;">${url}</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; text-align:center;">
+        <img src="${qr}" alt="궁합 검사 QR" width="130" height="130" style="border:1px solid #F3D9CC; border-radius:10px; background:#fff; padding:6px;">
+        <div style="font-size:11px; color:var(--ink-soft); margin-top:6px;">스캔하면 바로 시작</div>
+      </div>
+    </div>
+  </div>`;
 }
 
 // 학원용: 종합 프로파일 + 수업 설계서 + 상담 가이드 — 인쇄 3페이지 (학부모 가이드는 제외 — 학원 내부 운영 전용)
