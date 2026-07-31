@@ -85,9 +85,17 @@ var C = { ink:"#1C2541", soft:"#5A6482", good:"#2A9D8F", warn:"#E8633C", mid:"#E
 // ---------- 아이 데이터: URL 파라미터에서 ----------
 function getChild(){
   var q = new URLSearchParams(location.search);
-  var i = q.get('i'), o = q.get('o'), c = q.get('c'), r = q.get('r');
-  if(!i || !o || !c || !r) return null;
-  return { input:i, output:o, confidence:c, resilience:r, name: q.get('n') || '아이' };
+  var d = q.get('d');
+  if(d){
+    try{
+      var raw = decodeURIComponent(escape(atob(d.replace(/-/g,'+').replace(/_/g,'/'))));
+      var iMap={'1':'sound','2':'text','3':'scene'}, oMap={'1':'flow','2':'form'}, bMap={'1':'low','2':'mid','3':'high'};
+      return { input:iMap[raw[2]], output:oMap[raw[3]], confidence:bMap[raw[4]], resilience:bMap[raw[5]], name:raw.slice(6)||'아이' };
+    }catch(e){ return null; }
+  }
+  var i=q.get('i'),o=q.get('o'),c=q.get('c'),r=q.get('r');
+  if(!i||!o||!c||!r) return null;
+  return { input:i, output:o, confidence:c, resilience:r, name:q.get('n')||'아이' };
 }
 
 var INPUT_LABEL = { sound:"소리로 배우는 아이", text:"글자로 배우는 아이", scene:"상황으로 배우는 아이" };

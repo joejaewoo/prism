@@ -300,18 +300,16 @@ function renderTest() {
 }
 
 // ===================== RESULT =====================
-// 아이 결과 → 학부모 궁합검사 링크 파라미터
+// 아이 결과 → 학부모 궁합검사 링크 (인코딩)
 function familyParams(result, name) {
   const l1 = result.layer1 || {}, l2 = result.layer2 || {}, l3 = result.layer3 || {};
-  const band = (v) => (v >= 60 ? 'high' : v >= 40 ? 'mid' : 'low');
-  const input = l1.dominant || 'sound';
-  const output = (l2.flow || 0) >= (l2.form || 0) ? 'flow' : 'form';
-  const q = new URLSearchParams({
-    i: input, o: output,
-    c: band(l3.confidence || 0), r: band(l3.resilience || 0),
-    n: name || '아이'
-  });
-  return 'family.html?' + q.toString();
+  const band = (v) => (v >= 60 ? '3' : v >= 40 ? '2' : '1');
+  const iMap = {sound:'1',text:'2',scene:'3'};
+  const oMap = (l2.flow || 0) >= (l2.form || 0) ? '1' : '2';
+  const salt = String.fromCharCode(65+Math.floor(Math.random()*26), 65+Math.floor(Math.random()*26));
+  const raw = salt + (iMap[l1.dominant] || '1') + oMap + band(l3.confidence || 0) + band(l3.resilience || 0) + (name || '');
+  const d = btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  return 'family.html?d=' + d;
 }
 
 function renderResult() {

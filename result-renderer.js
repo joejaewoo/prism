@@ -28,22 +28,21 @@ function renderParentResult(result, respondent) {
   ].join('');
 }
 
-// 학부모 궁합검사 링크 파라미터 (아이 결과를 URL에 담아 로그인 없이 연결)
+// 학부모 궁합검사 링크 인코딩 (아이 결과를 짧은 코드에 담아 보안+단축)
 function familyLinkParams(result, name) {
   const l1 = result.layer1 || {}, l2 = result.layer2 || {}, l3 = result.layer3 || {};
-  const band = (v) => (v >= 60 ? 'high' : v >= 40 ? 'mid' : 'low');
-  const output = (l2.flow || 0) >= (l2.form || 0) ? 'flow' : 'form';
-  const q = new URLSearchParams({
-    i: l1.dominant || 'sound', o: output,
-    c: band(l3.confidence || 0), r: band(l3.resilience || 0), n: name || '아이'
-  });
-  return q.toString();
+  const band = (v) => (v >= 60 ? '3' : v >= 40 ? '2' : '1');
+  const iMap = {sound:'1',text:'2',scene:'3'};
+  const oMap = (l2.flow || 0) >= (l2.form || 0) ? '1' : '2';
+  const salt = String.fromCharCode(65+Math.floor(Math.random()*26), 65+Math.floor(Math.random()*26));
+  const raw = salt + (iMap[l1.dominant] || '1') + oMap + band(l3.confidence || 0) + band(l3.resilience || 0) + (name || '');
+  return btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 
 // 결과지 하단 · 학부모 궁합검사 안내 (링크 + QR)
 function renderFamilyCTA(result, respondent) {
   const origin = (typeof location !== 'undefined' && location.origin) ? location.origin : '';
-  const url = origin + '/family.html?' + familyLinkParams(result, (respondent || {}).name);
+  const url = origin + '/family.html?d=' + familyLinkParams(result, (respondent || {}).name);
   const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' + encodeURIComponent(url);
   return `
   <div class="result-page family-cta">
