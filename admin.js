@@ -475,7 +475,7 @@ function validityBadge(item) {
   return `<div class="validity-note" style="display:flex;align-items:center;gap:12px;margin:0 0 16px;padding:12px 15px;border-radius:12px;background:${s.bg};border:1px solid ${s.bd}">
     <div style="width:32px;height:32px;border-radius:50%;background:${s.c};display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.icon}</div>
     <div style="line-height:1.35">
-      <div style="font-size:14.5px;font-weight:700;color:${s.c}">응답 신뢰도 · ${s.l}</div>
+      <div style="font-size:14.5px;font-weight:700;color:${s.c}">${s.l}</div>
       <div style="font-size:12.5px;color:#6B7280;margin-top:1px">검사 소요 시간 ${fmtDuration(totalMs)}</div>
     </div>
   </div>`;

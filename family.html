@@ -35,13 +35,18 @@ h1{font-size:22px;font-weight:800;margin:6px 0 6px}
 .q .qt{font-weight:700;font-size:15px;margin-bottom:11px;line-height:1.5}
 .opt{display:block;width:100%;text-align:left;padding:11px 13px;border-radius:11px;border:2px solid var(--line);background:#fff;color:var(--ink);font-size:14.5px;font-weight:500;cursor:pointer;margin-bottom:8px;font-family:inherit}
 .opt.sel{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
-.diagram{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:22px}
-.drow{display:flex;align-items:center;margin-bottom:10px}
-.drow .l,.drow .r{flex:1;font-weight:700;font-size:14}
+.diagram{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 20px 10px;margin-bottom:22px}
+.drow{display:flex;align-items:center;padding:13px 0;border-bottom:1px solid #EEF0F4}
+.drow:last-child{border-bottom:none}
+.drow.hd{padding:0 0 11px}
+.drow.hd .l,.drow.hd .r{font-size:12.5px;font-weight:800;color:var(--soft);letter-spacing:.02em}
+.drow .l,.drow .r{flex:1;font-weight:800;font-size:15.5px;color:var(--ink)}
 .drow .r{text-align:right}
-.drow .mid{width:74px;display:flex;flex-direction:column;align-items:center}
-.drow .conn{width:100%;height:2px;position:relative;margin:3px 0}
-.drow .conn span{position:absolute;left:50%;top:-4px;transform:translateX(-50%);width:9px;height:9px;border-radius:99px}
+.drow .mid{width:100px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.drow .axname{font-size:11px;color:var(--soft);font-weight:700}
+.drow .conn{width:58px;height:3px;position:relative;border-radius:2px}
+.drow .conn span{position:absolute;left:50%;top:-4px;transform:translateX(-50%);width:11px;height:11px;border-radius:99px;border:2px solid #fff}
+.drow .verdict{font-size:11px;font-weight:800;padding:2px 10px;border-radius:99px}
 .summary{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
 .summary .k{font-size:12px;font-weight:800;margin-bottom:4px}
 .summary .st{font-weight:700;font-size:15px;margin-bottom:4px;line-height:1.5}
@@ -85,6 +90,10 @@ var Q = [
     {t:"같이 소리 내어 읽거나 들려준다", v:"sound"},
     {t:"단어장·문제집으로 규칙을 짚어준다", v:"text"},
     {t:"영상·상황·게임으로 접하게 한다", v:"scene"} ] },
+  { id:"pWords", q:"아이가 모르는 영어 단어를 물으면, 나는…", a:[
+    {t:"발음부터 들려준다", v:"sound"},
+    {t:"뜻과 철자를 적어 보여준다", v:"text"},
+    {t:"예문이나 상황으로 설명한다", v:"scene"} ] },
   { id:"pOut", q:"아이가 영어 문장을 틀리게 말하면, 나는…", a:[
     {t:"바로 고쳐준다", v:"form"},
     {t:"일단 끝까지 말하게 둔다", v:"flow"} ] },
@@ -97,6 +106,15 @@ var Q = [
   { id:"pRisk", q:"아이가 배운 것 외의 새 표현을 시도하면, 나는…", a:[
     {t:"정확히 아는 것부터 하라고 한다", v:"accuracy"},
     {t:"틀려도 시도한 것을 응원한다", v:"encourage"} ] },
+  { id:"pEnv", q:"집에서 영어 영상·노래·게임은…", a:[
+    {t:"일상에서 자주 접하게 한다", v:"rich"},
+    {t:"정해진 공부 시간에만 한다", v:"study"} ] },
+  { id:"pTalk", q:"집에서 아이에게 영어로 짧게 말을 걸어보나요?", a:[
+    {t:"가끔이라도 시도한다", v:"yes"},
+    {t:"영어는 공부 시간에만 쓴다", v:"no"} ] },
+  { id:"pPace", q:"우리 집 영어 공부 리듬은…", a:[
+    {t:"매일 조금씩 꾸준히", v:"daily"},
+    {t:"시간 날 때 몰아서", v:"burst"} ] },
   { id:"pExp", q:"아이 영어에 대해 나는…", a:[
     {t:"또래보다 잘하길 기대하는 편", v:"push"},
     {t:"아이 속도에 맞추려는 편", v:"paced"} ] },
@@ -114,17 +132,19 @@ var app = document.getElementById('app');
 // ---------- 리포트 로직 ----------
 function build(){
   var sections = [];
-  // 1) 입력
-  if(ans.pIn === child.input){
-    sections.push({ ax:"입력", level:"good",
-      title:"둘 다 "+INPUT_SHORT[child.input]+" 중심 — 손발이 잘 맞아요",
+  // 1) 입력 (두 신호: pIn + pWords)
+  var inMatch = (ans.pIn===child.input?1:0) + (ans.pWords===child.input?1:0);
+  var need = { sound:"단어장을 쥐여주기보다 같이 소리 내어 읽고 들려주세요. 이 아이는 소리로 익힐 때 가장 잘 남아요.",
+    text:"영상만 보여주기보다, 문장을 눈으로 보며 규칙을 함께 찾아보세요. 이 아이는 글자로 정리될 때 이해가 깊어져요.",
+    scene:"단어를 따로 외우게 하기보다, 영상·상황·게임 속에서 자연스럽게 만나게 해주세요. 이 아이는 맥락 속에서 익혀요." }[child.input];
+  if(inMatch===2){
+    sections.push({ ax:"입력", level:"good", title:"둘 다 "+INPUT_SHORT[child.input]+" 중심 — 손발이 잘 맞아요",
       body:"아이도 부모도 "+INPUT_SHORT[child.input]+"으로 접근하는 편이에요. 지금처럼 이어가되, 가끔 다른 통로도 살짝 곁들이면 균형이 좋아집니다." });
+  } else if(inMatch===1){
+    sections.push({ ax:"입력", level:"mid", title:"아이 방식에 절반쯤 맞춰주고 계세요",
+      body:"어떤 순간엔 아이의 "+INPUT_SHORT[child.input]+" 방식으로 도와주시는데, 다른 순간엔 다른 방식이에요. "+need });
   } else {
-    var need = { sound:"단어장을 쥐여주기보다 같이 소리 내어 읽고 들려주세요. 이 아이는 소리로 익힐 때 가장 잘 남아요.",
-      text:"영상만 보여주기보다, 문장을 눈으로 보며 규칙을 함께 찾아보세요. 이 아이는 글자로 정리될 때 이해가 깊어져요.",
-      scene:"단어를 따로 외우게 하기보다, 영상·상황·게임 속에서 자연스럽게 만나게 해주세요. 이 아이는 맥락 속에서 익혀요." }[child.input];
-    sections.push({ ax:"입력", level:"warn",
-      title:"아이는 "+INPUT_SHORT[child.input]+"로 배우는데, 도움 방식이 조금 달라요", body:need });
+    sections.push({ ax:"입력", level:"warn", title:"아이는 "+INPUT_SHORT[child.input]+"로 배우는데, 도움 방식이 조금 달라요", body:need });
   }
   // 2) 출력
   if(ans.pOut === child.output){
@@ -165,12 +185,35 @@ function build(){
     sections.push({ ax:"도전", level:"mid", title:"새 시도를 정확성으로 막고 있진 않은지",
       body:"틀릴까 봐 '아는 것부터 하라'고 하면, 이 아이는 도전 자체를 멈춰요. 틀린 시도라도 '오, 그 표현 써봤네!' 하고 먼저 응원해 주면 표현의 폭이 넓어집니다." });
   }
-  // 부모 자신
+  // 6) 소통(Connection)
+  if(ans.pTalk==="yes"){
+    sections.push({ ax:"소통", level:"good", title:"집에서 영어로 말 걸어보는 시도, 아주 좋아요",
+      body:"완벽하지 않아도 짧게 영어로 주고받으면, 아이에게 영어가 '공부'가 아니라 '소통'이 됩니다. 이 경험이 영어를 계속하게 만드는 힘이에요." });
+  } else {
+    sections.push({ ax:"소통", level:"mid", title:"영어를 '공부'로만 만나고 있진 않은지",
+      body:"집에서 영어가 시험·숙제로만 존재하면 아이는 영어를 부담으로 느껴요. \"Good morning!\" 한마디라도 일상에서 주고받아 보세요. 완벽할 필요 없어요." });
+  }
+  // 7) 환경(Scene 아이일 때만)
+  if(child.input==="scene"){
+    if(ans.pEnv==="study"){
+      sections.push({ ax:"환경", level:"mid", title:"상황으로 배우는 아이 — 환경을 조금 더 열어주세요",
+        body:"이 아이는 영상·상황 속에서 가장 잘 흡수하는데, 지금은 정해진 공부 시간에만 영어를 접해요. 좋아하는 영어 영상·노래를 일상에 자연스럽게 틀어두면 훨씬 잘 늘어요." });
+    } else {
+      sections.push({ ax:"환경", level:"good", title:"상황으로 배우는 아이에게 딱 맞는 환경이에요",
+        body:"일상에서 영어를 자주 접하게 하는 지금 환경이, 맥락으로 배우는 이 아이에게 가장 잘 맞아요." });
+    }
+  }
+  // 8) 리듬
+  if(ans.pPace==="burst"){
+    sections.push({ ax:"리듬", level:"mid", title:"몰아서보다 매일 조금씩",
+      body:"언어는 몰아서 하기보다 매일 짧게 이어갈 때 훨씬 잘 남아요. 하루 10분이라도 규칙적인 리듬을 만들어 주세요." });
+  }
+
   var selfNote = ans.pSelf==="nervous"
     ? "영어가 부담되셔도 괜찮아요. 이 리포트의 조언은 대부분 '영어 실력'이 아니라 '반응하는 태도'에 관한 거예요. 발음을 못 고쳐줘도, 아이 시도를 인정해 주는 것만으로 충분히 큰 역할을 하고 계신 거예요."
     : null;
 
-  var order = ["회복력","자신감","출력","도전","입력"];
+  var order = ["회복력","자신감","출력","도전","소통","환경","리듬","입력"];
   var warns = sections.filter(function(s){return s.level==="warn";}).sort(function(a,b){return order.indexOf(a.ax)-order.indexOf(b.ax);});
   var goods = sections.filter(function(s){return s.level==="good";});
   var headline = { flow:"틀려도 일단 말하는 아이", form:"정확하게 말하려는 아이" }[child.output]
@@ -178,7 +221,6 @@ function build(){
 
   return { sections:sections, topWarn:warns[0]||null, topGood:goods[0]||null, selfNote:selfNote, headline:headline };
 }
-
 // ---------- 렌더 ----------
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
@@ -246,18 +288,18 @@ function renderReport(){
     '<h1>'+esc(R.headline)+'</h1>';
 
   // 다이어그램
-  html += '<div class="diagram"><div class="drow" style="font-size:12;color:'+C.soft+';font-weight:700">'+
-    '<div class="l" style="color:'+C.soft+'">아이</div><div class="mid"></div><div class="r" style="color:'+C.soft+'">부모</div></div>';
+  html += '<div class="diagram">';
+  html += '<div class="drow hd"><div class="l">아이</div><div class="mid"></div><div class="r">부모</div></div>';
   rows.forEach(function(row){
     var col = row.match?C.good:C.warn;
     html += '<div class="drow"><div class="l">'+row.l+'</div>'+
-      '<div class="mid"><div style="font-size:10px;color:'+C.soft+'">'+row.ax+'</div>'+
+      '<div class="mid"><div class="axname">'+row.ax+'</div>'+
       '<div class="conn" style="background:'+col+'"><span style="background:'+col+'"></span></div>'+
-      '<div style="font-size:10px;font-weight:700;color:'+col+'">'+(row.match?"맞음":"차이")+'</div></div>'+
+      '<div class="verdict" style="color:'+col+';background:'+col+'22">'+(row.match?"맞음":"차이")+'</div></div>'+
       '<div class="r">'+row.r+'</div></div>';
   });
   html += '<div class="drow"><div class="l">자신감 '+BAND_LABEL[child.confidence]+' · 회복력 '+BAND_LABEL[child.resilience]+'</div>'+
-    '<div class="mid"><div style="font-size:10px;color:'+C.soft+'">동력</div></div>'+
+    '<div class="mid"><div class="axname">동력</div></div>'+
     '<div class="r" style="color:'+C.purple+';font-size:13px">부모 반응의 영향 ↓</div></div></div>';
 
   if(R.topWarn){

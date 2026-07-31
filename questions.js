@@ -23,7 +23,7 @@ const QUESTIONS = {
 
   "g2": [ // 초3-4, 24문항
     { id: "q1", layer: "L1", text: "새 영어 단어를 외울 때, 어떤 게 더 잘 외워져?", a: { text: "소리를 여러 번 듣고 따라 말하면 잘 외워져", dim: "sound" }, b: { text: "단어를 노트에 여러 번 쓰면 잘 외워져", dim: "text" } },
-    { id: "q2", layer: "L1", text: "영어 리스닝 문제를 풀 때, 나는...", a: { text: "소리만 들어도 대충 무슨 말인지 알겠어", dim: "sound" }, b: { text: "대본(스크립트)을 보면 훨씬 이해가 잘 돼", dim: "text" } },
+    { id: "q2", layer: "L1", text: "처음 듣는 영어를, 나는...", a: { text: "소리만 들어도 대충 알아듣는 편이야", dim: "sound" }, b: { text: "글자(자막·대본)로 봐야 정확히 이해되는 편이야", dim: "text" } },
     { id: "q3", layer: "L1", text: "선생님이 영어 문장을 알려줄 때, 나는...", a: { text: "선생님 발음을 듣고 그대로 따라 하는 게 편해", dim: "sound" }, b: { text: "칠판에 쓰인 문장을 보면서 읽는 게 편해", dim: "text" } },
     { id: "q4", layer: "L1", text: "영어 시간에 모르는 표현이 나오면...", a: { text: "그때 상황이나 그림을 보면서 \"이런 뜻이겠지?\" 하고 추측해", dim: "scene" }, b: { text: "사전을 찾아보거나 선생님한테 바로 물어봐", dim: "text" } },
     { id: "q5", layer: "L1", text: "영어 문법이 헷갈릴 때...", a: { text: "예문을 여러 개 보면서 패턴을 느껴", dim: "scene" }, b: { text: "규칙을 정리해서 외워", dim: "text" } },
@@ -103,8 +103,8 @@ const CHECK_QUESTIONS = {
   "g2": [
     { id: "c1a", check: "g2p1", text: "영어로 말할 때, 나는...", a: { text: "문법이 틀려도 일단 말해", pole: "P" }, b: { text: "맞는지 확인하고 나서 말해", pole: "Q" } },
     { id: "c1b", check: "g2p1", text: "발표 차례가 오면, 나는...", a: { text: "문장을 다 만들고 나서 말해", pole: "Q" }, b: { text: "일단 아는 단어로 말해봐", pole: "P" } },
-    { id: "c2a", check: "g2p2", text: "새 표현을 익힐 때, 나는...", a: { text: "여러 번 들으면 잘 익혀져", pole: "P" }, b: { text: "써보면서 익히는 게 좋아", pole: "Q" } },
-    { id: "c2b", check: "g2p2", text: "단어 시험을 준비할 때, 나는...", a: { text: "노트에 써가며 외워", pole: "Q" }, b: { text: "소리 내어 말하며 외워", pole: "P" } },
+    { id: "c2a", check: "g2p2", text: "새 영어 단어를 외울 때, 나는...", a: { text: "소리 내어 여러 번 말하면 잘 외워져", pole: "P" }, b: { text: "여러 번 써보면 잘 외워져", pole: "Q" } },
+    { id: "c2b", check: "g2p2", text: "받아쓰기를 준비할 때, 나는...", a: { text: "글자를 눈으로 보며 익혀", pole: "Q" }, b: { text: "소리 내어 읽으며 익혀", pole: "P" } },
     { id: "c3a", check: "g2p3", text: "새로운 걸 배울 때, 나는...", a: { text: "빨리 해보고 싶어", pole: "P" }, b: { text: "조금 망설여져", pole: "Q" } },
     { id: "c3b", check: "g2p3", text: "원어민 선생님이 말을 걸면, 나는...", a: { text: "당황스러워서 머뭇거려", pole: "Q" }, b: { text: "신나서 대답해보고 싶어", pole: "P" } }
   ],
