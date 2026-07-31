@@ -76,7 +76,7 @@ const QUESTIONS = {
     { id: "q25", layer: "L3", text: "영어 발표에서 실수를 한 경험이 있다면...", a: { text: "다음엔 더 잘 준비하자는 동기가 돼", dim: "resilience" }, b: { text: "그 기억이 한동안 신경 쓰여", dim: "resilience_low" } },
     { id: "q26", layer: "L3", text: "나한테 영어란?", a: { text: "세상 사람들과 소통하는 도구", dim: "connection" }, b: { text: "내 목표를 이루기 위한 중요한 능력", dim: "connection_low" } },
     { id: "q27", layer: "L3", text: "영어를 쓸 때 가장 뿌듯한 순간은?", a: { text: "외국인이랑 진짜 대화가 통했을 때", dim: "connection" }, b: { text: "어려운 영어 과제를 완성했을 때", dim: "connection_low" } },
-    { id: "q28", layer: "L3", text: "유튜브나 넷플릭스를 볼 때...", a: { text: "영어 콘텐츠를 자막 없이 보려고 도전한 적 있어", dim: "connection" }, b: { text: "재미있는 콘텐츠가 중요하지, 언어는 상관없어", dim: "connection_low" } },
+    { id: "q28", layer: "L3", text: "유튜브나 넷플릭스를 볼 때...", a: { text: "영어로 된 영상도 일부러 찾아봐", dim: "connection" }, b: { text: "한국어로 된 것만 골라 봐", dim: "connection_low" } },
     { id: "q29", layer: "L3", text: "영어 프레젠테이션 수업에서...", a: { text: "여러 사람 앞에서 내 생각을 발표하는 게 재밌어", dim: "stage" }, b: { text: "소규모로 깊이 있게 토의하는 게 더 잘 맞아", dim: "stage_low" } },
     { id: "q30", layer: "L3", text: "영어 토론이나 디베이트를 하라고 하면...", a: { text: "내 의견을 영어로 표현해보는 도전이 재밌을 것 같아", dim: "stage" }, b: { text: "글로 써서 내 의견을 정리하는 게 더 잘 맞아", dim: "stage_low" } }
   ]
