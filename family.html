@@ -92,7 +92,8 @@ function getChild(){
 
 var INPUT_LABEL = { sound:"소리로 배우는 아이", text:"글자로 배우는 아이", scene:"상황으로 배우는 아이" };
 var INPUT_SHORT = { sound:"소리(듣기·말하기)", text:"글자·규칙", scene:"상황·맥락" };
-var INPUT_EMOJI = { sound:"🎧", text:"📖", scene:"🎬" };
+var INPUT_ICON = { sound:'<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', text:'<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>', scene:'<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>' };
+var PARENT_ICON = '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
 var OUTPUT_LABEL = { flow:"Flow형", form:"Form형" };
 var BAND_LABEL = { low:"여린 편", mid:"보통", high:"단단한 편" };
 
@@ -256,7 +257,7 @@ function renderIntro(){
     '<h1>부모의 방식과 아이의 방식, 얼마나 맞을까요?</h1>'+
     '<p class="lead">아이와 부모가 <b>영어를 대하는 방식이 서로 맞는지</b>, 그리고 <b>부모의 반응이 아이의 자신감·회복력에 어떻게 작용하는지</b> 짚어드립니다. 7문항, 1분이면 끝나요.</p>'+
     '<div class="child-card">'+
-      '<div class="child-emoji">'+INPUT_EMOJI[child.input]+'</div>'+
+      '<div class="child-emoji">'+INPUT_ICON[child.input]+'</div>'+
       '<div><b>'+esc(child.name)+'</b> · '+INPUT_LABEL[child.input]+
       '<div class="sub">출력 '+OUTPUT_LABEL[child.output]+' · 자신감 '+BAND_LABEL[child.confidence]+' · 회복력 '+BAND_LABEL[child.resilience]+'</div></div>'+
     '</div>'+
@@ -294,10 +295,11 @@ function renderReport(){
     mid:{c:C.mid,bg:"#FFF4DC",tag:"참고하세요",ic:"!"} };
 
   var pApproach = { sound:"소리로 돕는", text:"글자로 돕는", scene:"상황으로 돕는" }[ans.pIn];
+  var motWarn = R.sections.some(function(s){ return (s.ax==="회복력"||s.ax==="자신감") && s.level==="warn"; });
   var axes = [
     { an:"입력", match: ans.pIn===child.input, kind:"m" },
     { an:"출력", match: ans.pOut===child.output, kind:"m" },
-    { an:"동력", kind:"e" }  // 영향
+    { an:"동력", kind:"e", motWarn: motWarn }
   ];
 
   // ---------- HERO ----------
@@ -306,7 +308,7 @@ function renderReport(){
     '<h1 class="serif">'+esc(R.headline)+'</h1>'+
     '<div class="hero-grid">'+
       '<div class="pcard">'+
-        '<div class="emoji">'+INPUT_EMOJI[child.input]+'</div>'+
+        '<div class="emoji">'+INPUT_ICON[child.input]+'</div>'+
         '<div class="who">아이</div>'+
         '<div class="ttl">'+INPUT_LABEL[child.input].replace(" 아이","")+'</div>'+
         '<div class="meta">출력 '+OUTPUT_LABEL[child.output]+'<br>자신감 '+BAND_LABEL[child.confidence]+' · 회복력 '+BAND_LABEL[child.resilience]+'</div>'+
@@ -314,7 +316,7 @@ function renderReport(){
       '<div class="axcol">';
   axes.forEach(function(a){
     var col, txt;
-    if(a.kind==="e"){ col=C.purple; txt="영향"; }
+    if(a.kind==="e"){ col=a.motWarn?C.warn:C.good; txt=a.motWarn?"주의 필요":"양호"; }
     else if(a.match){ col=C.good; txt="잘 맞음"; }
     else { col=C.warn; txt="차이"; }
     html += '<div class="axpill"><div class="an">'+a.an+'</div>'+
@@ -322,7 +324,7 @@ function renderReport(){
   });
   html += '</div>'+
       '<div class="pcard">'+
-        '<div class="emoji">🧑‍🏫</div>'+
+        '<div class="emoji">'+PARENT_ICON+'</div>'+
         '<div class="who">부모</div>'+
         '<div class="ttl">'+pApproach+'</div>'+
         '<div class="meta">'+(ans.pOut==="flow"?"끝까지 들어주는 편":"바로 고쳐주는 편")+'</div>'+
