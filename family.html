@@ -159,25 +159,25 @@ function build(){
     text:"영상만 보여주기보다, 문장을 눈으로 보며 규칙을 함께 찾아보세요. 이 아이는 글자로 정리될 때 이해가 깊어져요.",
     scene:"단어를 따로 외우게 하기보다, 영상·상황·게임 속에서 자연스럽게 만나게 해주세요. 이 아이는 맥락 속에서 익혀요." }[child.input];
   if(inMatch===2){
-    sections.push({ ax:"입력", level:"good", title:"둘 다 "+INPUT_SHORT[child.input]+" 중심 — 손발이 잘 맞아요",
+    sections.push({ ax:"익히는 방식", level:"good", title:"둘 다 "+INPUT_SHORT[child.input]+" 중심 — 손발이 잘 맞아요",
       body:"아이도 부모도 "+INPUT_SHORT[child.input]+"으로 접근하는 편이에요. 지금처럼 이어가되, 가끔 다른 통로도 살짝 곁들이면 균형이 좋아집니다." });
   } else if(inMatch===1){
-    sections.push({ ax:"입력", level:"mid", title:"아이 방식에 절반쯤 맞춰주고 계세요",
+    sections.push({ ax:"익히는 방식", level:"mid", title:"아이 방식에 절반쯤 맞춰주고 계세요",
       body:"어떤 순간엔 아이의 "+INPUT_SHORT[child.input]+" 방식으로 도와주시는데, 다른 순간엔 다른 방식이에요. "+need });
   } else {
-    sections.push({ ax:"입력", level:"warn", title:"아이는 "+INPUT_SHORT[child.input]+"로 배우는데, 도움 방식이 조금 달라요", body:need });
+    sections.push({ ax:"익히는 방식", level:"warn", title:"아이는 "+INPUT_SHORT[child.input]+"로 배우는데, 도움 방식이 조금 달라요", body:need });
   }
   // 2) 출력
   if(ans.pOut === child.output){
-    sections.push({ ax:"출력", level:"good", title:"표현 방식이 서로 잘 맞아요",
+    sections.push({ ax:"말하는 방식", level:"good", title:"표현 방식이 서로 잘 맞아요",
       body: child.output==="flow"
         ? "아이는 일단 말하고 싶어 하고, 부모도 끝까지 들어주는 편이에요. 이 조합에서 아이는 편하게 말이 늘어요."
         : "아이는 정확히 하고 싶어 하고, 부모도 바로바로 짚어주는 편이에요. 이 조합은 정확성을 키우기 좋아요." });
   } else if(child.output==="flow"){
-    sections.push({ ax:"출력", level:"warn", title:"아이는 일단 말하고 싶은데, 바로 고쳐주는 편이에요",
+    sections.push({ ax:"말하는 방식", level:"warn", title:"아이는 일단 말하고 싶은데, 바로 고쳐주는 편이에요",
       body:"말하는 중간에 교정이 들어오면 이 아이는 입을 닫아버릴 수 있어요. 다 말한 뒤 가장 중요한 것 하나만 부드럽게 짚어주세요. 발화량이 먼저, 정확성은 그다음입니다." });
   } else {
-    sections.push({ ax:"출력", level:"mid", title:"아이는 정확히 하고 싶은데, 그냥 넘어가는 편이에요",
+    sections.push({ ax:"말하는 방식", level:"mid", title:"아이는 정확히 하고 싶은데, 그냥 넘어가는 편이에요",
       body:"이 아이는 틀린 채로 지나가면 오히려 답답해할 수 있어요. 아이가 원할 때는 정확한 표현을 짚어주는 것도 좋아요." });
   }
   // 3) 회복력
@@ -234,7 +234,7 @@ function build(){
     ? "영어가 부담되셔도 괜찮아요. 이 리포트의 조언은 대부분 '영어 실력'이 아니라 '반응하는 태도'에 관한 거예요. 발음을 못 고쳐줘도, 아이 시도를 인정해 주는 것만으로 충분히 큰 역할을 하고 계신 거예요."
     : null;
 
-  var order = ["회복력","자신감","출력","도전","소통","환경","리듬","입력"];
+  var order = ["회복력","자신감","말하는 방식","도전","소통","환경","리듬","익히는 방식"];
   var warns = sections.filter(function(s){return s.level==="warn";}).sort(function(a,b){return order.indexOf(a.ax)-order.indexOf(b.ax);});
   var goods = sections.filter(function(s){return s.level==="good";});
   var headline = { flow:"틀려도 일단 말하는 아이", form:"정확하게 말하려는 아이" }[child.output]
@@ -305,9 +305,9 @@ function renderReport(){
   var pApproach = { sound:"소리로 돕는", text:"글자로 돕는", scene:"상황으로 돕는" }[ans.pIn];
   var motWarn = R.sections.some(function(s){ return (s.ax==="회복력"||s.ax==="자신감") && s.level==="warn"; });
   var axes = [
-    { an:"입력", match: ans.pIn===child.input, kind:"m" },
-    { an:"출력", match: ans.pOut===child.output, kind:"m" },
-    { an:"동력", kind:"e", motWarn: motWarn }
+    { an:"익히는 방식", match: ans.pIn===child.input, kind:"m" },
+    { an:"말하는 방식", match: ans.pOut===child.output, kind:"m" },
+    { an:"학습 동력", kind:"e", motWarn: motWarn }
   ];
 
   // ---------- HERO ----------
