@@ -131,13 +131,16 @@ function renderAdminMain() {
       </div>
     </div>
     <div class="top-actions">
-      <button class="btn-sm ${adminState.tab==='test'?'primary':'outline'}" id="btn-tab-test">📋 응시 기록</button>
-      <button class="btn-sm ${adminState.tab==='family'?'primary':'outline'}" id="btn-tab-family">💗 궁합 기록</button>
       <a href="test.html" target="_blank" class="btn-sm outline" id="btn-go-test" style="text-decoration:none;">📝 평가 화면</a>
       <button class="btn-sm outline" id="btn-org-switch">기관 변경</button>
       <button class="btn-sm outline" id="btn-refresh">↻ 새로고침</button>
       <button class="btn-sm outline" id="btn-logout">로그아웃</button>
     </div>
+  </div>
+  <div style="display:flex;gap:8px;margin:14px 0 4px">
+    <button class="btn-sm ${adminState.tab==='test'?'primary':''}" id="btn-tab-test" style="padding:9px 20px;border-radius:99px;font-size:14px;border:1px solid ${adminState.tab==='test'?'#1C2541':'#DDE1E8'};background:${adminState.tab==='test'?'#1C2541':'#fff'};color:${adminState.tab==='test'?'#fff':'#5A6482'};cursor:pointer;font-weight:700">📋 응시 기록</button>
+    <button class="btn-sm ${adminState.tab==='family'?'primary':''}" id="btn-tab-family" style="padding:9px 20px;border-radius:99px;font-size:14px;border:1px solid ${adminState.tab==='family'?'#1C2541':'#DDE1E8'};background:${adminState.tab==='family'?'#1C2541':'#fff'};color:${adminState.tab==='family'?'#fff':'#5A6482'};cursor:pointer;font-weight:700">💗 궁합 기록</button>
+  </div>
   </div>
 
   ${!isApiConfigured() ? `<div class="api-warning">⚠️ API_URL이 설정되지 않았습니다.</div>` : ''}
@@ -717,8 +720,8 @@ function renderFamilyView() {
               <div>${OUTPUT_L[item.childOutput] || item.childOutput}</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center">
-              <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:${matchIn?'#2A9D8F':'#E8633C'};color:#fff">${matchIn?'같음':'차이'}</span>
-              <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:${matchOut?'#2A9D8F':'#E8633C'};color:#fff">${matchOut?'같음':'차이'}</span>
+              <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:${matchIn?'#2A9D8F':'#E8633C'};color:#fff">익히기 ${matchIn?'같음':'차이'}</span>
+              <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:${matchOut?'#2A9D8F':'#E8633C'};color:#fff">표현 ${matchOut?'같음':'차이'}</span>
             </div>
             <div style="flex:1;text-align:center">
               <div style="color:rgba(255,255,255,.5);font-size:11px">부모</div>
