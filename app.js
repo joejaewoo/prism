@@ -307,7 +307,7 @@ function familyParams(result, name, grade, phone) {
   const iMap = {sound:'1',text:'2',scene:'3'};
   const oMap = (l2.flow || 0) >= (l2.form || 0) ? '1' : '2';
   const salt = String.fromCharCode(65+Math.floor(Math.random()*26), 65+Math.floor(Math.random()*26));
-  const raw = salt + (iMap[l1.dominant] || '1') + oMap + band(l3.confidence || 0) + band(l3.resilience || 0) + (name || '');
+  const raw = salt + (iMap[l1.dominant] || '1') + oMap + band(l3.confidence || 0) + band(l3.resilience || 0) + (name || '') + '|' + (grade || '') + '|' + (phone || '');
   const d = btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return 'family.html?d=' + d;
 }
