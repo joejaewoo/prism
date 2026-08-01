@@ -180,6 +180,9 @@ function doGet(e) {
     if (action === 'list') {
       return jsonResponse_({ ok: true, items: listRecords_(e.parameter) });
     }
+    if (action === 'familyList') {
+      return jsonResponse_({ ok: true, items: listFamilyRecords_() });
+    }
     if (action === 'detail') {
       const item = getRecordById_(e.parameter.id);
       if (!item) return jsonResponse_({ ok: false, error: 'not found' });
@@ -205,7 +208,9 @@ function rowToRecord_(row) {
     layer2: safeParse_(row[8]),
     layer3: safeParse_(row[9]),
     recipe: safeParse_(row[10]),
-    answers: safeParse_(row[11])
+    answers: safeParse_(row[11]),
+    orgCode: row[12] || '',
+    orgName: row[13] || ''
   };
 }
 
@@ -242,8 +247,27 @@ function listRecords_(params) {
     id: r.id, submittedAt: r.submittedAt, name: r.name, grade: r.grade,
     gradeGroup: r.gradeGroup, school: r.school,
     layer1Type: r.layer1.type, layer2Type: r.layer2.type,
-    layer1TypeKey: r.layer1.typeKey, layer2TypeKey: r.layer2.typeKey
+    layer1TypeKey: r.layer1.typeKey, layer2TypeKey: r.layer2.typeKey,
+    orgCode: r.orgCode, orgName: r.orgName
   }));
+}
+
+function listFamilyRecords_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('궁합기록');
+  if (!sheet) return [];
+  const data = sheet.getDataRange().getValues();
+  data.shift();
+  return data.map(row => ({
+    savedAt: row[0] instanceof Date ? row[0].toISOString() : row[0],
+    childName: row[1] || '',
+    childInput: row[2] || '',
+    childOutput: row[3] || '',
+    childConfidence: row[4] || '',
+    childResilience: row[5] || '',
+    parentAnswers: safeParse_(row[6]),
+    report: safeParse_(row[7])
+  })).reverse();
 }
 
 function getRecordById_(id) {
