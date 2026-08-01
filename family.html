@@ -96,6 +96,8 @@ function saveReport(childData, parentAnswers, report) {
           childOutput: childData.output,
           childConfidence: childData.confidence,
           childResilience: childData.resilience,
+          childGrade: childData.grade,
+          childPhone: childData.phone,
           parentAnswers: parentAnswers,
           report: { headline: report.headline, sections: report.sections.map(function(s){ return {ax:s.ax, level:s.level, title:s.title}; }) }
         }
@@ -112,12 +114,12 @@ function getChild(){
     try{
       var raw = decodeURIComponent(escape(atob(d.replace(/-/g,'+').replace(/_/g,'/'))));
       var iMap={'1':'sound','2':'text','3':'scene'}, oMap={'1':'flow','2':'form'}, bMap={'1':'low','2':'mid','3':'high'};
-      return { input:iMap[raw[2]], output:oMap[raw[3]], confidence:bMap[raw[4]], resilience:bMap[raw[5]], name:raw.slice(6)||'아이' };
+      var parts=(raw.slice(6)||'').split('\t'); return { input:iMap[raw[2]], output:oMap[raw[3]], confidence:bMap[raw[4]], resilience:bMap[raw[5]], name:parts[0]||'아이', grade:parts[1]||'', phone:parts[2]||'' };
     }catch(e){ return null; }
   }
   var i=q.get('i'),o=q.get('o'),c=q.get('c'),r=q.get('r');
   if(!i||!o||!c||!r) return null;
-  return { input:i, output:o, confidence:c, resilience:r, name:q.get('n')||'아이' };
+  return { input:i, output:o, confidence:c, resilience:r, name:q.get('n')||'아이', grade:'', phone:'' };
 }
 
 var INPUT_LABEL = { sound:"소리로 배우는 아이", text:"글자로 배우는 아이", scene:"상황으로 배우는 아이" };

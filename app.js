@@ -301,7 +301,7 @@ function renderTest() {
 
 // ===================== RESULT =====================
 // 아이 결과 → 학부모 궁합검사 링크 (인코딩)
-function familyParams(result, name) {
+function familyParams(result, name, grade, phone) {
   const l1 = result.layer1 || {}, l2 = result.layer2 || {}, l3 = result.layer3 || {};
   const band = (v) => (v >= 60 ? '3' : v >= 40 ? '2' : '1');
   const iMap = {sound:'1',text:'2',scene:'3'};
@@ -325,7 +325,7 @@ function renderResult() {
     <div style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; text-align:left;">
       <div style="font-weight:700; font-size:15px; margin-bottom:4px;">💗 이어서 · 학부모 영어 궁합 검사</div>
       <div style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin-bottom:12px;">부모님이 이어서 1분만 답하면, 아이와 영어를 대하는 방식이 얼마나 맞는지 바로 알려드려요.</div>
-      <a href="${familyParams(state.result || {}, state.respondent.name)}" class="btn-primary" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">학부모 궁합 검사 시작하기</a>
+      <a href="${familyParams(state.result || {}, state.respondent.name, state.respondent.grade, state.respondent.phone)}" class="btn-primary" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">학부모 궁합 검사 시작하기</a>
     </div>
     <button class="btn-primary" id="btn-restart" style="background:#fff; color:var(--ink-soft); border:1px solid var(--line);">처음으로</button>
   </div>

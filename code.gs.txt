@@ -127,12 +127,14 @@ function handleFamilySave_(body) {
   let sheet = ss.getSheetByName('궁합기록');
   if (!sheet) {
     sheet = ss.insertSheet('궁합기록');
-    sheet.appendRow(['저장일시', '아이이름', '아이입력유형', '아이출력유형', '아이자신감', '아이회복력', '부모응답JSON', '궁합결과JSON']);
+    sheet.appendRow(['저장일시', '아이이름', '학년', '전화번호', '아이입력유형', '아이출력유형', '아이자신감', '아이회복력', '부모응답JSON', '궁합결과JSON']);
     sheet.setFrozenRows(1);
   }
   sheet.appendRow([
     new Date(),
     d.childName || '',
+    d.childGrade || '',
+    d.childPhone || '',
     d.childInput || '',
     d.childOutput || '',
     d.childConfidence || '',
@@ -261,12 +263,14 @@ function listFamilyRecords_() {
   return data.map(row => ({
     savedAt: row[0] instanceof Date ? row[0].toISOString() : row[0],
     childName: row[1] || '',
-    childInput: row[2] || '',
-    childOutput: row[3] || '',
-    childConfidence: row[4] || '',
-    childResilience: row[5] || '',
-    parentAnswers: safeParse_(row[6]),
-    report: safeParse_(row[7])
+    childGrade: row[2] || '',
+    childPhone: row[3] || '',
+    childInput: row[4] || '',
+    childOutput: row[5] || '',
+    childConfidence: row[6] || '',
+    childResilience: row[7] || '',
+    parentAnswers: safeParse_(row[8]),
+    report: safeParse_(row[9])
   })).reverse();
 }
 

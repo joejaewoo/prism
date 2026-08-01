@@ -228,7 +228,7 @@ function renderLogin() {
       <input type="password" id="login-pw" placeholder="비밀번호" maxlength="20"
         style="width:100%; padding:13px 14px; border:1px solid var(--line); border-radius:10px; font-size:15px; text-align:center; margin-bottom:12px; font-family:inherit;">
       ${adminState.authError ? '<div style="color:var(--coral); font-size:13px; margin-bottom:12px;">비밀번호가 올바르지 않습니다.</div>' : ''}
-      <button class="btn-sm" id="btn-login" style="width:100%; height:auto; padding:13px;">입장하기</button>
+      <button class="btn-sm" id="btn-login" style="width:100%; height:auto; padding:13px;" ${adminState.loading?'disabled':''}>${adminState.loading?'불러오는 중...':'입장하기'}</button>
     </div>
     <a href="index.html" style="display:inline-block; margin-top:18px; font-size:13px; color:var(--ink-soft); text-decoration:none;">← 소개 페이지로 돌아가기</a>
   </div>
@@ -259,11 +259,14 @@ function verifyPassword() {
   }
   if (!isApiConfigured()) {
     adminState.authError = false;
-    adminState.authed = true; // API 미설정 상태에서는 통과시키고 화면에서 경고 표시
+    adminState.authed = true;
     adminState.error = 'API_URL 미설정';
     adminRender();
     return;
   }
+  // 로딩 표시
+  adminState.loading = true;
+  adminRender();
   fetch(`${API_URL}?action=list&pw=${encodeURIComponent(adminState.pw)}`)
     .then(res => res.json())
     .then(data => {
@@ -724,13 +727,13 @@ function renderFamilyView() {
 
       return '<div style="background:#fff;border:1px solid #E2E5EC;border-radius:16px;overflow:hidden">' +
         '<div style="padding:16px 20px;border-bottom:1px solid #E2E5EC;display:flex;justify-content:space-between;align-items:center">' +
-          '<div><b style="font-size:17px;color:#1C2541">' + escapeHtml(item.childName || '이름 없음') + '</b>' +
+          '<div><b style="font-size:17px;color:#1C2541">' + escapeHtml(item.childName || '이름 없음') + '</b>' + (item.childGrade ? ' <span style="font-size:13px;color:#5A6482;font-weight:400">' + escapeHtml(item.childGrade) + '</span>' : '') +
             '<div style="display:flex;gap:6px;margin-top:6px">' +
               '<span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#FDF2ED;color:#C24A22;font-weight:600">자신감 '+(BAND[item.childConfidence]||'?')+'</span>' +
               '<span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#E7F4EF;color:#1F7A6E;font-weight:600">회복력 '+(BAND[item.childResilience]||'?')+'</span>' +
             '</div>' +
           '</div>' +
-          '<span style="font-size:12px;color:#8A8F9C">' + date + '</span>' +
+          (item.childPhone ? '<div style="font-size:12px;color:#8A8F9C">' + escapeHtml(item.childPhone) + '</div>' : '') + '<div style="font-size:12px;color:#8A8F9C">' + date + '</div>' +
         '</div>' +
         '<div style="padding:14px 20px">' +
           row('익히는 방식', INP[item.childInput]||'?', PINP[pa.pIn]||'?', matchIn) +

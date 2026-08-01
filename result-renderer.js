@@ -29,7 +29,7 @@ function renderParentResult(result, respondent) {
 }
 
 // 학부모 궁합검사 링크 인코딩 (아이 결과를 짧은 코드에 담아 보안+단축)
-function familyLinkParams(result, name) {
+function familyLinkParams(result, name, grade, phone) {
   const l1 = result.layer1 || {}, l2 = result.layer2 || {}, l3 = result.layer3 || {};
   const band = (v) => (v >= 60 ? '3' : v >= 40 ? '2' : '1');
   const iMap = {sound:'1',text:'2',scene:'3'};
@@ -42,7 +42,7 @@ function familyLinkParams(result, name) {
 // 결과지 하단 · 학부모 궁합검사 안내 (링크 + QR)
 function renderFamilyCTA(result, respondent) {
   const origin = (typeof location !== 'undefined' && location.origin) ? location.origin : '';
-  const url = origin + '/family.html?d=' + familyLinkParams(result, (respondent || {}).name);
+  const url = origin + '/family.html?d=' + familyLinkParams(result, (respondent||{}).name, (respondent||{}).grade, (respondent||{}).phone);
   const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=' + encodeURIComponent(url);
   return `
   <div class="result-page family-cta">
