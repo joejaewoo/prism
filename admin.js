@@ -727,13 +727,15 @@ function renderFamilyView() {
 
       return '<div style="background:#fff;border:1px solid #E2E5EC;border-radius:16px;overflow:hidden">' +
         '<div style="padding:16px 20px;border-bottom:1px solid #E2E5EC;display:flex;justify-content:space-between;align-items:center">' +
-          '<div><b style="font-size:17px;color:#1C2541">' + escapeHtml(item.childName || '이름 없음') + '</b>' + (item.childGrade ? ' <span style="font-size:13px;color:#5A6482;font-weight:400">' + escapeHtml(item.childGrade) + '</span>' : '') +
+          '<div><b style="font-size:17px;color:#1C2541">' + escapeHtml(item.childName || '이름 없음') + '</b>' +
+            (item.childGrade ? '<span style="display:inline-block;margin-left:8px;font-size:12.5px;padding:2px 8px;border-radius:6px;background:#EEF0F4;color:#5A6482;font-weight:600">' + escapeHtml(item.childGrade) + '</span>' : '') +
+            (item.childPhone ? '<div style="font-size:13px;color:#5A6482;margin-top:3px">📞 ' + escapeHtml(item.childPhone) + '</div>' : '') +
             '<div style="display:flex;gap:6px;margin-top:6px">' +
               '<span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#FDF2ED;color:#C24A22;font-weight:600">자신감 '+(BAND[item.childConfidence]||'?')+'</span>' +
               '<span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#E7F4EF;color:#1F7A6E;font-weight:600">회복력 '+(BAND[item.childResilience]||'?')+'</span>' +
             '</div>' +
           '</div>' +
-          (item.childPhone ? '<div style="font-size:12px;color:#8A8F9C">' + escapeHtml(item.childPhone) + '</div>' : '') + '<div style="font-size:12px;color:#8A8F9C">' + date + '</div>' +
+          '<div style="font-size:12px;color:#8A8F9C">' + date + '</div>' +
         '</div>' +
         '<div style="padding:14px 20px">' +
           row('익히는 방식', INP[item.childInput]||'?', PINP[pa.pIn]||'?', matchIn) +
