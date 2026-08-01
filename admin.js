@@ -688,62 +688,59 @@ function loadFamilyList() {
 
 function renderFamilyView() {
   const items = adminState.familyItems;
-  if (adminState.familyLoading) return '<div style="text-align:center;padding:60px;color:var(--soft)">불러오는 중...</div>';
-  if (!items.length) return '<div style="text-align:center;padding:60px;color:var(--soft)">아직 궁합 기록이 없습니다.</div>';
+  if (adminState.familyLoading) return '<div style="text-align:center;padding:60px;color:#5A6482">불러오는 중...</div>';
+  if (!items.length) return '<div style="text-align:center;padding:60px;color:#5A6482">아직 궁합 기록이 없습니다.</div>';
 
-  const INPUT_L = { sound:'소리로 배우는', text:'글자로 배우는', scene:'상황으로 배우는' };
-  const OUTPUT_L = { flow:'Flow형', form:'Form형' };
-  const BAND_L = { low:'여린 편', mid:'보통', high:'단단한 편' };
-  const pInL = { sound:'소리로', text:'글자로', scene:'상황으로' };
+  const INP = { sound:'소리로 익힘', text:'글자로 익힘', scene:'상황으로 익힘' };
+  const OUT = { flow:'일단 말하는 편', form:'정확히 말하는 편' };
+  const PINP = { sound:'소리로 도와줌', text:'글자로 도와줌', scene:'상황으로 도와줌' };
+  const POUT = { flow:'끝까지 들어줌', form:'바로 고쳐줌' };
+  const BAND = { low:'여린 편', mid:'보통', high:'단단한 편' };
 
-  return '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px;padding:20px 0">' +
+  return '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:18px;padding:20px 0">' +
     items.map(item => {
       const r = item.report || {};
       const pa = item.parentAnswers || {};
       const secs = r.sections || [];
       const warns = secs.filter(s => s.level === 'warn');
       const goods = secs.filter(s => s.level === 'good');
-      const date = item.savedAt ? new Date(item.savedAt).toLocaleDateString('ko-KR', {year:'numeric',month:'long',day:'numeric'}) : '';
+      const date = item.savedAt ? new Date(item.savedAt).toLocaleDateString('ko-KR', {year:'numeric',month:'short',day:'numeric'}) : '';
       const matchIn = pa.pIn === item.childInput;
       const matchOut = pa.pOut === item.childOutput;
 
-      return `<div style="background:#fff;border:1px solid #E2E5EC;border-radius:16px;overflow:hidden">
-        <div style="background:#1C2541;padding:16px 18px;color:#fff">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <b style="font-size:16px">${escapeHtml(item.childName || '이름 없음')}</b>
-            <span style="font-size:12px;color:rgba(255,255,255,.6)">${date}</span>
-          </div>
-          <div style="display:flex;gap:14px;margin-top:10px;font-size:13px">
-            <div style="flex:1;text-align:center">
-              <div style="color:rgba(255,255,255,.5);font-size:11px">아이</div>
-              <div style="margin-top:2px">${INPUT_L[item.childInput] || item.childInput}</div>
-              <div>${OUTPUT_L[item.childOutput] || item.childOutput}</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center">
-              <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:${matchIn?'#2A9D8F':'#E8633C'};color:#fff">익히기 ${matchIn?'같음':'차이'}</span>
-              <span style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:700;background:${matchOut?'#2A9D8F':'#E8633C'};color:#fff">표현 ${matchOut?'같음':'차이'}</span>
-            </div>
-            <div style="flex:1;text-align:center">
-              <div style="color:rgba(255,255,255,.5);font-size:11px">부모</div>
-              <div style="margin-top:2px">${pInL[pa.pIn] || '?'}</div>
-              <div>${pa.pOut==='flow'?'들어줌':'고쳐줌'}</div>
-            </div>
-          </div>
-        </div>
-        <div style="padding:14px 18px">
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-            <span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#FDE8DE;color:#C24A22;font-weight:700">자신감 ${BAND_L[item.childConfidence] || '?'}</span>
-            <span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#E7F4EF;color:#1F7A6E;font-weight:700">회복력 ${BAND_L[item.childResilience] || '?'}</span>
-          </div>
-          ${warns.length ? '<div style="margin-bottom:6px">' + warns.map(w =>
-            '<div style="font-size:13px;color:#C24A22;font-weight:700;line-height:1.6">⚠ ' + escapeHtml(w.title) + '</div>'
-          ).join('') + '</div>' : ''}
-          ${goods.length ? goods.map(g =>
-            '<div style="font-size:12.5px;color:#1F7A6E;line-height:1.6">✓ ' + escapeHtml(g.title) + '</div>'
-          ).join('') : ''}
-          ${!warns.length && !goods.length ? '<div style="font-size:12.5px;color:#8A8F9C">상세 결과 없음</div>' : ''}
-        </div>
-      </div>`;
+      function row(label, childTxt, parentTxt, match) {
+        const c = match ? '#2A9D8F' : '#E8633C';
+        const bg = match ? '#E7F4EF' : '#FDE8DE';
+        const icon = match ? '✓' : '✕';
+        return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F0F1F4">' +
+          '<div style="width:20px;height:20px;border-radius:99px;background:'+c+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">'+icon+'</div>' +
+          '<div style="flex:1;font-size:13.5px;color:#1C2541"><b>'+label+'</b></div>' +
+          '<div style="font-size:13px;color:#1C2541;text-align:right">' +
+            '<span style="color:#5A6482">아이</span> '+escapeHtml(childTxt) +
+            ' <span style="color:#ccc;margin:0 4px">vs</span> ' +
+            '<span style="color:#5A6482">부모</span> '+escapeHtml(parentTxt) +
+          '</div></div>';
+      }
+
+      return '<div style="background:#fff;border:1px solid #E2E5EC;border-radius:16px;overflow:hidden">' +
+        '<div style="padding:16px 20px;border-bottom:1px solid #E2E5EC;display:flex;justify-content:space-between;align-items:center">' +
+          '<div><b style="font-size:17px;color:#1C2541">' + escapeHtml(item.childName || '이름 없음') + '</b>' +
+            '<div style="display:flex;gap:6px;margin-top:6px">' +
+              '<span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#FDF2ED;color:#C24A22;font-weight:600">자신감 '+(BAND[item.childConfidence]||'?')+'</span>' +
+              '<span style="font-size:11.5px;padding:3px 9px;border-radius:8px;background:#E7F4EF;color:#1F7A6E;font-weight:600">회복력 '+(BAND[item.childResilience]||'?')+'</span>' +
+            '</div>' +
+          '</div>' +
+          '<span style="font-size:12px;color:#8A8F9C">' + date + '</span>' +
+        '</div>' +
+        '<div style="padding:14px 20px">' +
+          row('익히는 방식', INP[item.childInput]||'?', PINP[pa.pIn]||'?', matchIn) +
+          row('말하는 방식', OUT[item.childOutput]||'?', POUT[pa.pOut]||'?', matchOut) +
+        '</div>' +
+        (warns.length || goods.length ? '<div style="padding:10px 20px 16px;border-top:1px solid #F0F1F4">' +
+          warns.map(w => '<div style="font-size:13.5px;color:#C24A22;font-weight:700;line-height:1.7">⚠ '+escapeHtml(w.title)+'</div>').join('') +
+          goods.map(g => '<div style="font-size:13px;color:#1F7A6E;line-height:1.7">✓ '+escapeHtml(g.title)+'</div>').join('') +
+        '</div>' : '') +
+      '</div>';
     }).join('') + '</div>';
 }
 
