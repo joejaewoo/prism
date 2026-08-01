@@ -81,6 +81,28 @@ h1{font-size:22px;font-weight:800;margin:6px 0 6px}
 <script>
 // ---------- 팔레트 ----------
 var C = { ink:"#1C2541", soft:"#5A6482", good:"#2A9D8F", warn:"#E8633C", mid:"#E8A33C", purple:"#6B5CA5" };
+var API_URL = 'https://script.google.com/macros/s/AKfycbwIwHar6DeouN7pg8g-Oaqb4Sy0me2-IZzF3I7dtDVzm-_GbZdj5DH1c_tx4b9oCZaH/exec';
+
+// 리포트 저장 (fire-and-forget)
+function saveReport(childData, parentAnswers, report) {
+  try {
+    fetch(API_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'familySave',
+        data: {
+          childName: childData.name,
+          childInput: childData.input,
+          childOutput: childData.output,
+          childConfidence: childData.confidence,
+          childResilience: childData.resilience,
+          parentAnswers: parentAnswers,
+          report: { headline: report.headline, sections: report.sections.map(function(s){ return {ax:s.ax, level:s.level, title:s.title}; }) }
+        }
+      })
+    }).catch(function(){});
+  } catch(e) {}
+}
 
 // ---------- 아이 데이터: URL 파라미터에서 ----------
 function getChild(){
@@ -298,6 +320,7 @@ function renderQuiz(){
 function renderReport(){
   app.classList.add('wide');
   var R = build();
+  saveReport(child, ans, R);
   var LS = { good:{c:C.good,bg:"#E7F4EF",tag:"잘 맞아요",ic:"✓"},
     warn:{c:C.warn,bg:"#FDE8DE",tag:"신경 써주세요",ic:"!"},
     mid:{c:C.mid,bg:"#FFF4DC",tag:"참고하세요",ic:"!"} };

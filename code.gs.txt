@@ -58,6 +58,14 @@ function doPost(e) {
       return handleSubmit_(body);
     }
 
+    if (action === 'inquiry') {
+      return handleInquiry_(body);
+    }
+
+    if (action === 'familySave') {
+      return handleFamilySave_(body);
+    }
+
     return jsonResponse_({ ok: false, error: 'unknown action: ' + action });
   } catch (err) {
     return jsonResponse_({ ok: false, error: err.message });
@@ -90,6 +98,49 @@ function handleSubmit_(body) {
   ]);
 
   return jsonResponse_({ ok: true, id: id });
+}
+
+// 도입 문의 저장 ('도입문의' 시트에 한 행 추가)
+function handleInquiry_(body) {
+  const q = body.inquiry || {};
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName('도입문의');
+  if (!sheet) {
+    sheet = ss.insertSheet('도입문의');
+    sheet.appendRow(['접수일시', '학원명', '휴대폰', '이메일', '지역', '문의내용']);
+  }
+  sheet.appendRow([
+    new Date(),
+    q.academy || '',
+    q.phone || '',
+    q.email || '',
+    q.region || '',
+    q.message || ''
+  ]);
+  return jsonResponse_({ ok: true });
+}
+
+// 부모 궁합검사 결과 저장 ('궁합기록' 시트에 한 행 추가)
+function handleFamilySave_(body) {
+  const d = body.data || {};
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName('궁합기록');
+  if (!sheet) {
+    sheet = ss.insertSheet('궁합기록');
+    sheet.appendRow(['저장일시', '아이이름', '아이입력유형', '아이출력유형', '아이자신감', '아이회복력', '부모응답JSON', '궁합결과JSON']);
+    sheet.setFrozenRows(1);
+  }
+  sheet.appendRow([
+    new Date(),
+    d.childName || '',
+    d.childInput || '',
+    d.childOutput || '',
+    d.childConfidence || '',
+    d.childResilience || '',
+    JSON.stringify(d.parentAnswers || {}),
+    JSON.stringify(d.report || {})
+  ]);
+  return jsonResponse_({ ok: true });
 }
 
 /**
