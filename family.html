@@ -129,7 +129,7 @@ var PARENT_ICON = '<svg width="38" height="38" viewBox="0 0 24 24" fill="none" s
 var OUTPUT_LABEL = { flow:"Flow형", form:"Form형" };
 var BAND_LABEL = { low:"여린 편", mid:"보통", high:"단단한 편" };
 
-// ---------- 부모 7문항 ----------
+// ---------- 부모 11문항 ----------
 var Q = [
   { id:"pIn", q:"아이 영어 공부를 도와줄 때, 나는 주로…", a:[
     {t:"같이 소리 내어 읽거나 들려준다", v:"sound"},
@@ -287,7 +287,7 @@ function renderIntro(){
   app.innerHTML = '<div class="col">' +
     '<div class="eyebrow">💗 우리 집 영어 궁합 리포트</div>'+
     '<h1>부모의 방식과 아이의 방식, 얼마나 맞을까요?</h1>'+
-    '<p class="lead">아이와 부모가 <b>영어를 대하는 방식이 서로 맞는지</b>, 그리고 <b>부모의 반응이 아이의 자신감·회복력에 어떻게 작용하는지</b> 짚어드립니다. 7문항, 1분이면 끝나요.</p>'+
+    '<p class="lead">아이와 부모가 <b>영어를 대하는 방식이 서로 맞는지</b>, 그리고 <b>부모의 반응이 아이의 자신감·회복력에 어떻게 작용하는지</b> 짚어드립니다. 11문항, 약 1분이면 끝나요.</p>'+
     '<div class="child-card">'+
       '<div class="child-emoji">'+INPUT_ICON[child.input]+'</div>'+
       '<div><b>'+esc(child.name)+'</b> · '+INPUT_LABEL[child.input]+

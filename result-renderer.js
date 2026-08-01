@@ -50,7 +50,7 @@ function renderFamilyCTA(result, respondent) {
     <div style="display:flex; gap:22px; align-items:center; background:#FDF2ED; border:1px solid #F3D9CC; border-radius:14px; padding:20px 22px;">
       <div style="flex:1;">
         <p style="font-size:14px; color:var(--ink); line-height:1.75; margin:0 0 12px;">
-          부모님이 이어서 <b>1분(7문항)</b>만 답하면, 아이와 영어를 대하는 방식이 얼마나 맞는지,
+          부모님이 이어서 <b>약 1분(11문항)</b>만 답하면, 아이와 영어를 대하는 방식이 얼마나 맞는지,
           그리고 부모님의 반응이 아이의 자신감·회복력에 어떻게 작용하는지 알려드립니다.
         </p>
         <div style="font-size:12.5px; color:var(--ink-soft); word-break:break-all;">아래 QR을 스캔하거나, 링크로 접속하세요<br>
