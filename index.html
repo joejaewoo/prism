@@ -571,6 +571,116 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
   </div>
 </section>
 
+<!-- ===== OUTPUT PREVIEW ===== -->
+<section class="outputs">
+  <style>
+    .outputs{background:var(--bg);padding:110px 40px;border-top:1px solid var(--line)}
+    .outputs-inner{max-width:1080px;margin:0 auto}
+    .outputs-eyebrow{display:inline-block;font-family:'Courier New',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--coral);margin-bottom:20px}
+    .outputs h2{font-size:clamp(26px,3.4vw,40px);font-weight:700;line-height:1.32;color:var(--ink)}
+    .outputs-lead{font-size:16px;color:var(--soft);line-height:1.85;margin-top:16px;max-width:620px}
+    .out-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:48px}
+    .out-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+    .out-card:hover{transform:translateY(-5px);box-shadow:0 16px 44px rgba(28,37,65,.10)}
+    .out-head{padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+    .out-head .badge{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px;margin-bottom:8px}
+    .out-head h3{font-size:17px;font-weight:800;color:var(--ink);margin:0 0 3px}
+    .out-head p{font-size:12.5px;color:var(--soft);margin:0;line-height:1.5}
+    .out-body{padding:18px 20px 22px}
+
+    /* 미니 레이더 차트 */
+    .mini-radar{width:100%;max-width:180px;margin:0 auto 14px}
+    /* 미니 유형 카드 */
+    .mini-type{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:12px;margin-bottom:8px}
+    .mini-type .dot{width:10px;height:10px;border-radius:99px;flex-shrink:0}
+    .mini-type .nm{font-size:13px;font-weight:700;color:var(--ink)}
+    .mini-type .sub{font-size:11.5px;color:var(--soft)}
+    /* 미니 게이지 */
+    .mini-gauge{margin-bottom:8px}
+    .mini-gauge .lbl{font-size:11.5px;color:var(--soft);margin-bottom:3px}
+    .mini-gauge .bar{height:6px;background:#EEF0F4;border-radius:99px;overflow:hidden}
+    .mini-gauge .fill{height:100%;border-radius:99px}
+    /* 미니 궁합 */
+    .mini-match{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;margin-bottom:8px}
+    .mini-match .side{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--ink)}
+    .mini-match .vs{font-size:10px;color:var(--soft)}
+    .mini-match .pill{font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;color:#fff}
+    /* 미니 수업 */
+    .mini-tip{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:var(--bg);border-radius:10px;margin-bottom:7px;font-size:12px;color:var(--ink);line-height:1.5}
+    .mini-tip .ic{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px}
+
+    @media(max-width:760px){.outputs{padding:80px 22px}.out-grid{grid-template-columns:1fr}}
+  </style>
+  <div class="outputs-inner rv">
+    <div class="outputs-eyebrow">WHAT YOU GET</div>
+    <h2 class="serif">검사 한 번으로, 이 모든 결과물이 나옵니다.</h2>
+    <p class="outputs-lead">학생 검사 + 부모 궁합까지, 하나의 검사에서 <b style="color:var(--ink)">세 가지 산출물</b>이 생성됩니다.</p>
+
+    <div class="out-grid">
+      <!-- 카드1: 학부모 결과지 -->
+      <div class="out-card">
+        <div class="out-head">
+          <div class="badge" style="background:rgba(232,99,60,.12);color:var(--coral)">학부모 전달용</div>
+          <h3>학습유형 결과지</h3>
+          <p>아이의 학습 성향을 한눈에</p>
+        </div>
+        <div class="out-body">
+          <svg class="mini-radar" viewBox="0 0 200 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="100,20 170,70 150,150 50,150 30,70" fill="none" stroke="#DDE1E8" stroke-width="1"/>
+            <polygon points="100,45 145,78 133,132 67,132 55,78" fill="none" stroke="#DDE1E8" stroke-width="1"/>
+            <polygon points="100,35 158,74 142,142 58,142 42,74" fill="rgba(232,99,60,.12)" stroke="var(--coral)" stroke-width="2"/>
+            <text x="100" y="14" text-anchor="middle" font-size="10" fill="#5A6482" font-weight="700">Sound</text>
+            <text x="178" y="72" font-size="10" fill="#5A6482" font-weight="700">Scene</text>
+            <text x="157" y="162" font-size="10" fill="#5A6482" font-weight="700">Flow</text>
+            <text x="15" y="162" font-size="10" fill="#5A6482" font-weight="700">Form</text>
+            <text x="18" y="72" font-size="10" fill="#5A6482" font-weight="700">Text</text>
+          </svg>
+          <div class="mini-type"><span class="dot" style="background:var(--coral)"></span><div><div class="nm">모차르트형 (Sound 주도)</div><div class="sub">소리로 영어를 흡수하는 아이</div></div></div>
+          <div class="mini-gauge"><div class="lbl">자신감</div><div class="bar"><div class="fill" style="width:72%;background:var(--teal)"></div></div></div>
+          <div class="mini-gauge"><div class="lbl">회복력</div><div class="bar"><div class="fill" style="width:55%;background:var(--purple)"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 카드2: 학원용 수업 설계서 -->
+      <div class="out-card">
+        <div class="out-head">
+          <div class="badge" style="background:rgba(42,157,143,.12);color:var(--teal)">학원 내부용</div>
+          <h3>수업 설계서 · 상담 가이드</h3>
+          <p>교사가 바로 쓰는 지도 전략</p>
+        </div>
+        <div class="out-body">
+          <div class="mini-tip"><span class="ic" style="background:rgba(232,99,60,.12);color:var(--coral)">🎧</span><div><b>익히는 방식</b><br>듣기 → 따라 말하기 → 읽기 순서로 접근</div></div>
+          <div class="mini-tip"><span class="ic" style="background:rgba(42,157,143,.12);color:var(--teal)">💬</span><div><b>말하는 방식</b><br>틀려도 끊지 말고 발화량 먼저 확보</div></div>
+          <div class="mini-tip"><span class="ic" style="background:rgba(107,92,165,.12);color:var(--purple)">💡</span><div><b>자신감 지원</b><br>작은 성공을 구체적으로 칭찬해주세요</div></div>
+          <div class="mini-tip"><span class="ic" style="background:rgba(232,163,60,.12);color:#C68A2E">🏠</span><div><b>가정 안내</b><br>영어 팟캐스트·오디오북 노출 늘리기</div></div>
+        </div>
+      </div>
+
+      <!-- 카드3: 궁합 리포트 -->
+      <div class="out-card">
+        <div class="out-head">
+          <div class="badge" style="background:rgba(107,92,165,.12);color:var(--purple)">부모 참여형</div>
+          <h3>부모-자녀 영어 궁합</h3>
+          <p>부모 11문항 → 즉시 궁합 분석</p>
+        </div>
+        <div class="out-body">
+          <div class="mini-match" style="background:#F7F8FB">
+            <div class="side">🎧<br>소리로 배워요</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div class="vs">익히기</div><div class="pill" style="background:var(--coral)">차이</div>
+              <div class="vs">표현</div><div class="pill" style="background:var(--coral)">차이</div>
+              <div class="vs">동력</div><div class="pill" style="background:var(--teal)">양호</div>
+            </div>
+            <div class="side">📖<br>글자로 도와요</div>
+          </div>
+          <div style="background:#FDE8DE;border-radius:10px;padding:9px 12px;font-size:12px;color:#C24A22;font-weight:700;margin-bottom:6px">⚠ 아이는 소리로 배우는데, 글자로 도와주고 있어요</div>
+          <div style="background:#E7F4EF;border-radius:10px;padding:9px 12px;font-size:12px;color:#1F7A6E;font-weight:700">✓ 회복력이 단단한 아이예요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== PRICING ===== -->
 <section class="pricing">
   <style>
