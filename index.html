@@ -653,7 +653,7 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
     </div>
 
     <!-- ===== ROW 1: 결과지 ===== -->
-    <div class="pain-row">
+    <div class="pain-row" id="row1">
       <div class="pain-side">
         <div class="pain-num">01</div>
         <div class="pain-q">이 아이가 <em>어떻게 배우는지</em><br>한눈에 확인합니다</div>
@@ -667,7 +667,7 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
           <svg viewBox="0 0 220 185" fill="none" style="width:160px;display:block;margin:0 auto 14px">
             <polygon points="110,22 200,162 20,162" fill="none" stroke="#DDE1E8" stroke-width="1"/>
             <polygon points="110,55 165,137 55,137" fill="none" stroke="#EEF0F4" stroke-width="1"/>
-            <polygon points="110,30 192,155 35,130" fill="rgba(232,99,60,.10)" stroke="#E8633C" stroke-width="2" stroke-linejoin="round"/>
+            <polygon points="110,30 192,155 35,130" fill="rgba(232,99,60,.10)" stroke="#E8633C" stroke-width="2" id="mk-radar" stroke-linejoin="round"/>
             <circle cx="110" cy="30" r="3.5" fill="#E8633C"/><circle cx="192" cy="155" r="3.5" fill="#E8633C"/><circle cx="35" cy="130" r="3.5" fill="#E8633C"/>
             <text x="110" y="16" text-anchor="middle" font-size="10" fill="#5A6482" font-weight="700">Sound</text>
             <text x="208" y="168" font-size="10" fill="#5A6482" font-weight="700">Scene</text>
@@ -685,7 +685,7 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
     </div>
 
     <!-- ===== ROW 2: 수업설계서 ===== -->
-    <div class="pain-row flip">
+    <div class="pain-row flip" id="row2">
       <div class="pain-side">
         <div class="pain-num">02</div>
         <div class="pain-q">유형에 맞는 <em>수업 설계</em>를<br>바로 받습니다</div>
@@ -706,7 +706,7 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
     </div>
 
     <!-- ===== ROW 3: 궁합 ===== -->
-    <div class="pain-row">
+    <div class="pain-row" id="row3">
       <div class="pain-side">
         <div class="pain-num">03</div>
         <div class="pain-q">부모의 반응이 <em>아이에게 어떤 영향</em>을<br>주는지 확인합니다</div>
@@ -741,9 +741,46 @@ footer .fl{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.15em;marg
   <script>
   (function(){
     var rows=document.querySelectorAll('.pain-row');
-    if(!('IntersectionObserver' in window)){rows.forEach(function(r){r.classList.add('visible')});return;}
-    var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0.15});
-    rows.forEach(function(r){io.observe(r);});
+    if(!('IntersectionObserver' in window)){rows.forEach(function(r){r.classList.add('visible')});} else {
+      var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0.15});
+      rows.forEach(function(r){io.observe(r);});
+    }
+    var P=[
+      {nm:"김지유 · 초3 · Level 2",rd:"110,30 192,155 35,130",ps:"모차르트형 · Sound 주도",pd:"소리를 통해 영어를 흡수하는 아이. 발음·리듬을 자연스럽게 습득합니다.",g:[74,52,88,68],gl:["강한 편","보통","매우 강한 편","강한 편"],gc:["#2A9D8F","#6B5CA5","#E8633C","#E8A33C"],hm:"<b>듣기 환경</b> — 팟캐스트, 오디오북, 노래 등 음성 노출을 늘려주세요.<br><b>소리 먼저</b> — 새 단어는 소리 내어 3번. 소리에 익숙해지는 게 먼저.<br><b>따라 말하기</b> — 영상 볼 때 한 문장씩 따라 말하면 발음과 리듬이 빠르게.",rt:"📋 모차르트형 · 수업 설계",rb:"Sound 주도",r:["<b>익히기</b> — <b>듣기 2회 → 따라 말하기</b> → 철자는 마지막.","<b>표현 · Flow형</b> — 틀려도 끊지 마세요. <b>발화량 먼저.</b>","<b>자신감</b> — <b>작은 성공을 구체적으로</b> 짚어주세요.","<b>진입</b> — <b>듣기→따라 말하기→읽기</b>. 텍스트 먼저 주면 흥미↓","<b>평가</b> — 듣고 말하기 비중 높이면 강점이 드러남."],ch:"틀려도 일단 말하는 아이 × 글자로 돕는 부모",cc:"소리로 배워요",cm:"Flow형 · 자신감 보통",cp:"글자로 도와요",cpm:"바로 교정하는 편",al:["⚠ 소리로 배우는데 단어장으로 도와주고 있어요.","⚠ 다 말한 뒤 하나만 짚어주세요.","⚠ 자신감이 여린 아이 — 기대가 부담.","✓ 회복력이 단단한 아이예요.","✓ 집에서 영어로 말 걸기, 좋아요."],ac:["#C24A22","#C24A22","#8A5A1E","#1F7A6E","#1F7A6E"],ab:["#FDE8DE","#FDE8DE","#FFF4DC","#E7F4EF","#E7F4EF"]},
+      {nm:"이하늘 · 초5 · Level 3",rd:"110,75 152,155 30,148",ps:"다윈형 · Text 주도",pd:"글자와 규칙으로 체계적으로 배우는 아이. 독해·문법에서 강점.",g:[45,82,55,38],gl:["보통","매우 강한 편","보통","아직 여린 편"],gc:["#E8A33C","#2A9D8F","#6B5CA5","#E8633C"],hm:"<b>읽기 습관</b> — 영어 원서를 레벨에 맞게 매일 10분씩.<br><b>규칙 정리</b> — 노트에 문법 패턴을 스스로 정리하면 이해↑<br><b>자막 활용</b> — 영어 영상에 영어 자막 켜두면 읽기+듣기 동시에.",rt:"📋 다윈형 · 수업 설계",rb:"Text 주도",r:["<b>익히기</b> — 문장을 <b>눈으로 먼저</b> 보여주고 규칙 찾게.","<b>표현 · Form형</b> — 틀린 부분 <b>그때그때 부드럽게</b> 짚기.","<b>회복력</b> — 교정 받아도 금방 회복. 과도하면 지칠 수 있음.","<b>진입</b> — <b>읽기→규칙 정리→말하기</b>. 소리부터 시작하면 불안.","<b>평가</b> — 필기·독해 위주에서 강점이 드러남."],ch:"정확하게 말하는 아이 × 소리로 돕는 부모",cc:"글자로 배워요",cm:"Form형 · 자신감 보통",cp:"소리로 도와요",cpm:"끝까지 들어주는 편",al:["⚠ 글자로 배우는데 소리 위주로 도와주고 있어요.","✓ 표현 방식이 서로 잘 맞아요.","✓ 회복력이 매우 단단해요.","✓ 매일 꾸준한 리듬, 딱 맞아요.",""],ac:["#C24A22","#1F7A6E","#1F7A6E","#1F7A6E",""],ab:["#FDE8DE","#E7F4EF","#E7F4EF","#E7F4EF",""]},
+      {nm:"박서준 · 초2 · Level 1",rd:"110,68 182,158 48,100",ps:"에디슨형 · Scene 주도",pd:"상황과 맥락에서 직관적으로 파악. 영상·게임 속에서 폭발적으로 성장.",g:[90,60,72,85],gl:["매우 강한 편","강한 편","강한 편","매우 강한 편"],gc:["#2A9D8F","#6B5CA5","#E8633C","#E8A33C"],hm:"<b>영상·게임</b> — 영어 드라마, 영화, 보드게임 등 맥락 있는 콘텐츠.<br><b>상황 속에서</b> — 단어 따로 외우기보다 상황에서 자연스럽게.<br><b>체험 중심</b> — 원어민 대화, 역할극이 가장 효과적.",rt:"📋 에디슨형 · 수업 설계",rb:"Scene 주도",r:["<b>익히기</b> — 단어를 <b>상황·장면 속에서</b> 제시.","<b>표현 · Flow형</b> — <b>상황극·역할극에서 가장 잘 발화.</b>","<b>자신감</b> — 매우 강함. 도전적 과제를 주면 더 빛남.","<b>진입</b> — <b>상황 체험→표현 습득→정리</b>. 규칙부터 하면 흥미↓","<b>평가</b> — 구두 발표·상황극에서 강점. 암기 테스트 과소평가."],ch:"상황으로 배우는 아이 × 상황으로 돕는 부모",cc:"상황으로 배워요",cm:"Flow형 · 자신감 매우 강함",cp:"상황으로 도와요",cpm:"끝까지 들어주는 편",al:["✓ 익히는 방식이 딱 맞아요!","✓ 표현 방식도 잘 맞아요.","✓ 자신감이 매우 단단해요.","✓ 영어를 일상에서 접하는 환경, 좋아요.",""],ac:["#1F7A6E","#1F7A6E","#1F7A6E","#1F7A6E",""],ab:["#E7F4EF","#E7F4EF","#E7F4EF","#E7F4EF",""]}
+    ];
+    var ci=0;
+    document.querySelectorAll('.outputs .frame-body').forEach(function(fb){fb.style.transition='opacity .4s ease';});
+    var rd=document.getElementById('mk-radar'); if(rd) rd.style.transition='all .8s cubic-bezier(.4,0,.2,1)';
+    setInterval(function(){
+      ci=(ci+1)%P.length; var p=P[ci];
+      var r1=document.getElementById('row1'),r2=document.getElementById('row2'),r3=document.getElementById('row3');
+      if(!r1||!r2||!r3)return;
+      var fbs=[r1,r2,r3].map(function(r){return r.querySelector('.frame-body');});
+      fbs.forEach(function(fb){if(fb)fb.style.opacity='0';});
+      setTimeout(function(){
+        var f1=fbs[0];if(f1){
+          f1.querySelector('.name').textContent=p.nm;
+          if(rd)rd.setAttribute('points',p.rd);
+          f1.querySelector('.m-persona .nm').textContent=p.ps;
+          f1.querySelector('.m-persona .desc').textContent=p.pd;
+          var fills=f1.querySelectorAll('.m-gauge .fill'),lbls=f1.querySelectorAll('.m-gauge .l span:last-child');
+          for(var i=0;i<4;i++){if(fills[i]){fills[i].style.width=p.g[i]+'%';fills[i].style.background=p.gc[i];}if(lbls[i]){lbls[i].textContent=p.gl[i];lbls[i].style.color=p.gc[i];}}
+          var hb=f1.querySelector('.m-home .hb');if(hb)hb.innerHTML=p.hm;}
+        var f2=fbs[1];if(f2){
+          var ts=f2.querySelector('.m-recipe-title span');if(ts)ts.textContent=p.rt;
+          var tb=f2.querySelector('.m-recipe-title .badge');if(tb)tb.textContent=p.rb;
+          f2.querySelectorAll('.m-recipe > div').forEach(function(d,i){if(p.r[i])d.innerHTML=p.r[i];});}
+        var f3=fbs[2];if(f3){
+          var hl=f3.querySelector('.m-hero .hl');if(hl)hl.textContent=p.ch;
+          var sides=f3.querySelectorAll('.m-hero .side');
+          if(sides[0]){sides[0].querySelector('b').textContent=p.cc;sides[0].querySelector('.meta').textContent=p.cm;}
+          if(sides[2]){sides[2].querySelector('b').textContent=p.cp;sides[2].querySelector('.meta').textContent=p.cpm;}
+          f3.querySelectorAll('.m-alert').forEach(function(a,i){if(p.al[i]){a.textContent=p.al[i];a.style.color=p.ac[i];a.style.background=p.ab[i];a.style.display='block';}else{a.style.display='none';}});}
+        fbs.forEach(function(fb){if(fb)fb.style.opacity='1';});
+      },400);
+    },3500);
   })();
   </script>
 </section>
